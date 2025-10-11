@@ -1,11 +1,10 @@
-import { Button } from "@/components/ui/button"
+import { useRoutes } from "react-router-dom"
+import { Suspense } from "react"
 
-function App() {
-    return (
-        <div className="flex min-h-svh flex-col items-center justify-center">
-            <Button>Click me</Button>
-        </div>
-    )
+import routes from "@/routes"
+
+export default function App() {
+    const routing = useRoutes(routes)
+
+    return <Suspense fallback={<div>Loading...</div>}>{routing}</Suspense>
 }
-
-export default App
