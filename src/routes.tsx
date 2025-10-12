@@ -1,9 +1,9 @@
 import { Navigate } from "react-router-dom"
 
 import SelectRolePage from "@/pages/signUp/SelectRolePage"
-import StudentFormPage from "@/pages/signUp/StudentFormPage"
-import AgentFormPage from "@/pages/signUp/AgentFormPage"
-import AdvisorFormPage from "@/pages/signUp/AdvisorFormPage"
+import StudentFormPage from "@/pages/signUp/student/StudentFormPage"
+import AgentFormPage from "@/pages/signUp/agent/AgentFormPage"
+import AdvisorFormPage from "@/pages/signUp/advisor/AdvisorFormPage"
 import LandingPage from "@/pages/landing/LandingPage"
 
 const routes = [
