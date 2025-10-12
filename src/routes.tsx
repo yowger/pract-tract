@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom"
 
-import SelectRolePage from "@/pages/signUp/SelectRolePage"
+import SelectRolePage from "@/pages/signUp/auth/SelectRolePage"
 import StudentFormPage from "@/pages/signUp/student/StudentFormPage"
 import AgentFormPage from "@/pages/signUp/agent/AgentFormPage"
 import AdvisorFormPage from "@/pages/signUp/advisor/AdvisorFormPage"
-import LandingPage from "@/pages/landing/LandingPage"
+import LandingPage from "@/pages/LandingPage"
 
 const routes = [
     { path: "/", element: <LandingPage /> },
