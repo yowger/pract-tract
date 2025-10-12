@@ -12,6 +12,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { useRegister } from "@/features/auth/hooks/useRegister"
+import { toast } from "sonner"
+import { AxiosError } from "axios"
 
 const studentFormSchema = z
     .object({
@@ -22,8 +25,8 @@ const studentFormSchema = z
             .string()
             .min(8, "Please confirm your password"),
         student_id: z.string().min(3, "Student ID is required"),
-        program_id: z.string().min(1, "Program ID required"),
-        section_id: z.string().min(1, "Section ID required"),
+        program_id: z.int().min(1, "Program ID required"),
+        section_id: z.int().min(1, "Section ID required"),
     })
     .refine((data) => data.password === data.password_confirmation, {
         message: "Passwords do not match",
@@ -32,7 +35,7 @@ const studentFormSchema = z
 
 type StudentFormValues = z.infer<typeof studentFormSchema>
 
-export default function StudentForm() {
+const StudentForm = () => {
     const form = useForm<StudentFormValues>({
         resolver: zodResolver(studentFormSchema),
         defaultValues: {
@@ -41,15 +44,32 @@ export default function StudentForm() {
             password: "",
             password_confirmation: "",
             student_id: "",
-            program_id: "",
-            section_id: "",
+            program_id: 1,
+            section_id: 1,
         },
     })
 
-    const onSubmit = (values: StudentFormValues) => {
-        console.log("Registering student:", values)
-        // Example:
-        // await axios.post("/api/register", { ...values, role: "student" })
+    const { mutate: register, isPending } = useRegister()
+
+    const onSubmit = async (values: StudentFormValues) => {
+        try {
+            await register({
+                ...values,
+                role: "student",
+            })
+
+            toast.success("Student registered successfully")
+            form.reset()
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error(
+                    error?.response?.data?.message ||
+                        "Failed to register. Please try again."
+                )
+            } else if (error instanceof Error) {
+                toast.error(error.message)
+            }
+        }
     }
 
     return (
@@ -175,14 +195,12 @@ export default function StudentForm() {
                     )}
                 />
 
-                <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={form.formState.isSubmitting}
-                >
-                    {form.formState.isSubmitting ? "Submitting..." : "Register"}
+                <Button type="submit" className="w-full" disabled={isPending}>
+                    {isPending ? "Submitting..." : "Register"}
                 </Button>
             </form>
         </Form>
     )
 }
+
+export default StudentForm

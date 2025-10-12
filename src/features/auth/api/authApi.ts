@@ -1,4 +1,5 @@
-import { privateApi, publicApi } from "@/lib/axiosClient"
+import { privateApi } from "@/lib/axiosClient"
+import { AUTH_ENDPOINTS } from "../constants/endpoints"
 
 export interface BaseRegisterPayload {
     name: string
@@ -32,27 +33,30 @@ export type RegisterPayload =
     | BaseRegisterPayload
 
 export const getCsrfCookie = async () => {
-    await publicApi.get("/sanctum/csrf-cookie")
+    await privateApi.get(AUTH_ENDPOINTS.csrf)
 }
 
 export const login = async (email: string, password: string) => {
     await getCsrfCookie()
-    const { data } = await publicApi.post("/login", { email, password })
+    const { data } = await privateApi.post(AUTH_ENDPOINTS.login, {
+        email,
+        password,
+    })
     return data
 }
 
 export const register = async (payload: RegisterPayload) => {
     await getCsrfCookie()
-    const { data } = await publicApi.post("/register", payload)
+    const { data } = await privateApi.post(AUTH_ENDPOINTS.register, payload)
     return data
 }
 
 export const logout = async () => {
-    const { data } = await privateApi.post("/logout")
+    const { data } = await privateApi.post(AUTH_ENDPOINTS.logout)
     return data
 }
 
 export const getCurrentUser = async () => {
-    const { data } = await privateApi.get("/me")
+    const { data } = await privateApi.get(AUTH_ENDPOINTS.me)
     return data
 }

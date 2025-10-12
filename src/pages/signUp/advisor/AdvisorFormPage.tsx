@@ -1,3 +1,5 @@
-export default function AdvisorFormPage() {
-    return <div>AdvisorForm</div>
+const AdvisorFormPage = () => {
+    return <div>AdvisorFormPage</div>
 }
+
+export default AdvisorFormPage

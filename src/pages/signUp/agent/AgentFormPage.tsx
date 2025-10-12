@@ -1,3 +1,5 @@
-export default function AgentFormPage() {
-    return <div>AgentForm</div>
+const AgentFormPage = () => {
+    return <div>AgentFormPage</div>
 }
+
+export default AgentFormPage

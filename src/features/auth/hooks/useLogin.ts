@@ -2,10 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { login } from "../api/authApi"
 
-export function useLogin() {
+export const useLogin = () => {
     const queryClient = useQueryClient()
 
-    const mutation = useMutation({
+    return useMutation({
         mutationFn: ({
             email,
             password,
@@ -17,10 +17,4 @@ export function useLogin() {
             queryClient.invalidateQueries({ queryKey: ["user"] })
         },
     })
-
-    return {
-        login: mutation.mutateAsync,
-        isLoading: mutation.isPending,
-        error: mutation.error,
-    }
 }

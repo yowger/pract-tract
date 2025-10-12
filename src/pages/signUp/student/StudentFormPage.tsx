@@ -1,6 +1,6 @@
-import StudentForm from "./StudentForm"
+import StudentForm from "../../../features/auth/components/forms/StudentForm"
 
-export default function StudentFormPage() {
+const StudentFormPage = () => {
     return (
         <div className="max-w-md mx-auto my-10 p-6 border border-gray-300 rounded-lg shadow-md">
             <h1>Student Form</h1>
@@ -9,3 +9,5 @@ export default function StudentFormPage() {
         </div>
     )
 }
+
+export default StudentFormPage

@@ -1,19 +1,13 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { logout } from "../api/authApi"
 
-export function useLogout() {
+export const useLogout = () => {
     const queryClient = useQueryClient()
 
-    const mutation = useMutation({
+    return useMutation({
         mutationFn: logout,
         onSuccess: () => {
             queryClient.removeQueries({ queryKey: ["user"] })
         },
     })
-
-    return {
-        logout: mutation.mutateAsync,
-        isLoading: mutation.isPending,
-        error: mutation.error,
-    }
 }

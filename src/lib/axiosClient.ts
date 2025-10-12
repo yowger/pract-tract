@@ -6,13 +6,16 @@ export const publicApi = axios.create({
     baseURL: BASE_URL,
     headers: {
         Accept: "application/json",
+        "Content-Type": "application/json",
     },
 })
 
 export const privateApi = axios.create({
     baseURL: BASE_URL,
     withCredentials: true,
+    withXSRFToken: true,
     headers: {
         Accept: "application/json",
+        "Content-Type": "application/json",
     },
 })

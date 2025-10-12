@@ -5,7 +5,7 @@ interface RoleSelectHandler {
     (role: string): void
 }
 
-export default function SelectRolePage() {
+const SelectRolePage = () => {
     const navigate = useNavigate()
 
     const handleSelect: RoleSelectHandler = (role) => {
@@ -37,3 +37,5 @@ export default function SelectRolePage() {
         </div>
     )
 }
+
+export default SelectRolePage
