@@ -19,12 +19,13 @@ const routes = [
     { path: "/signup/advisor", element: <AdvisorFormPage /> },
 
     {
-        path: "/student/dashboard",
-        element: (
-            <ProtectedRoute>
-                <StudentDashboardPage />
-            </ProtectedRoute>
-        ),
+        path: "/student",
+        element: <ProtectedRoute allowedRoles={["student"]} />,
+        children: [
+            { path: "dashboard", element: <StudentDashboardPage /> },
+            // { path: "profile", element: <StudentProfilePage /> },
+            // { path: "settings", element: <StudentSettingsPage /> },
+        ],
     },
 
     { path: "*", element: <div>Not Found</div> },

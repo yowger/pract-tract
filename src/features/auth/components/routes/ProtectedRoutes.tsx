@@ -1,26 +1,27 @@
-import { type ReactNode } from "react"
-import { Navigate } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom"
 
 import { useUser } from "../../hooks/useUser"
+import type { UserRole } from "@/types/roles"
 
 interface ProtectedRouteProps {
-    children: ReactNode
     redirectTo?: string
+    allowedRoles?: UserRole[]
 }
 
 export const ProtectedRoute = ({
-    children,
-    redirectTo = "/login",
+    allowedRoles,
+    redirectTo = "/signin",
 }: ProtectedRouteProps) => {
-    const { data: user, isLoading } = useUser()
+    const { data: profile, isLoading } = useUser()
 
-    if (isLoading) {
-        return <div>Loading...</div>
-    }
+    if (isLoading) return <div>Loading...</div>
 
-    if (!user) {
+    if (
+        !profile ||
+        (allowedRoles && !allowedRoles.includes(profile.user.role))
+    ) {
         return <Navigate to={redirectTo} replace />
     }
 
-    return <>{children}</>
+    return <Outlet />
 }

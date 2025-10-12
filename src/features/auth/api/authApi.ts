@@ -1,5 +1,6 @@
 import { privateApi } from "@/lib/axiosClient"
 import { AUTH_ENDPOINTS } from "../constants/endpoints"
+import type { StudentResponse } from "@/features/student/types/student"
 
 export interface BaseRegisterPayload {
     name: string
@@ -32,6 +33,12 @@ export type RegisterPayload =
     | AgentRegisterPayload
     | BaseRegisterPayload
 
+export type CurrentUserResponse = StudentResponse
+// | AdvisorResponse
+// | AgentResponse
+// | DirectorResponse
+// | AdminResponse
+
 export const getCsrfCookie = async () => {
     await privateApi.get(AUTH_ENDPOINTS.csrf)
 }
@@ -56,7 +63,7 @@ export const logout = async () => {
     return data
 }
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (): Promise<CurrentUserResponse> => {
     const { data } = await privateApi.get(AUTH_ENDPOINTS.me)
     return data
 }
