@@ -1,49 +1,29 @@
-import { Navigate } from "react-router-dom"
+import { Navigate, Outlet } from "react-router-dom"
 
 import type { UserRole } from "@/types/roles"
 import { useUser } from "../../hooks/useUser"
 
 interface ProtectedRouteProps {
-    children: React.ReactNode
     allowedRoles: UserRole[]
-    redirectTo?: string
 }
 
-export const ProtectedRoute = ({
-    children,
-    allowedRoles,
-    redirectTo = "/signin",
-}: ProtectedRouteProps) => {
+export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
     const { data: user, isLoading } = useUser()
 
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <p>Loading...</p>
-            </div>
-        )
-    }
+    if (isLoading) return <div>Loading...</div>
 
-    if (!user) {
-        return <Navigate to={redirectTo} replace />
-    }
-
-    const roleRedirects: Record<UserRole, string> = {
-        admin: "/admin/dashboard",
-        director: "/director/dashboard",
-        advisor: "/advisor/dashboard",
-        agent: "/agent/dashboard",
-        student: "/student/dashboard",
-    }
+    if (!user) return <Navigate to="/signin" replace />
 
     if (!allowedRoles.includes(user.user.role)) {
-        return (
-            <Navigate
-                to={roleRedirects[user.user.role] ?? "/landing"}
-                replace
-            />
-        )
+        const redirectPath =
+            user.user.role === "director"
+                ? "/director/dashboard"
+                : user.user.role === "student"
+                ? "/student/dashboard"
+                : "/landing"
+
+        return <Navigate to={redirectPath} replace />
     }
 
-    return <>{children}</>
+    return <Outlet />
 }

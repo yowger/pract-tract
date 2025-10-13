@@ -11,35 +11,47 @@ import SignInFormPage from "@/pages/signUp/SignInFormPage"
 import DirectorDashboardPage from "@/pages/director/DirectorDashboardPage"
 import StudentLayout from "@/layouts/StudentLayout"
 import DirectorLayout from "@/layouts/DirectorLayout"
+import { PublicRoute } from "@/features/auth/components/routes/PublicRoutes"
 
 const routes = [
-    { path: "/", element: <Navigate to="/landing" replace /> },
     { path: "/landing", element: <LandingPage /> },
-    { path: "/signin", element: <SignInFormPage /> },
-    { path: "/signup", element: <SelectRolePage /> },
-    { path: "/signup/*", element: <Navigate to="/signup" replace /> },
-    { path: "/signup/student", element: <StudentFormPage /> },
-    { path: "/signup/agent", element: <AgentFormPage /> },
-    { path: "/signup/advisor", element: <AdvisorFormPage /> },
+
+    {
+        element: <PublicRoute />,
+        children: [
+            { path: "/signin", element: <SignInFormPage /> },
+            { path: "/signup", element: <SelectRolePage /> },
+            { path: "/signup/*", element: <Navigate to="/signup" replace /> },
+            { path: "/signup/student", element: <StudentFormPage /> },
+            { path: "/signup/agent", element: <AgentFormPage /> },
+            { path: "/signup/advisor", element: <AdvisorFormPage /> },
+        ],
+    },
 
     {
         path: "/student",
-        element: (
-            <ProtectedRoute allowedRoles={["student"]}>
-                <StudentLayout />
-            </ProtectedRoute>
-        ),
-        children: [{ path: "dashboard", element: <StudentDashboardPage /> }],
+        element: <ProtectedRoute allowedRoles={["student"]} />,
+        children: [
+            {
+                element: <StudentLayout />,
+                children: [
+                    { path: "dashboard", element: <StudentDashboardPage /> },
+                ],
+            },
+        ],
     },
 
     {
         path: "/director",
-        element: (
-            <ProtectedRoute allowedRoles={["director"]}>
-                <DirectorLayout />
-            </ProtectedRoute>
-        ),
-        children: [{ path: "dashboard", element: <DirectorDashboardPage /> }],
+        element: <ProtectedRoute allowedRoles={["director"]} />,
+        children: [
+            {
+                element: <DirectorLayout />,
+                children: [
+                    { path: "dashboard", element: <DirectorDashboardPage /> },
+                ],
+            },
+        ],
     },
 
     { path: "*", element: <div>Not Found</div> },
