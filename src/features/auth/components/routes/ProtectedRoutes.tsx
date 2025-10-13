@@ -1,14 +1,16 @@
-import { Navigate, Outlet } from "react-router-dom"
+import { Navigate } from "react-router-dom"
 
 import { useUser } from "../../hooks/useUser"
 import type { UserRole } from "@/types/roles"
 
 interface ProtectedRouteProps {
+    children: React.ReactNode
     redirectTo?: string
     allowedRoles?: UserRole[]
 }
 
 export const ProtectedRoute = ({
+    children,
     allowedRoles,
     redirectTo = "/signin",
 }: ProtectedRouteProps) => {
@@ -23,5 +25,5 @@ export const ProtectedRoute = ({
         return <Navigate to={redirectTo} replace />
     }
 
-    return <Outlet />
+    return <>{children}</>
 }

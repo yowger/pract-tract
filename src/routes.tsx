@@ -8,6 +8,7 @@ import AdvisorFormPage from "@/pages/signUp/advisor/AdvisorFormPage"
 import LandingPage from "@/pages/LandingPage"
 import StudentDashboardPage from "@/pages/student/StudentDashboardPage"
 import SignInFormPage from "./pages/signUp/SignInFormPage"
+import StudentLayout from "./layouts/StudentLayout"
 
 const routes = [
     { path: "/landing", element: <LandingPage /> },
@@ -20,7 +21,11 @@ const routes = [
 
     {
         path: "/student",
-        element: <ProtectedRoute allowedRoles={["student"]} />,
+        element: (
+            <ProtectedRoute allowedRoles={["student"]}>
+                <StudentLayout />
+            </ProtectedRoute>
+        ),
         children: [
             { path: "dashboard", element: <StudentDashboardPage /> },
             // { path: "profile", element: <StudentProfilePage /> },
