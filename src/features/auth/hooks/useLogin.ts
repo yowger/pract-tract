@@ -5,14 +5,12 @@ import { login } from "../api/authApi"
 export const useLogin = () => {
     const queryClient = useQueryClient()
 
-    return useMutation({
-        mutationFn: ({
-            email,
-            password,
-        }: {
-            email: string
-            password: string
-        }) => login(email, password),
+    return useMutation<
+        Awaited<ReturnType<typeof login>>,
+        Error,
+        { email: string; password: string }
+    >({
+        mutationFn: ({ email, password }) => login(email, password),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["user"] })
         },

@@ -18,7 +18,7 @@ export const ProtectedRoute = ({
 
     if (
         !profile ||
-        (allowedRoles && !allowedRoles.includes(profile.user.role))
+        (allowedRoles && !allowedRoles.includes(profile.user.user.role))
     ) {
         return <Navigate to={redirectTo} replace />
     }

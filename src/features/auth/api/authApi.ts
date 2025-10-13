@@ -33,17 +33,26 @@ export type RegisterPayload =
     | AgentRegisterPayload
     | BaseRegisterPayload
 
-export type CurrentUserResponse = StudentResponse
+export type UserResponse = StudentResponse
 // | AdvisorResponse
 // | AgentResponse
 // | DirectorResponse
 // | AdminResponse
 
+export type AuthResponse = { user: UserResponse }
+
+export type CurrentUserResponse = AuthResponse
+export type LoginResponse = AuthResponse
+export type RegisterResponse = AuthResponse
+
 export const getCsrfCookie = async () => {
     await privateApi.get(AUTH_ENDPOINTS.csrf)
 }
 
-export const login = async (email: string, password: string) => {
+export const login = async (
+    email: string,
+    password: string
+): Promise<LoginResponse> => {
     await getCsrfCookie()
     const { data } = await privateApi.post(AUTH_ENDPOINTS.login, {
         email,
@@ -52,13 +61,15 @@ export const login = async (email: string, password: string) => {
     return data
 }
 
-export const register = async (payload: RegisterPayload) => {
+export const register = async (
+    payload: RegisterPayload
+): Promise<RegisterResponse> => {
     await getCsrfCookie()
     const { data } = await privateApi.post(AUTH_ENDPOINTS.register, payload)
     return data
 }
 
-export const logout = async () => {
+export const logout = async (): Promise<void> => {
     const { data } = await privateApi.post(AUTH_ENDPOINTS.logout)
     return data
 }

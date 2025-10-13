@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 import { useLogin } from "@/features/auth/hooks/useLogin"
+import { useNavigate } from "react-router-dom"
 
 const loginSchema = z.object({
     email: z.email("Invalid email address"),
@@ -25,6 +26,8 @@ const loginSchema = z.object({
 type LoginFormValues = z.infer<typeof loginSchema>
 
 const LoginForm = () => {
+    const navigate = useNavigate()
+
     const form = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -33,12 +36,36 @@ const LoginForm = () => {
         },
     })
 
-    const { mutate: login, isPending } = useLogin()
+    const { mutateAsync: login, isPending } = useLogin()
 
     const onSubmit = async (values: LoginFormValues) => {
         try {
-            await login({ ...values })
+            const response = await login({ ...values })
+
+            const role = response.user.user.role
+
             toast.success("Logged in successfully")
+
+            switch (role) {
+                case "student":
+                    navigate("/student/dashboard")
+                    break
+                case "advisor":
+                    navigate("/advisor/dashboard")
+                    break
+                case "agent":
+                    navigate("/agent/dashboard")
+                    break
+                case "director":
+                    navigate("/director/dashboard")
+                    break
+                case "admin":
+                    navigate("/admin/dashboard")
+                    break
+                default:
+                    navigate("/")
+                    break
+            }
         } catch (error) {
             if (error instanceof AxiosError) {
                 toast.error(

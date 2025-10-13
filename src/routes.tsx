@@ -10,7 +10,7 @@ import StudentDashboardPage from "@/pages/student/StudentDashboardPage"
 import SignInFormPage from "./pages/signUp/SignInFormPage"
 
 const routes = [
-    { path: "/", element: <LandingPage /> },
+    { path: "/landing", element: <LandingPage /> },
     { path: "/signin", element: <SignInFormPage /> },
     { path: "/signup", element: <SelectRolePage /> },
     { path: "/signup/*", element: <Navigate to="/signup" replace /> },
@@ -32,18 +32,3 @@ const routes = [
 ]
 
 export default routes
-
-/*
-    { path: "/", element: <div>Home</div> },
-    { path: "/about", element: <div>About</div> },
-    {
-        path: "/dashboard",
-        element: <div>Dashboard Layout</div>,
-        children: [
-            { index: true, element: <div>Dashboard</div> },
-            { path: "settings", element: <div>Settings </div> },
-        ],
-    },
-    { path: "*", element: <div>Not Found</div> },
-]
-*/
