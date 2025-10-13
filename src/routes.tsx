@@ -49,6 +49,10 @@ const routes = [
                 element: <DirectorLayout />,
                 children: [
                     { path: "dashboard", element: <DirectorDashboardPage /> },
+                    // { path: "students", element: <StudentManagementPage /> },
+                    // { path: "advisors", element: <AdvisorManagementPage /> },
+                    // { path: "companies", element: <CompanyManagementPage /> },
+                    // { path: "reports", element: <ReportsPage /> },
                 ],
             },
         ],

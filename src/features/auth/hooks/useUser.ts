@@ -8,5 +8,6 @@ export const useUser = (): UseQueryResult<
         queryKey: ["user"],
         queryFn: getCurrentUser,
         retry: false,
+        staleTime: 5 * 60 * 1000,
     })
 }
