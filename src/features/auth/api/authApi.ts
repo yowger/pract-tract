@@ -1,6 +1,7 @@
 import { privateApi } from "@/lib/axiosClient"
-import { AUTH_ENDPOINTS } from "../constants/endpoints"
 import type { StudentResponse } from "@/features/student/types/student"
+import type { DirectorResponse } from "@/features/director/types/director"
+import { AUTH_ENDPOINTS } from "../constants/endpoints"
 
 export interface BaseRegisterPayload {
     name: string
@@ -33,10 +34,11 @@ export type RegisterPayload =
     | AgentRegisterPayload
     | BaseRegisterPayload
 
-export type UserResponse = StudentResponse
-// | AdvisorResponse
-// | AgentResponse
-// | DirectorResponse
+export type UserResponse =
+    | StudentResponse
+    // | AdvisorResponse
+    // | AgentResponse
+    | DirectorResponse
 // | AdminResponse
 
 export type AuthResponse = { user: UserResponse }

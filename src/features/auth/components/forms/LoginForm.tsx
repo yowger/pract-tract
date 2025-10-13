@@ -42,7 +42,7 @@ const LoginForm = () => {
         try {
             const response = await login({ ...values })
 
-            const role = response.user.user.role
+            const role = response.user.role
 
             toast.success("Logged in successfully")
 
