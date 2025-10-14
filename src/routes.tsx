@@ -12,6 +12,7 @@ import DirectorDashboardPage from "@/pages/director/DirectorDashboardPage"
 import StudentLayout from "@/layouts/StudentLayout"
 import DirectorLayout from "@/layouts/DirectorLayout"
 import { PublicRoute } from "@/features/auth/components/routes/PublicRoutes"
+import StudentManagementPage from "./pages/director/StudentManagementPage"
 
 const routes = [
     { path: "/landing", element: <LandingPage /> },
@@ -50,7 +51,7 @@ const routes = [
                 element: <DirectorLayout />,
                 children: [
                     { path: "dashboard", element: <DirectorDashboardPage /> },
-                    // { path: "students", element: <StudentManagementPage /> },
+                    { path: "students", element: <StudentManagementPage /> },
                     // { path: "advisors", element: <AdvisorManagementPage /> },
                     // { path: "companies", element: <CompanyManagementPage /> },
                     // { path: "reports", element: <ReportsPage /> },
