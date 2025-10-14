@@ -15,6 +15,7 @@ import { PublicRoute } from "@/features/auth/components/routes/PublicRoutes"
 
 const routes = [
     { path: "/landing", element: <LandingPage /> },
+    { path: "/", element: <Navigate to="/landing" replace /> },
 
     {
         element: <PublicRoute />,
