@@ -7,13 +7,13 @@ const StudentManagementPage = () => {
     if (isLoading) return <p>Loading...</p>
     if (error) return <p>Error loading students.</p>
 
-    const students = data.data
+    const students = data?.data
 
     return (
         <div>
             <h1 className="text-xl font-semibold mb-4">Students</h1>
             <ul className="space-y-2">
-                {students.map((student) => (
+                {students?.map((student) => (
                     <li key={student.id} className="p-3 rounded bg-gray-100">
                         <p>
                             <strong>{student.user.name}</strong> –{" "}
