@@ -7,6 +7,8 @@ import DashboardLayout from "./dashboard/DashboardLayout"
 import Navbar from "./dashboard/Navbar"
 import { useUser } from "@/features/auth/hooks/useUser"
 import { isDirector } from "@/features/auth/api/authApi"
+import { useLogout } from "@/features/auth/hooks/useLogout"
+import { toast } from "sonner"
 
 const adminLinks = [
     { name: "Dashboard", path: "/director/dashboard", icon: Home },
@@ -17,13 +19,25 @@ const adminLinks = [
 
 const DirectorLayout = () => {
     const { data: user } = useUser()
+    const { mutateAsync: logout } = useLogout()
     const navigate = useNavigate()
 
     if (!user) return null
 
     if (user && isDirector(user.user) === false) {
-        navigate("/login")
+        navigate("/signin")
         return null
+    }
+
+    async function handleLogout() {
+        try {
+            await logout()
+            toast.success("Logged out successfully")
+            navigate("/login")
+        } catch (error) {
+            toast.error("Failed to log out")
+            console.error(error)
+        }
     }
 
     return (
@@ -32,6 +46,7 @@ const DirectorLayout = () => {
                 navbar={
                     <Navbar
                         toggleButton={<SidebarTrigger />}
+                        onLogout={handleLogout}
                         user={{
                             name: user.user.name,
                             role: user.user.role,
