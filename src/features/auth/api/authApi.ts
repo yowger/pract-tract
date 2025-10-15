@@ -41,6 +41,14 @@ export type UserResponse =
     | DirectorResponse
 // | AdminResponse
 
+export function isDirector(user: UserResponse): user is DirectorResponse {
+    return user.role === "director"
+}
+
+export function isStudent(user: UserResponse): user is StudentResponse {
+    return user.role === "student"
+}
+
 export type AuthResponse = { user: UserResponse }
 
 export type CurrentUserResponse = AuthResponse

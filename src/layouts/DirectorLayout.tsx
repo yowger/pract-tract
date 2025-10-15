@@ -1,14 +1,48 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
+import { Home, Users, Building2, UserCog } from "lucide-react"
+
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import Sidebar from "./dashboard/Sidebar"
+import DashboardLayout from "./dashboard/DashboardLayout"
+import Navbar from "./dashboard/Navbar"
+import { useUser } from "@/features/auth/hooks/useUser"
+import { isDirector } from "@/features/auth/api/authApi"
+
+const adminLinks = [
+    { name: "Dashboard", path: "/director/dashboard", icon: Home },
+    { name: "Students", path: "/director/students", icon: Users },
+    { name: "Advisors", path: "/director/advisors", icon: UserCog },
+    { name: "Companies", path: "/director/companies", icon: Building2 },
+]
 
 const DirectorLayout = () => {
-    return (
-        <div className="flex h-screen">
-            <aside className="bg-gray-100 p-4 border-r">Sidebar</aside>
+    const { data: user } = useUser()
+    const navigate = useNavigate()
 
-            <main className="flex-1 overflow-y-auto p-6">
+    if (!user) return null
+
+    if (user && isDirector(user.user) === false) {
+        navigate("/login")
+        return null
+    }
+
+    return (
+        <SidebarProvider>
+            <DashboardLayout
+                navbar={
+                    <Navbar
+                        toggleButton={<SidebarTrigger />}
+                        user={{
+                            name: user.user.name,
+                            role: user.user.role,
+                        }}
+                    />
+                }
+                sidebar={<Sidebar links={adminLinks} title="Director" />}
+            >
                 <Outlet />
-            </main>
-        </div>
+            </DashboardLayout>
+        </SidebarProvider>
     )
 }
 

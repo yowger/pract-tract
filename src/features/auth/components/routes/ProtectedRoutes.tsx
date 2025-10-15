@@ -25,5 +25,9 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
         return <Navigate to={redirectPath} replace />
     }
 
-    return <Outlet />
+    return (
+        <div className="w-full min-h-screen">
+            <Outlet />
+        </div>
+    )
 }
