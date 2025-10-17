@@ -2,7 +2,6 @@ import { Outlet, useNavigate } from "react-router-dom"
 import {
     Home,
     User,
-    FileText,
     CalendarCheck,
     ClipboardList,
     FolderOpen,
@@ -16,16 +15,15 @@ import Sidebar from "./dashboard/Sidebar"
 import DashboardLayout from "./dashboard/DashboardLayout"
 import Navbar from "./dashboard/Navbar"
 
-const studentLinks = [
-    { name: "Dashboard", path: "/student/dashboard", icon: Home },
-    { name: "Profile", path: "/student/profile", icon: User },
-    { name: "Attendance", path: "/student/attendance", icon: CalendarCheck },
-    { name: "Reports", path: "/student/reports", icon: FileText },
-    { name: "Documents", path: "/student/documents", icon: FolderOpen },
-    { name: "Evaluation", path: "/student/evaluation", icon: ClipboardList },
+const AgentLinks = [
+    { name: "Dashboard", path: "/agent/dashboard", icon: Home },
+    { name: "Profile", path: "/agent/profile", icon: User },
+    { name: "Attendance", path: "/agent/attendance", icon: CalendarCheck },
+    { name: "Schedule", path: "/agent/schedule", icon: ClipboardList },
+    { name: "Students", path: "/agent/students", icon: FolderOpen },
 ]
 
-const StudentLayout = () => {
+const AgentLayout = () => {
     const { data: user } = useUser()
     const { mutateAsync: logout } = useLogout()
     const navigate = useNavigate()
@@ -56,7 +54,7 @@ const StudentLayout = () => {
                         }}
                     />
                 }
-                sidebar={<Sidebar links={studentLinks} title="Student" />}
+                sidebar={<Sidebar links={AgentLinks} title="Student" />}
             >
                 <Outlet />
             </DashboardLayout>
@@ -64,4 +62,4 @@ const StudentLayout = () => {
     )
 }
 
-export default StudentLayout
+export default AgentLayout

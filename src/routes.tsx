@@ -3,6 +3,12 @@ import { Navigate } from "react-router-dom"
 
 import { ProtectedRoute } from "@/features/auth/components/routes/ProtectedRoutes"
 import { PublicRoute } from "@/features/auth/components/routes/PublicRoutes"
+import AgentLayout from "./layouts/AgentLayout"
+import AgentDashboardPage from "./pages/agent/AgentDashboardPage"
+import AgentStudentsPage from "./pages/agent/AgentStudentsPage"
+import AgentAttendancePage from "./pages/agent/AgentAttendancePage"
+import AgentSchedulePage from "./pages/agent/AgentSchedulePage"
+import AgentProfilePage from "./pages/agent/AgentProfilePage"
 
 const LandingPage = lazy(() => import("@/pages/LandingPage"))
 const SignInFormPage = lazy(() => import("@/pages/signUp/SignInFormPage"))
@@ -61,6 +67,23 @@ const routes = [
             { path: "/signup/student", element: <StudentFormPage /> },
             { path: "/signup/agent", element: <AgentFormPage /> },
             { path: "/signup/advisor", element: <AdvisorFormPage /> },
+        ],
+    },
+
+    {
+        path: "/agent",
+        element: <ProtectedRoute allowedRoles={["agent"]} />,
+        children: [
+            {
+                element: <AgentLayout />,
+                children: [
+                    { path: "dashboard", element: <AgentDashboardPage /> },
+                    { path: "students", element: <AgentStudentsPage /> },
+                    { path: "attendance", element: <AgentAttendancePage /> },
+                    { path: "schedule", element: <AgentSchedulePage /> },
+                    { path: "profile", element: <AgentProfilePage /> },
+                ],
+            },
         ],
     },
 
