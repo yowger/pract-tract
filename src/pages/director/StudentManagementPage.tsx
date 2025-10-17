@@ -1,30 +1,98 @@
+import { useState } from "react"
+
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
+import DataTable from "@/features/shared/components/Datatable"
+import { Input } from "@/components/ui/input"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { StudentColumns } from "@/features/director/components/studentColumns"
 import { useStudents } from "@/features/director/hooks/useStudents"
 
 const StudentManagementPage = () => {
-    const { data, isLoading, error } = useStudents({ per_page: 10, page: 1 })
-    console.log("🚀 ~ StudentManagementPage ~ data:", data)
+    const [filters, setFilters] = useState({
+        page: 1,
+        per_page: 10,
+        student: "",
+        status: "",
+        program_id: undefined as number | undefined,
+    })
 
-    if (isLoading) return <p>Loading...</p>
-    if (error) return <p>Error loading students.</p>
+    const { data, isLoading } = useStudents(filters)
 
-    const students = data?.data
+    const students = data?.data ?? []
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+        setFilters((f) => ({
+            ...f,
+            student: value,
+            page: 1,
+        }))
+    }
+
+    const handleStatusChange = (value: string) => {
+        setFilters((f) => ({
+            ...f,
+            status: value === "all" ? "" : value,
+            page: 1,
+        }))
+    }
 
     return (
-        <div>
-            <h1 className="text-xl font-semibold mb-4">Students</h1>
-            <ul className="space-y-2">
-                {students?.map((student) => (
-                    <li key={student.id} className="p-3 rounded bg-gray-100">
-                        <p>
-                            <strong>{student.user.name}</strong> –{" "}
-                            {student.program?.name}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                            Status: {student.user.status}
-                        </p>
-                    </li>
-                ))}
-            </ul>
+        <div className="space-y-4">
+            <div className="flex justify-between items-center">
+                <h1 className="text-xl font-semibold">Students</h1>
+
+                <div className="flex gap-3 items-center">
+                    <Input
+                        placeholder="Search student..."
+                        value={filters.student}
+                        onChange={handleSearch}
+                        className="w-[200px]"
+                    />
+
+                    <Select
+                        value={filters.status || "all"}
+                        onValueChange={handleStatusChange}
+                    >
+                        <SelectTrigger className="w-[160px]">
+                            <SelectValue placeholder="Filter by status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">All</SelectItem>
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="accepted">Accepted</SelectItem>
+                            <SelectItem value="rejected">Rejected</SelectItem>
+                            <SelectItem value="inactive">Inactive</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
+
+            <ScrollArea type="always" className="w-full overflow-x-auto">
+                <DataTable
+                    data={students}
+                    columns={StudentColumns}
+                    isLoading={isLoading}
+                    manualPagination
+                    pageCount={data?.meta.last_page}
+                    totalItems={data?.meta.total}
+                    pagination={{
+                        pageIndex: filters.page - 1,
+                        pageSize: filters.per_page,
+                    }}
+                    onPageChange={(page) => setFilters((f) => ({ ...f, page }))}
+                    onPageSizeChange={(size) =>
+                        setFilters((f) => ({ ...f, per_page: size }))
+                    }
+                />
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
         </div>
     )
 }
