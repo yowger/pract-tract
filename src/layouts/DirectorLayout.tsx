@@ -1,14 +1,13 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import { Home, Users, Building2, UserCog } from "lucide-react"
+import { toast } from "sonner"
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { useUser } from "@/features/auth/hooks/useUser"
+import { useLogout } from "@/features/auth/hooks/useLogout"
+import Navbar from "./dashboard/Navbar"
 import Sidebar from "./dashboard/Sidebar"
 import DashboardLayout from "./dashboard/DashboardLayout"
-import Navbar from "./dashboard/Navbar"
-import { useUser } from "@/features/auth/hooks/useUser"
-import { isDirector } from "@/features/auth/api/authApi"
-import { useLogout } from "@/features/auth/hooks/useLogout"
-import { toast } from "sonner"
 
 const adminLinks = [
     { name: "Dashboard", path: "/director/dashboard", icon: Home },
@@ -24,16 +23,11 @@ const DirectorLayout = () => {
 
     if (!user) return null
 
-    if (user && isDirector(user.user) === false) {
-        navigate("/signin")
-        return null
-    }
-
     async function handleLogout() {
         try {
             await logout()
             toast.success("Logged out successfully")
-            navigate("/login")
+            navigate("/signin")
         } catch (error) {
             toast.error("Failed to log out")
             console.error(error)
