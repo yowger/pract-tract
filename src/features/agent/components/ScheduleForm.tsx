@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form"
-import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
     Form,
@@ -21,6 +20,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
+import { formSchema, type ScheduleFormValues } from "../api/schedule"
 
 const daysOfWeek = [
     "monday",
@@ -32,43 +32,18 @@ const daysOfWeek = [
     "sunday",
 ]
 
-const formSchema = z.object({
-    company_id: z.string().optional(),
-    day_of_week: z.array(z.string().min(1)).min(1, "Select at least one day"),
-    start_date: z.string().optional(),
-    end_date: z.string().optional(),
-
-    am_time_in: z.string().optional(),
-    am_time_out: z.string().optional(),
-    am_require_photo_in: z.boolean(),
-    am_require_photo_out: z.boolean(),
-    am_require_location_in: z.boolean(),
-    am_require_location_out: z.boolean(),
-    am_grace_period_minutes: z.number().optional(),
-    am_undertime_grace_minutes: z.number().optional(),
-
-    pm_time_in: z.string().optional(),
-    pm_time_out: z.string().optional(),
-    pm_require_photo_in: z.boolean(),
-    pm_require_photo_out: z.boolean(),
-    pm_require_location_in: z.boolean(),
-    pm_require_location_out: z.boolean(),
-    pm_grace_period_minutes: z.number().optional(),
-    pm_undertime_grace_minutes: z.number().optional(),
-
-    allow_early_in: z.boolean(),
-    early_in_limit_minutes: z.number().optional(),
-})
-
-type ScheduleFormValues = z.infer<typeof formSchema>
-
 interface ScheduleFormProps {
     onSubmit: (data: ScheduleFormValues) => void
     companies?: { id: number; name: string }[]
+    disabled?: boolean
 }
 
-export function ScheduleForm({ onSubmit, companies = [] }: ScheduleFormProps) {
-    const form = useForm<z.infer<typeof formSchema>>({
+export function ScheduleForm({
+    onSubmit,
+    companies = [],
+    disabled,
+}: ScheduleFormProps) {
+    const form = useForm<ScheduleFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             day_of_week: [],
@@ -405,8 +380,8 @@ export function ScheduleForm({ onSubmit, companies = [] }: ScheduleFormProps) {
                     )}
                 />
 
-                <Button type="submit" className="w-full">
-                    Save Schedule
+                <Button type="submit" className="w-full" disabled={disabled}>
+                    {disabled ? "Saving..." : "Save Schedule"}
                 </Button>
             </form>
         </Form>
