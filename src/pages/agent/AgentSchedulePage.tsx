@@ -6,6 +6,7 @@ import { isAgent } from "@/features/auth/types/auth"
 import { useCreateSchedule } from "@/features/agent/hooks/useSchedule"
 import type { ScheduleFormValues } from "@/features/agent/api/schedule"
 import { toast } from "sonner"
+import { cleanUndefined } from "@/utils/utils"
 
 const AgentSchedulePage = () => {
     const { data, isLoading } = useUser()
@@ -17,12 +18,20 @@ const AgentSchedulePage = () => {
         return <Navigate to="/signin" replace />
     }
 
+    const companyId = data?.user?.agent?.company_id
+
     const handleSubmit = (formData: ScheduleFormValues) => {
-        createSchedule(formData, {
+        const cleanedData = {
+            ...cleanUndefined(formData),
+            company_id: companyId,
+        }
+
+        createSchedule(cleanedData, {
             onSuccess: () => {
                 toast.success("Schedule created successfully")
             },
-            onError: () => {
+            onError: (err) => {
+                console.log("🚀 ~ handleSubmit ~ err:", err)
                 toast.error("Failed to create schedule")
             },
         })
@@ -38,3 +47,5 @@ const AgentSchedulePage = () => {
 }
 
 export default AgentSchedulePage
+
+// number cannot be null, transform to 0
