@@ -1,51 +1,24 @@
-import { Navigate } from "react-router-dom"
-
-import { ScheduleForm } from "@/features/agent/components/ScheduleForm"
+import { Link } from "react-router-dom"
 import { useUser } from "@/features/auth/hooks/useUser"
 import { isAgent } from "@/features/auth/types/auth"
-import { useCreateSchedule } from "@/features/agent/hooks/useSchedule"
-import type { ScheduleFormValues } from "@/features/agent/api/schedule"
-import { toast } from "sonner"
-import { cleanUndefined } from "@/utils/utils"
+
+import { ScheduleCard } from "@/features/director/components/ScheduleCard"
 
 const AgentSchedulePage = () => {
-    const { data, isLoading } = useUser()
-    const { mutate: createSchedule, isPending } = useCreateSchedule()
+    const { data: user, isLoading: userLoading } = useUser()
 
-    if (isLoading) return <div>Loading...</div>
+    const schedule =
+        user?.user && isAgent(user.user)
+            ? user.user.agent?.company?.schedule
+            : null
 
-    if (!data || !isAgent(data.user)) {
-        return <Navigate to="/signin" replace />
+    if (userLoading) return <div>Loading...</div>
+
+    if (!schedule) {
+        return <Link to="/agent/schedule/create">Create Schedule</Link>
     }
 
-    const companyId = data?.user?.agent?.company_id
-
-    const handleSubmit = (formData: ScheduleFormValues) => {
-        const cleanedData = {
-            ...cleanUndefined(formData),
-            company_id: companyId,
-        }
-
-        createSchedule(cleanedData, {
-            onSuccess: () => {
-                toast.success("Schedule created successfully")
-            },
-            onError: (err) => {
-                console.log("🚀 ~ handleSubmit ~ err:", err)
-                toast.error("Failed to create schedule")
-            },
-        })
-    }
-
-    return (
-        <div>
-            <div className="max-w-2xl">
-                <ScheduleForm onSubmit={handleSubmit} disabled={isPending} />
-            </div>
-        </div>
-    )
+    return <ScheduleCard schedule={schedule} />
 }
 
 export default AgentSchedulePage
-
-// number cannot be null, transform to 0

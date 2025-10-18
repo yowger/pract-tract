@@ -1,3 +1,4 @@
+import type { Schedule } from "@/features/shared/types/schedule"
 import type { UserRole } from "./roles"
 
 export type User = {
@@ -53,6 +54,7 @@ export interface Company {
     is_active: number
     created_at: string
     updated_at: string
+    schedule?: Schedule
 }
 
 export interface Student {

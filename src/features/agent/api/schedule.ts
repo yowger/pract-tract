@@ -41,3 +41,10 @@ export async function fetchSchedules() {
     const res = await privateApi.get("/api/schedules")
     return res.data
 }
+
+export async function fetchSchedule(
+    companyId?: number
+): Promise<ScheduleFormValues | null> {
+    const res = await privateApi.get(`/api/schedules/${companyId}`)
+    return res.data
+}
