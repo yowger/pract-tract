@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/select"
 import { StudentColumns } from "@/features/director/components/StudentColumns"
 import { useStudents } from "@/features/director/hooks/useStudents"
+import type { StudentQueryParams } from "@/features/director/api/studentApi"
 
 const StudentManagementPage = () => {
-    const [filters, setFilters] = useState({
+    const [filters, setFilters] = useState<StudentQueryParams>({
         page: 1,
         per_page: 10,
         student: "",

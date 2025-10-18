@@ -2,11 +2,13 @@ import { privateApi } from "@/lib/axiosClient"
 import type { StudentPaginatedResponse } from "@/types/studentList"
 
 export interface StudentQueryParams {
-    page?: number
-    per_page?: number
+    page: number
+    per_page: number
     student?: string
     advisor?: string
-    company?: number
+    company?: string
+    company_id?: number
+
     program_id?: number
     section_id?: number
     status?: string

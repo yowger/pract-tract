@@ -22,14 +22,14 @@ export interface CompanyFilters {
     is_active?: boolean
     sort_by?: string
     sort_order?: "asc" | "desc"
-    per_page?: number
-    page?: number
+    per_page: number
+    page: number
 }
 
 export type CompanyPaginatedResponse = PaginatedResponse<Company>
 
 export const fetchCompanies = async (
-    filters: CompanyFilters = {}
+    filters: CompanyFilters
 ): Promise<CompanyPaginatedResponse> => {
     const { data } = await privateApi.get("/api/companies", { params: filters })
     return data
