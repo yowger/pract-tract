@@ -64,12 +64,11 @@ export interface Student {
     section: Section
     advisor?: {
         id: number
-        name: string
-    } | null
-    company?: {
-        id: number
-        name: string
-    } | null
+        created_at: string
+        updated_at: string
+        user: User
+    }
+    company?: Company
 }
 
 export interface UserAgent extends User {

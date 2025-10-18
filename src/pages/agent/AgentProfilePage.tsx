@@ -50,7 +50,7 @@ const AgentProfilePage = () => {
     const schedule = company?.schedule
 
     return (
-        <div>
+        <div className="p-6">
             <div className="max-w-4xl mx-auto">
                 <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
                     <div className="flex items-start justify-between">
