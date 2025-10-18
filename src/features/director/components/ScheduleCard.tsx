@@ -122,7 +122,7 @@ export const ScheduleCard = ({ schedule }: { schedule: Schedule }) => {
     )
 
     return (
-        <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl">
+        <div>
             <div className="max-w-4xl mx-auto">
                 <div className="mb-8">
                     <h1 className="text-2xl font-bold text-gray-900 mb-2">
