@@ -10,7 +10,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { StudentColumns } from "@/features/director/components/studentColumns"
+import { StudentColumns } from "@/features/director/components/StudentColumns"
 import { useStudents } from "@/features/director/hooks/useStudents"
 
 const StudentManagementPage = () => {
@@ -22,9 +22,7 @@ const StudentManagementPage = () => {
         program_id: undefined as number | undefined,
     })
 
-    const { data, isLoading } = useStudents(filters)
-
-    const students = data?.data ?? []
+    const { data: students, isLoading } = useStudents(filters)
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
@@ -76,12 +74,12 @@ const StudentManagementPage = () => {
 
             <ScrollArea type="always" className="w-full overflow-x-auto">
                 <DataTable
-                    data={students}
+                    data={students ? students.data : []}
                     columns={StudentColumns}
                     isLoading={isLoading}
                     manualPagination
-                    pageCount={data?.meta.last_page}
-                    totalItems={data?.meta.total}
+                    pageCount={students?.meta.last_page}
+                    totalItems={students?.meta.total}
                     pagination={{
                         pageIndex: filters.page - 1,
                         pageSize: filters.per_page,

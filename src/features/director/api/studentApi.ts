@@ -6,7 +6,7 @@ export interface StudentQueryParams {
     per_page?: number
     student?: string
     advisor?: string
-    company?: string
+    company?: number
     program_id?: number
     section_id?: number
     status?: string
