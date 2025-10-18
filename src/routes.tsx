@@ -7,7 +7,6 @@ import AgentLayout from "./layouts/AgentLayout"
 import AgentDashboardPage from "./pages/agent/AgentDashboardPage"
 import AgentStudentsPage from "./pages/agent/AgentStudentsPage"
 import AgentAttendancePage from "./pages/agent/AgentAttendancePage"
-import AgentSchedulePage from "./pages/agent/AgentSchedulePage"
 import AgentProfilePage from "./pages/agent/AgentProfilePage"
 import AgentCreateSchedulePage from "./pages/agent/AgentCreateSchedule"
 
@@ -81,7 +80,6 @@ const routes = [
                     { path: "dashboard", element: <AgentDashboardPage /> },
                     { path: "students", element: <AgentStudentsPage /> },
                     { path: "attendance", element: <AgentAttendancePage /> },
-                    { path: "schedule", element: <AgentSchedulePage /> },
                     {
                         path: "schedule/create",
                         element: <AgentCreateSchedulePage />,

@@ -1,11 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import {
-    Home,
-    User,
-    CalendarCheck,
-    ClipboardList,
-    FolderOpen,
-} from "lucide-react"
+import { Home, User, CalendarCheck, FolderOpen } from "lucide-react"
 import { toast } from "sonner"
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
@@ -19,7 +13,6 @@ const AgentLinks = [
     { name: "Dashboard", path: "/agent/dashboard", icon: Home },
     { name: "Profile", path: "/agent/profile", icon: User },
     { name: "Attendance", path: "/agent/attendance", icon: CalendarCheck },
-    { name: "Schedule", path: "/agent/schedule", icon: ClipboardList },
     { name: "Students", path: "/agent/students", icon: FolderOpen },
 ]
 
