@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { Clock, CheckCircle, LogOut, AlertCircle } from "lucide-react"
+import { useUser } from "@/features/auth/hooks/useUser"
 
 interface TimeRecord {
     date: string
@@ -10,6 +11,8 @@ interface TimeRecord {
 }
 
 const StudentAttendancePage = () => {
+    const { data: user } = useUser()
+
     const [currentTime, setCurrentTime] = useState(new Date())
     const [isClockedIn, setIsClockedIn] = useState(false)
     const [clockInTime, setClockInTime] = useState<string | null>(null)

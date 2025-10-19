@@ -8,7 +8,7 @@ export const CompanyColumns: ColumnDef<Company>[] = [
         accessorKey: "name",
     },
     {
-        header: "Email",
+        header: "Company Email",
         accessorKey: "email",
     },
     {
@@ -27,6 +27,10 @@ export const CompanyColumns: ColumnDef<Company>[] = [
     {
         header: "Owner",
         accessorFn: (row) => row.owner?.name || "-",
+    },
+    {
+        header: "Owner Email",
+        accessorFn: (row) => row.owner?.email || "-",
     },
     {
         header: "Students",

@@ -54,7 +54,7 @@ export interface Company {
     is_active: number
     created_at: string
     updated_at: string
-    schedule?: Schedule
+    schedule: Schedule | null
 }
 
 export interface Student {
@@ -62,13 +62,14 @@ export interface Student {
     student_id: string
     program: Program
     section: Section
-    advisor?: {
+    schedule_id: number | null
+    advisor: {
         id: number
         created_at: string
         updated_at: string
         user: User
-    }
-    company?: Company
+    } | null
+    company: Company | null
 }
 
 export interface UserAgent extends User {

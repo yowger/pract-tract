@@ -12,13 +12,6 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
-import {
-    Select,
-    SelectTrigger,
-    SelectContent,
-    SelectItem,
-    SelectValue,
-} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { formSchema, type ScheduleFormValues } from "../api/schedule"
 
@@ -34,28 +27,38 @@ const daysOfWeek = [
 
 interface ScheduleFormProps {
     onSubmit: (data: ScheduleFormValues) => void
-    companies?: { id: number; name: string }[]
     disabled?: boolean
 }
 
-export function ScheduleForm({
-    onSubmit,
-    companies = [],
-    disabled,
-}: ScheduleFormProps) {
+export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
     const form = useForm<ScheduleFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            day_of_week: [],
-            am_require_photo_in: false,
+            day_of_week: [
+                "monday",
+                "tuesday",
+                "wednesday",
+                "thursday",
+                "friday",
+            ],
+            am_time_in: "08:00",
+            am_time_out: "11:30",
+            pm_time_in: "13:00",
+            pm_time_out: "17:00",
+            am_require_photo_in: true,
             am_require_photo_out: false,
-            am_require_location_in: false,
-            am_require_location_out: false,
-            pm_require_photo_in: false,
+            am_require_location_in: true,
+            am_require_location_out: true,
+            pm_require_photo_in: true,
             pm_require_photo_out: false,
-            pm_require_location_in: false,
-            pm_require_location_out: false,
-            allow_early_in: false,
+            pm_require_location_in: true,
+            pm_require_location_out: true,
+            allow_early_in: true,
+            am_grace_period_minutes: 15,
+            am_undertime_grace_minutes: 30,
+            pm_grace_period_minutes: 15,
+            pm_undertime_grace_minutes: 30,
+            early_in_limit_minutes: 15,
         },
     })
 
@@ -63,39 +66,6 @@ export function ScheduleForm({
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <div className="grid grid-cols-2 gap-4">
-                    {companies.length > 0 && (
-                        <FormField
-                            control={form.control}
-                            name="company_id"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Company (optional)</FormLabel>
-                                    <Select
-                                        onValueChange={field.onChange}
-                                        value={field.value ?? ""}
-                                    >
-                                        <FormControl>
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="Select company" />
-                                            </SelectTrigger>
-                                        </FormControl>
-                                        <SelectContent>
-                                            {companies.map((c) => (
-                                                <SelectItem
-                                                    key={c.id}
-                                                    value={String(c.id)}
-                                                >
-                                                    {c.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    )}
-
                     <FormField
                         control={form.control}
                         name="day_of_week"

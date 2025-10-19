@@ -29,7 +29,7 @@ const AgentCreateSchedulePage = () => {
         createSchedule(cleanedData, {
             onSuccess: () => {
                 toast.success("Schedule created successfully")
-                navigate("/agent/schedule")
+                navigate("/agent/profile")
             },
             onError: () => {
                 toast.error("Failed to create schedule")

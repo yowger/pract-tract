@@ -198,9 +198,7 @@ const CompanyTab: React.FC<{ userData: UserStudent }> = ({ userData }) => {
 
     return (
         <div className="bg-white rounded-lg shadow-lg p-8 space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Training Company
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Company</h2>
 
             <Field icon={Building2} label="Company Name" value={company.name} />
             <Field
