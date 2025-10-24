@@ -5,14 +5,16 @@ import type {
     AttendanceStudent,
 } from "@/features/agent/types/attendance"
 
+export type AttendanceStatus = "present" | "absent" | "late" | "excused"
+
 export interface AttendanceFilters {
-    student_id?: number
+    student_name?: string
     date?: string
     start_date?: string
     end_date?: string
-    status?: "present" | "absent" | "late" | "excused"
-    per_page?: number
-    page?: number
+    status?: AttendanceStatus
+    per_page: number
+    page: number
 }
 
 export type AttendanceWithStudent = Attendance & {
