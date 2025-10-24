@@ -1,4 +1,6 @@
+import { AxiosError } from "axios"
 import { useState } from "react"
+import { toast } from "sonner"
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import DataTable from "@/features/shared/components/Datatable"
@@ -13,8 +15,22 @@ import {
 import { StudentColumns } from "@/features/director/components/StudentColumns"
 import { useStudents } from "@/features/director/hooks/useStudents"
 import type { StudentQueryParams } from "@/features/director/api/studentApi"
+import { Button } from "@/components/ui/button"
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
+import { useUpdateUsersStatus } from "@/features/director/hooks/useUpdateUsersStatus"
+import type { UserStatus } from "@/features/shared/types/users"
 
 const StudentManagementPage = () => {
+    const [selectedStudentsIds, setSelectedStudentsIds] = useState<number[]>([])
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [newStatus, setNewStatus] = useState<UserStatus | "">("")
+    const { mutateAsync: bulkUpdate, isPending } = useUpdateUsersStatus()
     const [filters, setFilters] = useState<StudentQueryParams>({
         page: 1,
         per_page: 10,
@@ -42,57 +58,154 @@ const StudentManagementPage = () => {
         }))
     }
 
+    const handleNewStatusChange = (value: string) => {
+        setNewStatus(
+            value as "" | "accepted" | "pending" | "rejected" | "inactive"
+        )
+    }
+
+    const handleBulkUpdate = async () => {
+        if (!newStatus || selectedStudentsIds.length === 0 || isPending) return
+
+        try {
+            await bulkUpdate({
+                user_ids: selectedStudentsIds,
+                status: newStatus,
+            })
+
+            toast.success("Status updated successfully")
+            setIsModalOpen(false)
+            setSelectedStudentsIds([])
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error(
+                    error?.response?.data?.message || "Status update failed"
+                )
+            }
+        }
+    }
+
     return (
-        <div className="space-y-4">
-            <div className="flex justify-between items-center">
-                <h1 className="text-xl font-semibold">Students</h1>
+        <>
+            <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                    <div>
+                        <Input
+                            placeholder="Search student..."
+                            value={filters.student}
+                            onChange={handleSearch}
+                            className="w-[200px]"
+                        />
+                    </div>
 
-                <div className="flex gap-3 items-center">
-                    <Input
-                        placeholder="Search student..."
-                        value={filters.student}
-                        onChange={handleSearch}
-                        className="w-[200px]"
-                    />
+                    <div className="flex gap-3 items-center">
+                        {selectedStudentsIds.length > 0 && (
+                            <Button onClick={() => setIsModalOpen(true)}>
+                                Update Status ({selectedStudentsIds.length})
+                            </Button>
+                        )}
 
-                    <Select
-                        value={filters.status || "all"}
-                        onValueChange={handleStatusChange}
-                    >
-                        <SelectTrigger className="w-[160px]">
-                            <SelectValue placeholder="Filter by status" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="all">All</SelectItem>
-                            <SelectItem value="pending">Pending</SelectItem>
-                            <SelectItem value="accepted">Accepted</SelectItem>
-                            <SelectItem value="rejected">Rejected</SelectItem>
-                            <SelectItem value="inactive">Inactive</SelectItem>
-                        </SelectContent>
-                    </Select>
+                        <Select
+                            value={filters.status || "all"}
+                            onValueChange={handleStatusChange}
+                        >
+                            <SelectTrigger className="w-[160px]">
+                                <SelectValue placeholder="Filter by status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="all">All</SelectItem>
+                                <SelectItem value="pending">Pending</SelectItem>
+                                <SelectItem value="accepted">
+                                    Accepted
+                                </SelectItem>
+                                <SelectItem value="rejected">
+                                    Rejected
+                                </SelectItem>
+                                <SelectItem value="inactive">
+                                    Inactive
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </div>
+
+                <ScrollArea type="always" className="w-full overflow-x-auto">
+                    <DataTable
+                        data={students ? students.data : []}
+                        columns={StudentColumns}
+                        isLoading={isLoading}
+                        manualPagination
+                        pageCount={students?.meta.last_page}
+                        totalItems={students?.meta.total}
+                        pagination={{
+                            pageIndex: filters.page - 1,
+                            pageSize: filters.per_page,
+                        }}
+                        onPageChange={(page) =>
+                            setFilters((f) => ({ ...f, page }))
+                        }
+                        onPageSizeChange={(size) =>
+                            setFilters((f) => ({ ...f, per_page: size }))
+                        }
+                        getRowId={(row) => row.user.id.toString()}
+                        onSelectedRowsChange={(rows) =>
+                            setSelectedStudentsIds(rows.map((r) => r.user.id))
+                        }
+                    />
+                    <ScrollBar orientation="horizontal" />
+                </ScrollArea>
             </div>
 
-            <ScrollArea type="always" className="w-full overflow-x-auto">
-                <DataTable
-                    data={students ? students.data : []}
-                    columns={StudentColumns}
-                    isLoading={isLoading}
-                    manualPagination
-                    pageCount={students?.meta.last_page}
-                    totalItems={students?.meta.total}
-                    pagination={{
-                        pageIndex: filters.page - 1,
-                        pageSize: filters.per_page,
-                    }}
-                    onPageChange={(page) => setFilters((f) => ({ ...f, page }))}
-                    onPageSizeChange={(size) =>
-                        setFilters((f) => ({ ...f, per_page: size }))
-                    }
-                />
-                <ScrollBar orientation="horizontal" />
-            </ScrollArea>
-        </div>
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>
+                            Update Status for {selectedStudentsIds.length}{" "}
+                            Student(s)
+                        </DialogTitle>
+                    </DialogHeader>
+
+                    <div className="space-y-4 py-2">
+                        <Select
+                            value={newStatus}
+                            onValueChange={handleNewStatusChange}
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select new status" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="pending">Pending</SelectItem>
+                                <SelectItem value="accepted">
+                                    Accepted
+                                </SelectItem>
+                                <SelectItem value="rejected">
+                                    Rejected
+                                </SelectItem>
+                                <SelectItem value="inactive">
+                                    Inactive
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <DialogFooter>
+                        <Button
+                            variant="outline"
+                            onClick={() => setIsModalOpen(false)}
+                            disabled={isPending}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleBulkUpdate}
+                            disabled={!newStatus || isPending}
+                        >
+                            Update
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+        </>
     )
 }
 

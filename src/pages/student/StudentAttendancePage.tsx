@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react"
 import { Clock, CheckCircle, LogOut, AlertCircle } from "lucide-react"
 import { useUser } from "@/features/auth/hooks/useUser"
+import { isStudent } from "@/features/auth/types/auth"
+import { useRecordAttendance } from "@/features/student/hooks/useAttendance"
+import { toast } from "sonner"
 
 interface TimeRecord {
     date: string
@@ -12,6 +15,12 @@ interface TimeRecord {
 
 const StudentAttendancePage = () => {
     const { data: user } = useUser()
+    const { mutateAsync: recordAttendance } = useRecordAttendance()
+
+    const scheduleId =
+        user && isStudent(user?.user)
+            ? user.user.student.company?.schedule?.id
+            : null
 
     const [currentTime, setCurrentTime] = useState(new Date())
     const [isClockedIn, setIsClockedIn] = useState(false)
@@ -89,16 +98,30 @@ const StudentAttendancePage = () => {
     }
 
     const handleClockIn = () => {
-        const now = currentTime.toLocaleTimeString("en-US", {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: true,
+        // const now = currentTime.toLocaleTimeString("en-US", {
+        //     hour: "2-digit",
+        //     minute: "2-digit",
+        //     hour12: true,
+        // })
+        // setClockInTime(now)
+        // setIsClockedIn(true)
+        // setNotificationMessage("✓ Successfully clocked in at " + now)
+        // setShowNotification(true)
+        // setTimeout(() => setShowNotification(false), 3000)
+
+        if (!scheduleId) {
+            toast.error("No schedule found for the company.")
+        }
+
+        recordAttendance({
+            schedule_id: scheduleId!,
+            attendance_id: 1,
+            time: new Date().toLocaleTimeString("en-GB", {
+                hour12: false,
+                hour: "2-digit",
+                minute: "2-digit",
+            }),
         })
-        setClockInTime(now)
-        setIsClockedIn(true)
-        setNotificationMessage("✓ Successfully clocked in at " + now)
-        setShowNotification(true)
-        setTimeout(() => setShowNotification(false), 3000)
     }
 
     const handleClockOut = () => {

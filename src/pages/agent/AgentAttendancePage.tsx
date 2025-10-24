@@ -3,11 +3,7 @@ import DataTable from "@/features/shared/components/Datatable"
 import { useAttendances } from "@/features/shared/hooks/useAttendance"
 
 const AgentAttendancePage = () => {
-    const {
-        data: attendances,
-        isLoading,
-        isError,
-    } = useAttendances({
+    const { data: attendances, isLoading } = useAttendances({
         page: 1,
         per_page: 10,
     })

@@ -1,4 +1,4 @@
-import { format, differenceInMinutes, parseISO } from "date-fns"
+import { format, parseISO } from "date-fns"
 import type { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
 import type { AttendanceWithStudent } from "@/features/shared/api/attendanceApi"
@@ -9,25 +9,6 @@ function formatTime(time: string | null) {
         return format(parseISO(time), "hh:mm a")
     } catch {
         return time
-    }
-}
-
-function calculateDuration(row: AttendanceWithStudent) {
-    const start = row.am_time_in || row.pm_time_in
-    const end = row.pm_time_out || row.am_time_out
-
-    if (!start || !end) return "-"
-
-    try {
-        const startDate = parseISO(start)
-        const endDate = parseISO(end)
-        const diff = differenceInMinutes(endDate, startDate)
-        if (diff < 0) return "-"
-        const hours = Math.floor(diff / 60)
-        const minutes = diff % 60
-        return `${hours}h ${minutes}m`
-    } catch {
-        return "-"
     }
 }
 
@@ -108,7 +89,7 @@ export const AgentAttendanceColumns: ColumnDef<AttendanceWithStudent>[] = [
     {
         id: "duration",
         header: "Duration",
-        cell: ({ row }) => <span>{calculateDuration(row.original)}</span>,
+        cell: ({ row }) => <span>{row.original.duration_minutes}</span>,
     },
     {
         accessorKey: "remarks",

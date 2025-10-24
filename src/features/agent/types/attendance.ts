@@ -38,6 +38,7 @@ export interface Attendance {
     pm_lng_in: number | null
     pm_lat_out: number | null
     pm_lng_out: number | null
+    duration_minutes: number | null
 
     remarks: string | null
     updated_by: number | null
