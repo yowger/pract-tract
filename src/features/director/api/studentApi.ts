@@ -17,9 +17,27 @@ export interface StudentQueryParams {
     sort_order?: "asc" | "desc"
 }
 
+export interface BulkUpdateCompanyPayload {
+    user_ids: number[]
+    company_id: number
+}
+
+export interface BulkUpdateAdvisorPayload {
+    user_ids: number[]
+    advisor_id: number
+}
+
 export const fetchStudents = async (
     params: StudentQueryParams
 ): Promise<StudentPaginatedResponse> => {
     const { data } = await privateApi.get("/api/students", { params })
     return data
+}
+
+export const bulkUpdateCompany = async (payload: BulkUpdateCompanyPayload) => {
+    return await privateApi.patch("/api/students/company/bulk", payload)
+}
+
+export const bulkUpdateAdvisor = async (payload: BulkUpdateAdvisorPayload) => {
+    return await privateApi.patch("/api/students/advisor/bulk", payload)
 }

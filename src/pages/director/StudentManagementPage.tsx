@@ -13,7 +13,11 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { StudentColumns } from "@/features/director/components/StudentColumns"
-import { useStudents } from "@/features/director/hooks/useStudents"
+import {
+    useStudents,
+    // useUpdateStudentsAdvisor,
+    useUpdateStudentsCompany,
+} from "@/features/director/hooks/useStudents"
 import type { StudentQueryParams } from "@/features/director/api/studentApi"
 import { Button } from "@/components/ui/button"
 import {
@@ -25,12 +29,19 @@ import {
 } from "@/components/ui/dialog"
 import { useUpdateUsersStatus } from "@/features/director/hooks/useUpdateUsersStatus"
 import type { UserStatus } from "@/features/shared/types/users"
+import { useCompanyOptions } from "@/features/shared/hooks/useCompany"
 
 const StudentManagementPage = () => {
     const [selectedStudentsIds, setSelectedStudentsIds] = useState<number[]>([])
-    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false)
+    const [isCompanyModalOpen, setCompanyModalOpen] = useState(false)
+    const { data: companies } = useCompanyOptions()
     const [newStatus, setNewStatus] = useState<UserStatus | "">("")
+    const [selectedCompanyId, setSelectedCompanyId] = useState<number | "">("")
+    // const [selectedAdvisorId, setSelectedAdvisorId] = useState<number | "">("")
     const { mutateAsync: bulkUpdate, isPending } = useUpdateUsersStatus()
+    const { mutateAsync: updateCompany } = useUpdateStudentsCompany()
+    // const { mutateAsync: updateAdvisor } = useUpdateStudentsAdvisor()
     const [filters, setFilters] = useState<StudentQueryParams>({
         page: 1,
         per_page: 10,
@@ -74,13 +85,33 @@ const StudentManagementPage = () => {
             })
 
             toast.success("Status updated successfully")
-            setIsModalOpen(false)
+            setIsStatusModalOpen(false)
             setSelectedStudentsIds([])
         } catch (error) {
             if (error instanceof AxiosError) {
                 toast.error(
                     error?.response?.data?.message || "Status update failed"
                 )
+            }
+        }
+    }
+
+    const handleBulkUpdateCompany = async () => {
+        if (!selectedCompanyId || selectedStudentsIds.length === 0) return
+
+        try {
+            await updateCompany({
+                user_ids: selectedStudentsIds,
+                company_id: selectedCompanyId,
+            })
+
+            toast.success("Company assigned successfully")
+            setCompanyModalOpen(false)
+            setSelectedStudentsIds([])
+            setSelectedCompanyId("")
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error("Failed to assign company")
             }
         }
     }
@@ -100,8 +131,14 @@ const StudentManagementPage = () => {
 
                     <div className="flex gap-3 items-center">
                         {selectedStudentsIds.length > 0 && (
-                            <Button onClick={() => setIsModalOpen(true)}>
+                            <Button onClick={() => setIsStatusModalOpen(true)}>
                                 Update Status ({selectedStudentsIds.length})
+                            </Button>
+                        )}
+
+                        {selectedStudentsIds.length > 0 && (
+                            <Button onClick={() => setCompanyModalOpen(true)}>
+                                Assign Company ({selectedStudentsIds.length})
                             </Button>
                         )}
 
@@ -156,7 +193,10 @@ const StudentManagementPage = () => {
                 </ScrollArea>
             </div>
 
-            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <Dialog
+                open={isStatusModalOpen}
+                onOpenChange={setIsStatusModalOpen}
+            >
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
@@ -191,7 +231,7 @@ const StudentManagementPage = () => {
                     <DialogFooter>
                         <Button
                             variant="outline"
-                            onClick={() => setIsModalOpen(false)}
+                            onClick={() => setIsStatusModalOpen(false)}
                             disabled={isPending}
                         >
                             Cancel
@@ -201,6 +241,54 @@ const StudentManagementPage = () => {
                             disabled={!newStatus || isPending}
                         >
                             Update
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={isCompanyModalOpen}
+                onOpenChange={setCompanyModalOpen}
+            >
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>
+                            Assign Company to {selectedStudentsIds.length}{" "}
+                            Student(s)
+                        </DialogTitle>
+                    </DialogHeader>
+
+                    <div className="space-y-4 py-2">
+                        <Select
+                            onValueChange={(val) =>
+                                setSelectedCompanyId(Number(val))
+                            }
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select Company" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {companies?.map((c) => (
+                                    <SelectItem key={c.id} value={String(c.id)}>
+                                        {c.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <DialogFooter>
+                        <Button
+                            variant="outline"
+                            onClick={() => setCompanyModalOpen(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleBulkUpdateCompany}
+                            disabled={!selectedCompanyId}
+                        >
+                            Assign
                         </Button>
                     </DialogFooter>
                 </DialogContent>

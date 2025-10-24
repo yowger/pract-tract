@@ -33,6 +33,11 @@ export const StudentColumns: ColumnDef<Student>[] = [
         cell: ({ row }) => <span>{row.original.user?.name}</span>,
     },
     {
+        accessorKey: "user.email",
+        header: "Email",
+        cell: ({ row }) => <span>{row.original.user?.email}</span>,
+    },
+    {
         accessorKey: "program.name",
         header: "Program",
         cell: ({ row }) => {
@@ -45,9 +50,26 @@ export const StudentColumns: ColumnDef<Student>[] = [
         },
     },
     {
-        accessorKey: "user.email",
-        header: "Email",
-        cell: ({ row }) => <span>{row.original.user?.email}</span>,
+        accessorKey: "company.name",
+        header: "Company",
+        cell: ({ row }) => {
+            const company = row.original.company
+            return (
+                <span title={company?.name || ""}>{company?.name || ""}</span>
+            )
+        },
+    },
+    {
+        accessorKey: "advisor.user.name",
+        header: "Advisor",
+        cell: ({ row }) => {
+            const advisor = row.original.advisor
+            return (
+                <span title={advisor?.user?.name || ""}>
+                    {advisor?.user?.name || ""}
+                </span>
+            )
+        },
     },
     {
         accessorKey: "user.status",
@@ -62,7 +84,6 @@ export const StudentColumns: ColumnDef<Student>[] = [
                     : status === "rejected"
                     ? "bg-red-100 text-red-800"
                     : "bg-gray-100 text-gray-800"
-
             return <Badge className={color}>{status}</Badge>
         },
     },
@@ -73,7 +94,6 @@ export const StudentColumns: ColumnDef<Student>[] = [
             const createdAt = new Date(
                 row.original.user.created_at
             ).toLocaleDateString()
-
             return <span>{createdAt}</span>
         },
     },
