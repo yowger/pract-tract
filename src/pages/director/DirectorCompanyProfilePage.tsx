@@ -25,24 +25,14 @@ const DirectorCompanyProfilePage = () => {
         <div className="max-w-4xl space-y-6">
             <ProfileHeader user={userData} />
 
-            <Tabs defaultValue="overview" className="space-y-6">
+            <Tabs defaultValue="company" className="space-y-6">
                 <TabsList className="bg-gray-100 p-1 rounded-lg">
-                    <TabsTrigger value="overview">Overview</TabsTrigger>
                     <TabsTrigger value="company">Company</TabsTrigger>
+                    <TabsTrigger value="owner">Owner</TabsTrigger>
                     <TabsTrigger value="schedule">Schedule</TabsTrigger>
                     <TabsTrigger value="students">Students</TabsTrigger>
                     <TabsTrigger value="attendance">Attendance</TabsTrigger>
                 </TabsList>
-
-                <TabsContent value="overview">
-                    <PersonalInfoCard
-                        email={userData.email}
-                        phone={userData.phone}
-                        role={userData.role}
-                        createdAt={userData.created_at}
-                        formatDate={formatDate}
-                    />
-                </TabsContent>
 
                 <TabsContent value="company">
                     <CompanyInfoCard
@@ -51,6 +41,17 @@ const DirectorCompanyProfilePage = () => {
                         phone={company.phone}
                         address={company.address}
                         isActive={company.is_active}
+                        studentsCount={company.students_count}
+                    />
+                </TabsContent>
+
+                <TabsContent value="owner">
+                    <PersonalInfoCard
+                        email={userData.email}
+                        phone={userData.phone}
+                        role={userData.role}
+                        createdAt={userData.created_at}
+                        formatDate={formatDate}
                     />
                 </TabsContent>
 

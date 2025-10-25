@@ -25,6 +25,24 @@ export type AttendanceWithStudent = Attendance & {
 export type AttendancePaginatedResponse =
     PaginatedResponse<AttendanceWithStudent>
 
+export interface AttendanceChartLineData {
+    date: string
+    present: number
+    absent: number
+    late: number
+    excused: number
+}
+
+export interface AttendanceChartPieData {
+    name: string
+    value: number
+}
+
+export interface AttendanceChartsResponse {
+    lineData: AttendanceChartLineData[]
+    pieData: AttendanceChartPieData[]
+}
+
 export const fetchAttendances = async (
     filters: AttendanceFilters
 ): Promise<AttendancePaginatedResponse> => {
@@ -33,4 +51,16 @@ export const fetchAttendances = async (
     })
 
     return data
+}
+
+export const fetchAttendanceCharts = async (params: {
+    company_id: number
+    start_date?: string
+    end_date?: string
+    student_name?: string
+    student_id?: string | number
+}): Promise<AttendanceChartsResponse> => {
+    const response = await privateApi.get("/api/attendances/charts", { params })
+
+    return response.data
 }

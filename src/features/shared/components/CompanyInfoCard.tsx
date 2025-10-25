@@ -1,4 +1,4 @@
-import { Building2, Mail, Phone, MapPin } from "lucide-react"
+import { Building2, Mail, Phone, MapPin, Users } from "lucide-react"
 
 interface CompanyInfoCardProps {
     name?: string | null
@@ -6,6 +6,7 @@ interface CompanyInfoCardProps {
     phone?: string | null
     address?: string | null
     isActive?: boolean | number | null
+    studentsCount?: number | null
 }
 
 export default function CompanyInfoCard({
@@ -14,6 +15,7 @@ export default function CompanyInfoCard({
     phone,
     address,
     isActive,
+    studentsCount = 0,
 }: CompanyInfoCardProps) {
     return (
         <div className="bg-white rounded-lg shadow-lg p-8 space-y-6">
@@ -58,6 +60,18 @@ export default function CompanyInfoCard({
                         <p className="text-sm text-gray-600">Company Address</p>
                         <p className="font-medium text-gray-900">
                             {address || "Not provided"}
+                        </p>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+                    <Users className="w-5 h-5 text-blue-600" />
+                    <div>
+                        <p className="text-sm text-gray-600">
+                            Number of Students
+                        </p>
+                        <p className="font-medium text-gray-900">
+                            {studentsCount || "Not provided"}
                         </p>
                     </div>
                 </div>

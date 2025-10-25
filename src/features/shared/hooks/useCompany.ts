@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 
 import { fetchCompany, fetchCompanyOptions } from "../api/companyApi"
+import { fetchAttendanceCharts } from "../api/attendanceApi"
 
 export const useCompanyOptions = () => {
     return useQuery({
@@ -15,5 +16,19 @@ export const useCompany = (companyId: number) => {
     return useQuery({
         queryKey: ["company", companyId],
         queryFn: () => fetchCompany(companyId),
+    })
+}
+
+export const useAttendanceCharts = (params: {
+    company_id: number
+    start_date?: string
+    end_date?: string
+    student_name?: string
+    student_id?: string | number
+}) => {
+    return useQuery({
+        queryKey: ["attendanceCharts", params],
+        queryFn: () => fetchAttendanceCharts(params),
+        staleTime: 1000 * 60 * 5,
     })
 }

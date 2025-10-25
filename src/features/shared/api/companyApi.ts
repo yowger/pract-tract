@@ -19,3 +19,4 @@ export const fetchCompany = async (companyId: number): Promise<Company> => {
 
     return response.data
 }
+
