@@ -9,11 +9,12 @@ export type AttendanceStatus = "present" | "absent" | "late" | "excused"
 
 export interface AttendanceFilters {
     student_name?: string
+    company_id?: number
     date?: string
     start_date?: string
     end_date?: string
     status?: AttendanceStatus
-    per_page: number 
+    per_page: number
     page: number
 }
 

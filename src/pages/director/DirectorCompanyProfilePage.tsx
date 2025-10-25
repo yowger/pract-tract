@@ -9,6 +9,7 @@ import { formatDate, formatTime } from "@/utils/utils"
 import NoScheduleCard from "@/features/shared/components/NoScheduleCard"
 import ProfileHeader from "@/features/shared/components/ProfileHeader"
 import StudentInfoCard from "@/features/shared/components/StudentInfoCard"
+import AttendanceInfoCard from "@/features/shared/components/AttendanceInfoCard"
 
 const DirectorCompanyProfilePage = () => {
     const { id } = useParams()
@@ -30,6 +31,7 @@ const DirectorCompanyProfilePage = () => {
                     <TabsTrigger value="company">Company</TabsTrigger>
                     <TabsTrigger value="schedule">Schedule</TabsTrigger>
                     <TabsTrigger value="students">Students</TabsTrigger>
+                    <TabsTrigger value="attendance">Attendance</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview">
@@ -65,7 +67,11 @@ const DirectorCompanyProfilePage = () => {
                 </TabsContent>
 
                 <TabsContent value="students">
-                    <StudentInfoCard />
+                    <StudentInfoCard companyId={company.id} />
+                </TabsContent>
+
+                <TabsContent value="attendance">
+                    <AttendanceInfoCard companyId={company.id} />
                 </TabsContent>
             </Tabs>
         </div>
