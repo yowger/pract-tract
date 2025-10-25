@@ -1,4 +1,4 @@
-import type { PaginatedResponse } from "@/features/shared/types/page"
+import type { PaginatedResponse } from "@/types/page"
 
 export interface Program {
     id: number

@@ -101,7 +101,6 @@ const AgentAttendancePage = () => {
                 <Button onClick={handleApplyFilters}>Apply</Button>
             </div>
 
-            {/* DataTable */}
             <DataTable
                 data={attendances?.data || []}
                 columns={AgentAttendanceColumns}
@@ -114,7 +113,7 @@ const AgentAttendancePage = () => {
                     pageSize: filters.per_page,
                 }}
                 onPageChange={(newPageIndex) =>
-                    setFilters((f) => ({ ...f, page: newPageIndex + 1 }))
+                    setFilters((f) => ({ ...f, page: newPageIndex }))
                 }
                 onPageSizeChange={(newSize) =>
                     setFilters((f) => ({ ...f, per_page: newSize, page: 1 }))

@@ -1,6 +1,6 @@
 import { privateApi } from "@/lib/axiosClient"
 
-import type { UserStatus } from "@/features/shared/types/users"
+import type { UserStatus } from "@/types/users"
 
 export interface BulkUpdateStatusPayload {
     user_ids: number[]

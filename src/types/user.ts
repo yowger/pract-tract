@@ -1,5 +1,6 @@
-import type { Schedule } from "@/features/shared/types/schedule"
+import type { Company } from "./company"
 import type { UserRole } from "./roles"
+import type { BulkUpdateCompanyPayload } from "@/features/director/api/studentApi"
 
 export type User = {
     id: number
@@ -21,7 +22,7 @@ export interface Agent {
     company_id: number
     created_at: string
     updated_at: string
-    company: Company
+    company: BulkUpdateCompanyPayload
 }
 
 export interface Director {
@@ -41,20 +42,6 @@ interface Program {
 interface Section {
     id: number
     name: string
-}
-
-export interface Company {
-    id: number
-    user_id: number
-    name: string
-    description: string | null
-    email: string
-    phone: string | null
-    address: string | null
-    is_active: number
-    created_at: string
-    updated_at: string
-    schedule: Schedule | null
 }
 
 export interface Student {

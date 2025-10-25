@@ -1,5 +1,5 @@
 import { privateApi } from "@/lib/axiosClient"
-import type { PaginatedResponse } from "../types/page"
+import type { PaginatedResponse } from "../../../types/page"
 import type {
     Attendance,
     AttendanceStudent,
@@ -13,7 +13,7 @@ export interface AttendanceFilters {
     start_date?: string
     end_date?: string
     status?: AttendanceStatus
-    per_page: number
+    per_page: number 
     page: number
 }
 

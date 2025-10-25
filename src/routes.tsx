@@ -9,6 +9,7 @@ import AgentStudentsPage from "./pages/agent/AgentStudentsPage"
 import AgentAttendancePage from "./pages/agent/AgentAttendancePage"
 import AgentProfilePage from "./pages/agent/AgentProfilePage"
 import AgentCreateSchedulePage from "./pages/agent/AgentCreateSchedule"
+import DirectorCompanyProfilePage from "./pages/director/DirectorCompanyProfilePage"
 
 const LandingPage = lazy(() => import("@/pages/LandingPage"))
 const SignInFormPage = lazy(() => import("@/pages/signUp/SignInFormPage"))
@@ -119,6 +120,10 @@ const routes = [
                     { path: "students", element: <StudentManagementPage /> },
                     { path: "advisors", element: <AdvisorManagementPage /> },
                     { path: "companies", element: <CompanyManagementPage /> },
+                    {
+                        path: "companies/:id",
+                        element: <DirectorCompanyProfilePage />,
+                    },
                     // { path: "reports", element: <ReportsPage /> },
                 ],
             },

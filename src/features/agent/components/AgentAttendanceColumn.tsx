@@ -30,19 +30,23 @@ export const AgentAttendanceColumns: ColumnDef<AttendanceWithStudent>[] = [
         accessorKey: "am_status",
         header: "AM",
         cell: ({ row }) => {
-            const status = row.original.am_status
+            const rawStatus = row.original.am_status
+            const status = rawStatus ?? "null"
+
+            const statusStyles: Record<string, string> = {
+                present:
+                    "bg-emerald-100 text-emerald-800 border border-emerald-200",
+                late: "bg-amber-100 text-amber-800 border border-amber-200",
+                undertime:
+                    "bg-orange-100 text-orange-800 border border-orange-200",
+                absent: "bg-rose-100 text-rose-800 border border-rose-200",
+                null: "bg-slate-100 text-slate-600 border border-slate-200",
+            }
+
+            const style = statusStyles[status] || statusStyles.null
+
             return (
-                <Badge
-                    variant={
-                        status === "present"
-                            ? "default"
-                            : status === "late"
-                            ? "outline"
-                            : "secondary"
-                    }
-                >
-                    {status ? status.toUpperCase() : "-"}
-                </Badge>
+                <Badge className={`${style} uppercase`}>{status || "-"}</Badge>
             )
         },
     },
@@ -50,19 +54,23 @@ export const AgentAttendanceColumns: ColumnDef<AttendanceWithStudent>[] = [
         accessorKey: "pm_status",
         header: "PM",
         cell: ({ row }) => {
-            const status = row.original.pm_status
+            const rawStatus = row.original.pm_status
+            const status = rawStatus ?? "null"
+
+            const statusStyles: Record<string, string> = {
+                present:
+                    "bg-emerald-100 text-emerald-800 border border-emerald-200",
+                late: "bg-amber-100 text-amber-800 border border-amber-200",
+                undertime:
+                    "bg-orange-100 text-orange-800 border border-orange-200",
+                absent: "bg-rose-100 text-rose-800 border border-rose-200",
+                null: "bg-slate-100 text-slate-600 border border-slate-200",
+            }
+
+            const style = statusStyles[status] || statusStyles.null
+
             return (
-                <Badge
-                    variant={
-                        status === "present"
-                            ? "default"
-                            : status === "late"
-                            ? "outline"
-                            : "secondary"
-                    }
-                >
-                    {status ? status.toUpperCase() : "-"}
-                </Badge>
+                <Badge className={`${style} uppercase`}>{status || "-"}</Badge>
             )
         },
     },

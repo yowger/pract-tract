@@ -28,7 +28,7 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import { useUpdateUsersStatus } from "@/features/director/hooks/useUpdateUsersStatus"
-import type { UserStatus } from "@/features/shared/types/users"
+import type { UserStatus } from "@/types/users"
 import { useCompanyOptions } from "@/features/shared/hooks/useCompany"
 
 const StudentManagementPage = () => {

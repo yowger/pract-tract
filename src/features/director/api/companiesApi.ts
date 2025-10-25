@@ -1,4 +1,4 @@
-import type { PaginatedResponse } from "@/features/shared/types/page"
+import type { PaginatedResponse } from "@/types/page"
 import { privateApi } from "@/lib/axiosClient"
 import type { User } from "@/types/user"
 
