@@ -156,12 +156,14 @@ const AttendanceInfoCard = ({ companyId }: { companyId: number }) => {
                                 fill="#8884d8"
                                 label
                             >
-                                {(charts?.pieData || []).map((entry, index) => (
-                                    <Cell
-                                        key={`cell-${index}`}
-                                        fill={COLORS[index % COLORS.length]}
-                                    />
-                                ))}
+                                {(charts?.pieData || []).map(
+                                    (_entry, index) => (
+                                        <Cell
+                                            key={`cell-${index}`}
+                                            fill={COLORS[index % COLORS.length]}
+                                        />
+                                    )
+                                )}
                             </Pie>
                             <Tooltip />
                         </PieChart>
