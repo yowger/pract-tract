@@ -19,7 +19,7 @@ import { useLogin } from "@/features/auth/hooks/useLogin"
 import { useNavigate } from "react-router-dom"
 
 const loginSchema = z.object({
-    email: z.email("Invalid email address"),
+    email: z.string().email("Invalid email address"),
     password: z.string().min(1, "Password is required"),
 })
 
@@ -82,7 +82,7 @@ const LoginForm = () => {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
+                className="space-y-5"
                 noValidate
             >
                 <FormField
@@ -90,11 +90,14 @@ const LoginForm = () => {
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel className="text-gray-700 font-medium">
+                                Email address
+                            </FormLabel>
                             <FormControl>
                                 <Input
                                     type="email"
                                     placeholder="you@example.com"
+                                    className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                                     {...field}
                                 />
                             </FormControl>
@@ -108,11 +111,14 @@ const LoginForm = () => {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel className="text-gray-700 font-medium">
+                                Password
+                            </FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
-                                    placeholder="********"
+                                    placeholder="Enter your password"
+                                    className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                                     {...field}
                                 />
                             </FormControl>
@@ -121,8 +127,35 @@ const LoginForm = () => {
                     )}
                 />
 
-                <Button type="submit" className="w-full" disabled={isPending}>
-                    {isPending ? "Logging in..." : "Login"}
+                <div className="flex items-center justify-between text-sm">
+                    <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                            type="checkbox"
+                            className="rounded border-gray-300"
+                        />
+                        <span className="text-gray-600">Remember me</span>
+                    </label>
+                    <a
+                        href="#"
+                        className="text-blue-600 hover:text-blue-700 font-medium"
+                    >
+                        Forgot password?
+                    </a>
+                </div>
+
+                <Button
+                    type="submit"
+                    className="w-full h-11 bg-blue-600 text-white font-medium shadow-lg shadow-blue-500/30"
+                    disabled={isPending}
+                >
+                    {isPending ? (
+                        <span className="flex items-center gap-2">
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            Signing in...
+                        </span>
+                    ) : (
+                        "Sign in"
+                    )}
                 </Button>
             </form>
         </Form>
