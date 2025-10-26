@@ -1,6 +1,7 @@
+import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+import { Mail, Lock, User, Hash, BookOpen, Users } from "lucide-react"
 
 import {
     Form,
@@ -25,8 +26,8 @@ const studentFormSchema = z
             .string()
             .min(8, "Please confirm your password"),
         student_id: z.string().min(3, "Student ID is required"),
-        program_id: z.int().min(1, "Program ID required"),
-        section_id: z.int().min(1, "Section ID required"),
+        program_id: z.number().min(1, "Program ID required"),
+        section_id: z.number().min(1, "Section ID required"),
     })
     .refine((data) => data.password === data.password_confirmation, {
         message: "Passwords do not match",
@@ -49,7 +50,7 @@ const StudentForm = () => {
         },
     })
 
-    const { mutate: register, isPending } = useRegister()
+    const { mutateAsync: register, isPending } = useRegister()
 
     const onSubmit = async (values: StudentFormValues) => {
         try {
@@ -76,7 +77,7 @@ const StudentForm = () => {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
+                className="bg-white rounded-2xl shadow-sm p-8 space-y-5"
                 noValidate
             >
                 <FormField
@@ -86,10 +87,16 @@ const StudentForm = () => {
                         <FormItem>
                             <FormLabel>Full Name</FormLabel>
                             <FormControl>
-                                <Input
-                                    placeholder="Juan Dela Cruz"
-                                    {...field}
-                                />
+                                <div className="relative">
+                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <User className="w-5 h-5" />
+                                    </div>
+                                    <Input
+                                        {...field}
+                                        placeholder="Juan Dela Cruz"
+                                        className="pl-11 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -101,13 +108,19 @@ const StudentForm = () => {
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>Email Address</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="email"
-                                    placeholder="student@example.com"
-                                    {...field}
-                                />
+                                <div className="relative">
+                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <Mail className="w-5 h-5" />
+                                    </div>
+                                    <Input
+                                        {...field}
+                                        type="email"
+                                        placeholder="student@example.com"
+                                        className="pl-11 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -121,11 +134,17 @@ const StudentForm = () => {
                         <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="password"
-                                    placeholder="********"
-                                    {...field}
-                                />
+                                <div className="relative">
+                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <Lock className="w-5 h-5" />
+                                    </div>
+                                    <Input
+                                        {...field}
+                                        type="password"
+                                        placeholder="Min. 8 characters"
+                                        className="pl-11 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -139,16 +158,33 @@ const StudentForm = () => {
                         <FormItem>
                             <FormLabel>Confirm Password</FormLabel>
                             <FormControl>
-                                <Input
-                                    type="password"
-                                    placeholder="********"
-                                    {...field}
-                                />
+                                <div className="relative">
+                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <Lock className="w-5 h-5" />
+                                    </div>
+                                    <Input
+                                        {...field}
+                                        type="password"
+                                        placeholder="Re-enter your password"
+                                        className="pl-11 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
+
+                <div className="relative py-2">
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="px-4 bg-white text-gray-500">
+                            Academic Information
+                        </span>
+                    </div>
+                </div>
 
                 <FormField
                     control={form.control}
@@ -157,46 +193,78 @@ const StudentForm = () => {
                         <FormItem>
                             <FormLabel>Student ID</FormLabel>
                             <FormControl>
-                                <Input
-                                    placeholder="e.g., 2025-12345"
-                                    {...field}
-                                />
+                                <div className="relative">
+                                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <Hash className="w-5 h-5" />
+                                    </div>
+                                    <Input
+                                        {...field}
+                                        placeholder="e.g., 2025-12345"
+                                        className="pl-11 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    />
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
 
-                <FormField
-                    control={form.control}
-                    name="program_id"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Program ID</FormLabel>
-                            <FormControl>
-                                <Input placeholder="e.g., 3" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="program_id"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Program</FormLabel>
+                                <FormControl>
+                                    <div className="relative">
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                            <BookOpen className="w-5 h-5" />
+                                        </div>
+                                        <Input
+                                            {...field}
+                                            type="number"
+                                            placeholder="e.g., 3"
+                                            className="pl-11 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        />
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
 
-                <FormField
-                    control={form.control}
-                    name="section_id"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Section ID</FormLabel>
-                            <FormControl>
-                                <Input placeholder="e.g., 12" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                    <FormField
+                        control={form.control}
+                        name="section_id"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Section</FormLabel>
+                                <FormControl>
+                                    <div className="relative">
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                            <Users className="w-5 h-5" />
+                                        </div>
+                                        <Input
+                                            {...field}
+                                            type="number"
+                                            placeholder="e.g., 12"
+                                            className="pl-11 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        />
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
 
-                <Button type="submit" className="w-full" disabled={isPending}>
-                    {isPending ? "Submitting..." : "Register"}
+                <Button
+                    type="submit"
+                    disabled={isPending}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white h-12 rounded-lg font-medium transition-colors mt-6"
+                >
+                    {isPending ? "Creating Account..." : "Create Account"}
                 </Button>
             </form>
         </Form>
