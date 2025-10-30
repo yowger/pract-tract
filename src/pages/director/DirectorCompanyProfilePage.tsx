@@ -10,6 +10,7 @@ import NoScheduleCard from "@/features/shared/components/NoScheduleCard"
 import ProfileHeader from "@/features/shared/components/ProfileHeader"
 import StudentInfoCard from "@/features/shared/components/StudentInfoCard"
 import AttendanceInfoCard from "@/features/shared/components/AttendanceInfoCard"
+import { Users, Calendar, CheckSquare, User, Home } from "lucide-react"
 
 const DirectorCompanyProfilePage = () => {
     const { id } = useParams()
@@ -22,16 +23,48 @@ const DirectorCompanyProfilePage = () => {
     const companySchedule = company.schedule
 
     return (
-        <div className="max-w-4xl space-y-6">
-            <ProfileHeader user={userData} />
+        <div className="max-w-4xl mx-auto px-4 space-y-6">
+            <ProfileHeader
+                name={company.name}
+                status={company.is_active ? "active" : "inactive"}
+                role={"company"}
+                id={userData.id}
+            />
 
-            <Tabs defaultValue="company" className="space-y-6">
-                <TabsList className="bg-gray-100 p-1 rounded-lg">
-                    <TabsTrigger value="company">Company</TabsTrigger>
-                    <TabsTrigger value="owner">Owner</TabsTrigger>
-                    <TabsTrigger value="schedule">Schedule</TabsTrigger>
-                    <TabsTrigger value="students">Students</TabsTrigger>
-                    <TabsTrigger value="attendance">Attendance</TabsTrigger>
+            <Tabs defaultValue="company">
+                <TabsList className="bg-gray-100 rounded-lg mb-6">
+                    <TabsList className="bg-gray-100 rounded-lg">
+                        <TabsTrigger
+                            value="company"
+                            className="flex items-center gap-2"
+                        >
+                            <Home className="w-4 h-4" /> Company
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="owner"
+                            className="flex items-center gap-2"
+                        >
+                            <User className="w-4 h-4" /> Owner
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="schedule"
+                            className="flex items-center gap-2"
+                        >
+                            <Calendar className="w-4 h-4" /> Schedule
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="students"
+                            className="flex items-center gap-2"
+                        >
+                            <Users className="w-4 h-4" /> Students
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="attendance"
+                            className="flex items-center gap-2"
+                        >
+                            <CheckSquare className="w-4 h-4" /> Attendance
+                        </TabsTrigger>
+                    </TabsList>
                 </TabsList>
 
                 <TabsContent value="company">
