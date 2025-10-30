@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge"
 
 import type { Student } from "@/types/studentList"
 import { Checkbox } from "@/components/ui/checkbox"
+import { Link } from "react-router-dom"
 
 export const StudentColumns: ColumnDef<Student>[] = [
     {
@@ -30,7 +31,19 @@ export const StudentColumns: ColumnDef<Student>[] = [
     {
         accessorKey: "user.name",
         header: "Name",
-        cell: ({ row }) => <span>{row.original.user?.name}</span>,
+        cell: ({ row }) => {
+            const studentId = row.original.id
+            const name = row.original.user?.name || "Unknown"
+
+            return (
+                <Link
+                    to={`/director/students/${studentId}`}
+                    className="text-blue-700 hover:underline"
+                >
+                    {name} {studentId}
+                </Link>
+            )
+        },
     },
     {
         accessorKey: "user.email",

@@ -1,12 +1,24 @@
 import type { ColumnDef } from "@tanstack/react-table"
-
+import { Link } from "react-router-dom"
 import type { Student } from "@/types/studentList"
 
 export const CompanyStudentColumns: ColumnDef<Student>[] = [
     {
         accessorKey: "user.name",
         header: "Name",
-        cell: ({ row }) => <span>{row.original.user?.name}</span>,
+        cell: ({ row }) => {
+            const studentId = row.original.id
+            const name = row.original.user?.name || "Unknown"
+
+            return (
+                <Link
+                    to={`/director/students/${studentId}`}
+                    className="text-blue-700 hover:underline"
+                >
+                    {name}
+                </Link>
+            )
+        },
     },
     {
         accessorKey: "user.email",

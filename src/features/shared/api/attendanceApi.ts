@@ -9,6 +9,7 @@ export type AttendanceStatus = "present" | "absent" | "late" | "excused"
 
 export interface AttendanceFilters {
     student_name?: string
+    student_id?: number
     company_id?: number
     date?: string
     start_date?: string
@@ -55,7 +56,7 @@ export const fetchAttendances = async (
 }
 
 export const fetchAttendanceCharts = async (params: {
-    company_id: number
+    company_id?: number
     start_date?: string
     end_date?: string
     student_name?: string

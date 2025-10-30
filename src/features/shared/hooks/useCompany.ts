@@ -20,7 +20,7 @@ export const useCompany = (companyId: number) => {
 }
 
 export const useAttendanceCharts = (params: {
-    company_id: number
+    company_id?: number
     start_date?: string
     end_date?: string
     student_name?: string
