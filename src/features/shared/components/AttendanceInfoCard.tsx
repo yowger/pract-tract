@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { startOfWeek, format, parseISO, isThisYear } from "date-fns"
+import { format, parseISO, isThisYear, startOfMonth } from "date-fns"
 
 import { Input } from "@/components/ui/input"
 import {
@@ -12,25 +12,13 @@ import {
 import DataTable from "@/features/shared/components/Datatable"
 import { useAttendances } from "@/features/shared/hooks/useAttendance"
 import { AgentAttendanceColumns } from "@/features/agent/components/AgentAttendanceColumn"
-import type {
-    AttendanceFilters,
-    AttendanceStatus,
-} from "@/features/shared/api/attendanceApi"
+import type { AttendanceFilters } from "@/features/shared/api/attendanceApi"
 import { XAxis, CartesianGrid, BarChart, Bar } from "recharts"
 import { useAttendanceCharts } from "../hooks/useCompany"
-import { Label } from "@/components/ui/label"
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { Button } from "@/components/ui/button"
-import { Filter } from "lucide-react"
 import { ATTENDANCE_STATUS_COLOR_MAP } from "@/const/colors"
 import { formatDateSmart } from "../../../utils/utils"
 
 import {
-    type ChartConfig,
     ChartContainer,
     ChartTooltip,
     ChartTooltipContent,
@@ -42,20 +30,10 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import DatePickerRange from "@/components/custom/DatePickerRange"
 
 const today = new Date()
-const thisWeekStart = startOfWeek(today, { weekStartsOn: 1 })
-
-const chartConfig = {
-    desktop: {
-        label: "Desktop",
-        color: "#2563eb",
-    },
-    mobile: {
-        label: "Mobile",
-        color: "#60a5fa",
-    },
-} satisfies ChartConfig
+const thisMonthStart = startOfMonth(today)
 
 const AttendanceInfoCard = ({ companyId }: { companyId: number }) => {
     const [filters, setFilters] = useState<AttendanceFilters>({
@@ -64,7 +42,7 @@ const AttendanceInfoCard = ({ companyId }: { companyId: number }) => {
         company_id: companyId,
         student_name: undefined,
         status: undefined,
-        start_date: format(thisWeekStart, "yyyy-MM-dd"),
+        start_date: format(thisMonthStart, "yyyy-MM-dd"),
         end_date: format(today, "yyyy-MM-dd"),
     })
 
@@ -95,14 +73,6 @@ const AttendanceInfoCard = ({ companyId }: { companyId: number }) => {
         setFilters((f) => ({ ...f, student_name: e.target.value, page: 1 }))
     }
 
-    const handleStatusChange = (value: string) => {
-        setFilters((f) => ({
-            ...f,
-            status: value === "all" ? undefined : (value as AttendanceStatus),
-            page: 1,
-        }))
-    }
-
     const handleDateChange = (
         field: "start_date" | "end_date",
         value: string
@@ -112,13 +82,38 @@ const AttendanceInfoCard = ({ companyId }: { companyId: number }) => {
 
     return (
         <div className="space-y-6">
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <div className="flex items-center justify-end gap-3">
+                <DatePickerRange
+                    value={{
+                        from: filters.start_date
+                            ? new Date(filters.start_date)
+                            : undefined,
+                        to: filters.end_date
+                            ? new Date(filters.end_date)
+                            : undefined,
+                    }}
+                    onChange={(range) => {
+                        if (range?.from && range?.to) {
+                            handleDateChange(
+                                "start_date",
+                                range.from.toISOString().slice(0, 10)
+                            )
+                            handleDateChange(
+                                "end_date",
+                                range.to.toISOString().slice(0, 10)
+                            )
+                        }
+                    }}
+                />
+            </div>
+
+            <div className="grid grid-cols-1 gap-6">
                 <Card className="py-0">
                     <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row">
                         <div className="flex flex-1 flex-col justify-center gap-1 px-6 pt-4 pb-3 sm:!py-0">
                             <CardTitle>Attendance Stats</CardTitle>
                             <CardDescription>
-                                Attendance summary from{" "}
+                                summary from{" "}
                                 {formatDateSmart(filters.start_date ?? "")} to{" "}
                                 {formatDateSmart(filters.end_date ?? "")}.
                             </CardDescription>
@@ -157,7 +152,7 @@ const AttendanceInfoCard = ({ companyId }: { companyId: number }) => {
 
                     <CardContent className="px-2 sm:p-6">
                         <ChartContainer
-                            config={chartConfig}
+                            config={{}}
                             className="min-h-[200px] w-full"
                         >
                             <BarChart accessibilityLayer data={lineData}>
@@ -213,147 +208,65 @@ const AttendanceInfoCard = ({ companyId }: { companyId: number }) => {
                 </Card>
             </div>
 
-            <div className="bg-white p-5 rounded-lg shadow space-y-4">
-                <div className="flex items-center flex-wrap gap-3">
-                    <Input
-                        placeholder="Search student by name"
-                        value={filters.student_name}
-                        onChange={handleSearchChange}
-                        className="w-[220px]"
-                    />
+            <Card className="py-0">
+                <CardHeader className="flex flex-row">
+                    <div className="flex flex-1 flex-row gap-3 pt-6 justify-between ">
+                        <div>
+                            <Input
+                                placeholder="Search student by name"
+                                value={filters.student_name}
+                                onChange={handleSearchChange}
+                            />
+                        </div>
 
-                    <div className="flex items-center gap-2">
-                        <Popover>
-                            <PopoverTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    size="icon"
-                                    className="gap-2"
-                                >
-                                    <Filter className="w-4 h-4" />
-                                </Button>
-                            </PopoverTrigger>
-
-                            <PopoverContent className="w-[320px] space-y-4">
-                                <div className="space-y-2">
-                                    <Label>Status</Label>
-                                    <Select
-                                        value={filters.status || "all"}
-                                        onValueChange={handleStatusChange}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select status" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="all">
-                                                All
-                                            </SelectItem>
-                                            <SelectItem value="present">
-                                                Present
-                                            </SelectItem>
-                                            <SelectItem value="absent">
-                                                Absent
-                                            </SelectItem>
-                                            <SelectItem value="late">
-                                                Late
-                                            </SelectItem>
-                                            <SelectItem value="excused">
-                                                Excused
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label>Date range</Label>
-                                    <div className="flex items-center gap-2">
-                                        <Input
-                                            type="date"
-                                            value={filters.start_date}
-                                            onChange={(e) =>
-                                                handleDateChange(
-                                                    "start_date",
-                                                    e.target.value
-                                                )
-                                            }
-                                            className="w-[140px]"
-                                        />
-                                        <span className="text-muted-foreground">
-                                            to
-                                        </span>
-                                        <Input
-                                            type="date"
-                                            value={filters.end_date}
-                                            onChange={(e) =>
-                                                handleDateChange(
-                                                    "end_date",
-                                                    e.target.value
-                                                )
-                                            }
-                                            className="w-[140px]"
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <Label>Per Page</Label>
-                                    <Select
-                                        value={String(filters.per_page)}
-                                        onValueChange={(val) =>
-                                            setFilters((f) => ({
-                                                ...f,
-                                                per_page: parseInt(val),
-                                                page: 1,
-                                            }))
-                                        }
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Per page" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="10">
-                                                10
-                                            </SelectItem>
-                                            <SelectItem value="20">
-                                                20
-                                            </SelectItem>
-                                            <SelectItem value="50">
-                                                50
-                                            </SelectItem>
-                                            <SelectItem value="100">
-                                                100
-                                            </SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                            </PopoverContent>
-                        </Popover>
+                        <Select
+                            value={String(filters.per_page)}
+                            onValueChange={(val) =>
+                                setFilters((f) => ({
+                                    ...f,
+                                    per_page: parseInt(val),
+                                    page: 1,
+                                }))
+                            }
+                        >
+                            <SelectTrigger className="w-[100px]">
+                                <SelectValue placeholder="Rows" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="10">10</SelectItem>
+                                <SelectItem value="20">20</SelectItem>
+                                <SelectItem value="50">50</SelectItem>
+                                <SelectItem value="100">100</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
-                </div>
+                </CardHeader>
 
-                <DataTable
-                    data={attendances?.data || []}
-                    columns={AgentAttendanceColumns}
-                    isLoading={isLoadingAttendances}
-                    manualPagination
-                    pageCount={attendances?.meta?.last_page}
-                    totalItems={attendances?.meta?.total}
-                    pagination={{
-                        pageIndex: filters.page - 1,
-                        pageSize: filters.per_page,
-                    }}
-                    onPageChange={(newPageIndex) =>
-                        setFilters((f) => ({ ...f, page: newPageIndex }))
-                    }
-                    onPageSizeChange={(newSize) =>
-                        setFilters((f) => ({
-                            ...f,
-                            per_page: newSize,
-                            page: 1,
-                        }))
-                    }
-                />
-            </div>
+                <CardContent className="px-6 pb-6">
+                    <DataTable
+                        data={attendances?.data || []}
+                        columns={AgentAttendanceColumns}
+                        isLoading={isLoadingAttendances}
+                        manualPagination
+                        pageCount={attendances?.meta?.last_page}
+                        totalItems={attendances?.meta?.total}
+                        pagination={{
+                            pageIndex: filters.page - 1,
+                            pageSize: filters.per_page,
+                        }}
+                        onPageChange={(newPageIndex) =>
+                            setFilters((f) => ({ ...f, page: newPageIndex }))
+                        }
+                        onPageSizeChange={(newSize) =>
+                            setFilters((f) => ({
+                                ...f,
+                                per_page: newSize,
+                                page: 1,
+                            }))
+                        }
+                    />
+                </CardContent>
+            </Card>
         </div>
     )
 }
