@@ -85,6 +85,7 @@ export default function StudentTabs({ id }: { id: string | number }) {
                     <StudentAttendanceInfoCard
                         userId={student.user.id}
                         studentId={student.student_id}
+                        companyId={student.company_id}
                     />
                 </TabsContent>
             </Tabs>

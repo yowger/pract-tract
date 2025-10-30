@@ -34,9 +34,11 @@ const today = new Date()
 const thisMonthStart = startOfMonth(today)
 
 const StudentAttendanceInfoCard = ({
+    companyId,
     userId,
     studentId,
 }: {
+    companyId: number
     userId: number
     studentId: number
 }) => {
@@ -54,7 +56,7 @@ const StudentAttendanceInfoCard = ({
     const { data: attendances, isLoading: isLoadingAttendances } =
         useAttendances(filters)
     const { data: charts } = useAttendanceCharts({
-        company_id: undefined,
+        company_id: companyId,
         student_id: studentId,
         start_date: filters.start_date,
         end_date: filters.end_date,
