@@ -82,7 +82,15 @@ const AttendanceInfoCard = ({ companyId }: { companyId: number }) => {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-end gap-3">
+            <div className="flex items-center justify-between">
+                <div className="bg-white">
+                    <Input
+                        placeholder="Search student by name"
+                        value={filters.student_name}
+                        onChange={handleSearchChange}
+                    />
+                </div>
+
                 <DatePickerRange
                     value={{
                         from: filters.start_date
@@ -210,15 +218,7 @@ const AttendanceInfoCard = ({ companyId }: { companyId: number }) => {
 
             <Card className="py-0">
                 <CardHeader className="flex flex-row">
-                    <div className="flex flex-1 flex-row gap-3 pt-6 justify-between ">
-                        <div>
-                            <Input
-                                placeholder="Search student by name"
-                                value={filters.student_name}
-                                onChange={handleSearchChange}
-                            />
-                        </div>
-
+                    <div className="flex flex-1 flex-row gap-3 pt-6 justify-end">
                         <Select
                             value={String(filters.per_page)}
                             onValueChange={(val) =>
