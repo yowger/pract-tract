@@ -1,3 +1,12 @@
+import { format, isThisYear, parseISO } from "date-fns"
+
+export function formatDateSmart(dateStr: string) {
+    const date = parseISO(dateStr)
+    return isThisYear(date)
+        ? format(date, "MMM d")
+        : format(date, "MMM d, yyyy")
+}
+
 export function cleanUndefined<T>(obj: T): T {
     return JSON.parse(
         JSON.stringify(obj, (_, v) => (v === undefined ? null : v))

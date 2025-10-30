@@ -31,6 +31,7 @@ export interface AttendanceChartLineData {
     absent: number
     late: number
     excused: number
+    undertime: number
 }
 
 export interface AttendanceChartPieData {

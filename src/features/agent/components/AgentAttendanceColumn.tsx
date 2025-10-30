@@ -1,25 +1,40 @@
-import { format, parseISO } from "date-fns"
+import { format, parse, parseISO } from "date-fns"
 import type { ColumnDef } from "@tanstack/react-table"
-import { Badge } from "@/components/ui/badge"
 import type { AttendanceWithStudent } from "@/features/shared/api/attendanceApi"
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 function formatTime(time: string | null) {
-    if (!time) return "-"
+    if (!time) return ""
+
     try {
-        return format(parseISO(time), "hh:mm a")
+        const date = time.includes("T")
+            ? parseISO(time)
+            : parse(time, "HH:mm:ss", new Date())
+
+        return format(date, "hh:mm a")
     } catch {
         return time
     }
+}
+
+const statusColors: Record<string, string> = {
+    present: "",
+    late: "text-amber-600",
+    undertime: "text-orange-600",
+    absent: "text-rose-600",
 }
 
 export const AgentAttendanceColumns: ColumnDef<AttendanceWithStudent>[] = [
     {
         accessorKey: "date",
         header: "Date",
-        cell: ({ row }) => {
-            const date = row.original.date
-            return <span>{format(new Date(date), "MMM d, yyyy")}</span>
-        },
+        cell: ({ row }) => (
+            <span>{format(new Date(row.original.date), "MMM d, yyyy")}</span>
+        ),
     },
     {
         accessorKey: "student.student_name",
@@ -27,82 +42,103 @@ export const AgentAttendanceColumns: ColumnDef<AttendanceWithStudent>[] = [
         cell: ({ row }) => row.original.student.user.name,
     },
     {
-        accessorKey: "am_status",
+        id: "am_session",
         header: "AM",
         cell: ({ row }) => {
-            const rawStatus = row.original.am_status
-            const status = rawStatus ?? "null"
+            const { am_time_in, am_time_out, am_status } = row.original
+            const status = am_status ?? "null"
+            const colorClass = statusColors[status] || statusColors.null
 
-            const statusStyles: Record<string, string> = {
-                present:
-                    "bg-emerald-100 text-emerald-800 border border-emerald-200",
-                late: "bg-amber-100 text-amber-800 border border-amber-200",
-                undertime:
-                    "bg-orange-100 text-orange-800 border border-orange-200",
-                absent: "bg-rose-100 text-rose-800 border border-rose-200",
-                null: "bg-slate-100 text-slate-600 border border-slate-200",
-            }
-
-            const style = statusStyles[status] || statusStyles.null
+            const timeRange =
+                am_time_in || am_time_out
+                    ? `${formatTime(am_time_in)} – ${formatTime(am_time_out)}`
+                    : ""
 
             return (
-                <Badge className={`${style} uppercase`}>{status || "-"}</Badge>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <span className={`cursor-help ${colorClass}`}>
+                            {timeRange}
+                        </span>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                        <div className="text-xs">
+                            <p>
+                                <strong>Status:</strong> {status}
+                            </p>
+                            <p>
+                                <strong>In:</strong>
+                                {formatTime(am_time_in)}
+                            </p>
+                            <p>
+                                <strong>Out:</strong>
+                                {formatTime(am_time_out)}
+                            </p>
+                        </div>
+                    </TooltipContent>
+                </Tooltip>
             )
         },
     },
     {
-        accessorKey: "pm_status",
+        id: "pm_session",
         header: "PM",
         cell: ({ row }) => {
-            const rawStatus = row.original.pm_status
-            const status = rawStatus ?? "null"
+            const { pm_time_in, pm_time_out, pm_status } = row.original
+            const status = pm_status ?? "null"
+            const colorClass = statusColors[status] || statusColors.null
 
-            const statusStyles: Record<string, string> = {
-                present:
-                    "bg-emerald-100 text-emerald-800 border border-emerald-200",
-                late: "bg-amber-100 text-amber-800 border border-amber-200",
-                undertime:
-                    "bg-orange-100 text-orange-800 border border-orange-200",
-                absent: "bg-rose-100 text-rose-800 border border-rose-200",
-                null: "bg-slate-100 text-slate-600 border border-slate-200",
-            }
-
-            const style = statusStyles[status] || statusStyles.null
+            const timeRange =
+                pm_time_in || pm_time_out
+                    ? `${formatTime(pm_time_in)} – ${formatTime(pm_time_out)}`
+                    : ""
 
             return (
-                <Badge className={`${style} uppercase`}>{status || "-"}</Badge>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <span className={`cursor-help ${colorClass}`}>
+                            {timeRange}
+                        </span>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                        <div className="text-xs">
+                            <p>
+                                <strong>Status:</strong> {status}
+                            </p>
+                            <p>
+                                <strong>In:</strong>
+                                {formatTime(pm_time_in)}
+                            </p>
+                            <p>
+                                <strong>Out:</strong> {formatTime(pm_time_out)}
+                            </p>
+                        </div>
+                    </TooltipContent>
+                </Tooltip>
             )
         },
-    },
-    {
-        accessorKey: "am_time_in",
-        header: "AM In",
-        cell: ({ row }) => formatTime(row.original.am_time_in),
-    },
-    {
-        accessorKey: "am_time_out",
-        header: "AM Out",
-        cell: ({ row }) => formatTime(row.original.am_time_out),
-    },
-    {
-        accessorKey: "pm_time_in",
-        header: "PM In",
-        cell: ({ row }) => formatTime(row.original.pm_time_in),
-    },
-    {
-        accessorKey: "pm_time_out",
-        header: "PM Out",
-        cell: ({ row }) => formatTime(row.original.pm_time_out),
     },
     {
         id: "duration",
         header: "Duration",
-        cell: ({ row }) => <span>{row.original.duration_minutes}</span>,
+        cell: ({ row }) => {
+            const mins = row.original.duration_minutes
+            if (mins == null || isNaN(mins)) return <span>-</span>
+
+            const hours = Math.floor(mins / 60)
+            const minutes = mins % 60
+
+            const formatted =
+                hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`
+
+            return <span>{formatted}</span>
+        },
     },
+
     {
         accessorKey: "remarks",
         header: "Remarks",
-        cell: ({ row }) => row.original.remarks || "-",
+        cell: ({ row }) => row.original.remarks,
     },
     {
         id: "actions",
