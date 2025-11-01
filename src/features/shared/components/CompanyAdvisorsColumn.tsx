@@ -2,14 +2,25 @@ import { type ColumnDef } from "@tanstack/react-table"
 import type { Advisor } from "@/features/director/api/advisorsApi"
 // import { Badge } from "@/components/ui/badge"
 import { format } from "date-fns"
+import { Link } from "react-router-dom"
 
 export const AdvisorColumns: ColumnDef<Advisor>[] = [
     {
         accessorKey: "user.name",
         header: "Name",
-        cell: ({ row }) => (
-            <div className="font-medium">{row.original.user?.name ?? "—"}</div>
-        ),
+        cell: ({ row }) => {
+            const advisorId = row.original.id
+            const name = row.original.user?.name || "Unknown"
+
+            return (
+                <Link
+                    to={`/director/advisors/${advisorId}`}
+                    className="text-blue-700 hover:underline"
+                >
+                    {name}
+                </Link>
+            )
+        },
     },
     {
         accessorKey: "user.email",
