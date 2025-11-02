@@ -80,14 +80,14 @@ const routes = [
             {
                 element: <AgentLayout />,
                 children: [
-                    { path: "dashboard", element: <AgentDashboardPage /> },
-                    { path: "students", element: <AgentStudentsPage /> },
-                    { path: "attendance", element: <AgentAttendancePage /> },
+                    // { path: "dashboard", element: <AgentDashboardPage /> },
+                    // { path: "students", element: <AgentStudentsPage /> },
+                    // { path: "attendance", element: <AgentAttendancePage /> },
                     {
                         path: "schedule/create",
                         element: <AgentCreateSchedulePage />,
                     },
-                    { path: "profile", element: <AgentProfilePage /> },
+                    { path: "dashboard", element: <AgentProfilePage /> },
                 ],
             },
         ],
@@ -103,7 +103,7 @@ const routes = [
                     // { path: "dashboard", element: <StudentDashboardPage /> },
                     { path: "dashboard", element: <StudentProfilePage /> },
                     // { path: "profile", element: <StudentProfilePage /> },
-                    // { path: "attendance", element: <StudentAttendancePage /> },
+                    { path: "attendance", element: <StudentAttendancePage /> },
                     // { path: "reports", element: <StudentReportsPage /> },
                     // { path: "documents", element: <DocumentsPage /> },
                     // { path: "evaluation", element: <StudentEvaluationPage /> },

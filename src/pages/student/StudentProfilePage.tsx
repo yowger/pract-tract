@@ -414,7 +414,8 @@ import { isStudent } from "@/features/auth/types/auth"
 const StudentProfilePage = () => {
     const { data: user } = useUser()
 
-    const studentId = user && isStudent(user?.user) ? user.user.student.id : null
+    const studentId =
+        user && isStudent(user?.user) ? user.user.student.id : null
 
     const { data: student, isLoading } = useStudent(Number(studentId))
 
@@ -503,11 +504,22 @@ const StudentProfilePage = () => {
                 </TabsContent>
 
                 <TabsContent value="attendance">
-                    <StudentAttendanceInfoCard
-                        userId={student.user.id}
-                        studentId={student.student_id}
-                        companyId={student.company_id}
-                    />
+                    {student.company_id === null ? (
+                        <Card>
+                            <CardContent>
+                                <p>
+                                    No company has been assigned to this student
+                                    yet.
+                                </p>
+                            </CardContent>
+                        </Card>
+                    ) : (
+                        <StudentAttendanceInfoCard
+                            userId={student.user.id}
+                            studentId={student.student_id}
+                            companyId={student.company_id}
+                        />
+                    )}
                 </TabsContent>
             </Tabs>
         </div>

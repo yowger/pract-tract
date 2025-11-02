@@ -10,10 +10,11 @@ import DashboardLayout from "./dashboard/DashboardLayout"
 import Navbar from "./dashboard/Navbar"
 
 const AgentLinks = [
-    { name: "Dashboard", path: "/agent/dashboard", icon: Home },
-    { name: "Profile", path: "/agent/profile", icon: User },
-    { name: "Attendance", path: "/agent/attendance", icon: CalendarCheck },
-    { name: "Students", path: "/agent/students", icon: FolderOpen },
+    { name: "Profile", path: "/agent/dashboard", icon: Home },
+    // { name: "Dashboard", path: "/agent/dashboard", icon: Home },
+    // { name: "Profile", path: "/agent/profile", icon: User },
+    // { name: "Attendance", path: "/agent/attendance", icon: CalendarCheck },
+    // { name: "Students", path: "/agent/students", icon: FolderOpen },
 ]
 
 const AgentLayout = () => {

@@ -21,6 +21,7 @@ const AgentCreateSchedulePage = () => {
     const companyId = data?.user?.agent?.company_id
 
     const handleSubmit = (formData: ScheduleFormValues) => {
+        console.log("🚀 ~ handleSubmit ~ formData:", formData)
         const cleanedData = {
             ...cleanUndefined(formData),
             company_id: companyId,

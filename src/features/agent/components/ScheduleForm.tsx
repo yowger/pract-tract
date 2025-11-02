@@ -16,13 +16,13 @@ import { Separator } from "@/components/ui/separator"
 import { formSchema, type ScheduleFormValues } from "../api/schedule"
 
 const daysOfWeek = [
-    "monday",
-    "tuesday",
-    "wednesday",
-    "thursday",
-    "friday",
-    "saturday",
-    "sunday",
+    { key: "mon", label: "Monday" },
+    { key: "tue", label: "Tuesday" },
+    { key: "wed", label: "Wednesday" },
+    { key: "thu", label: "Thursday" },
+    { key: "fri", label: "Friday" },
+    { key: "sat", label: "Saturday" },
+    { key: "sun", label: "Sunday" },
 ]
 
 interface ScheduleFormProps {
@@ -34,13 +34,7 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
     const form = useForm<ScheduleFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            day_of_week: [
-                "monday",
-                "tuesday",
-                "wednesday",
-                "thursday",
-                "friday",
-            ],
+            day_of_week: ["mon", "tue", "wed", "thu", "fri"],
             am_time_in: "08:00",
             am_time_out: "11:30",
             pm_time_in: "13:00",
@@ -73,30 +67,30 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
                             <FormItem>
                                 <FormLabel>Days of the Week</FormLabel>
                                 <div className="grid grid-cols-2 gap-2">
-                                    {daysOfWeek.map((day) => (
+                                    {daysOfWeek.map(({ key, label }) => (
                                         <label
-                                            key={day}
+                                            key={key}
                                             className="flex items-center space-x-2 border rounded-md p-2 cursor-pointer"
                                         >
                                             <Checkbox
                                                 checked={field.value?.includes(
-                                                    day
+                                                    key
                                                 )}
                                                 onCheckedChange={(checked) => {
                                                     const newDays = checked
                                                         ? [
                                                               ...(field.value ??
                                                                   []),
-                                                              day,
+                                                              key,
                                                           ]
                                                         : field.value.filter(
-                                                              (d) => d !== day
+                                                              (d) => d !== key
                                                           )
                                                     field.onChange(newDays)
                                                 }}
                                             />
                                             <span className="capitalize text-sm">
-                                                {day}
+                                                {label}
                                             </span>
                                         </label>
                                     ))}

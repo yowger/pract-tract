@@ -1,11 +1,11 @@
 import { Outlet, useNavigate } from "react-router-dom"
 import {
-    Home,
+    // Home,
     User,
-    FileText,
+    // FileText,
     CalendarCheck,
-    ClipboardList,
-    FolderOpen,
+    // ClipboardList,
+    // FolderOpen,
 } from "lucide-react"
 import { toast } from "sonner"
 
@@ -17,12 +17,13 @@ import DashboardLayout from "./dashboard/DashboardLayout"
 import Navbar from "./dashboard/Navbar"
 
 const studentLinks = [
-    { name: "Dashboard", path: "/student/dashboard", icon: Home },
-    { name: "Profile", path: "/student/profile", icon: User },
+    { name: "Profile", path: "/student/dashboard", icon: User },
+    // { name: "Dashboard", path: "/student/dashboard", icon: Home },
+    // { name: "Profile", path: "/student/profile", icon: User },
     { name: "Attendance", path: "/student/attendance", icon: CalendarCheck },
-    { name: "Reports", path: "/student/reports", icon: FileText },
-    { name: "Documents", path: "/student/documents", icon: FolderOpen },
-    { name: "Evaluation", path: "/student/evaluation", icon: ClipboardList },
+    // { name: "Reports", path: "/student/reports", icon: FileText },
+    // { name: "Documents", path: "/student/documents", icon: FolderOpen },
+    // { name: "Evaluation", path: "/student/evaluation", icon: ClipboardList },
 ]
 
 const StudentLayout = () => {

@@ -474,12 +474,17 @@
 
 // export default AgentProfilePage
 
-import React from 'react'
+import { useUser } from "@/features/auth/hooks/useUser"
+import { isAgent } from "@/features/auth/types/auth"
+import CompanyTabs from "@/features/shared/components/CompanyTabs"
 
 const AgentProfilePage = () => {
-  return (
-    <div>AgentProfilePage</div>
-  )
+    const { data: user } = useUser()
+
+    const companyId =
+        user && isAgent(user.user) ? user.user.agent.company_id : ""
+
+    return <CompanyTabs id={companyId} />
 }
 
 export default AgentProfilePage
