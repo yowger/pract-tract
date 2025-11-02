@@ -29,6 +29,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import DatePickerRange from "@/components/custom/DatePickerRange"
 
 const today = new Date()
 const thisMonthStart = startOfMonth(today)
@@ -77,8 +78,40 @@ const StudentAttendanceInfoCard = ({
         undertime: Number(d.undertime),
     }))
 
+    const handleDateChange = (
+        field: "start_date" | "end_date",
+        value: string
+    ) => {
+        setFilters((f) => ({ ...f, [field]: value, page: 1 }))
+    }
+
     return (
         <div className="space-y-6">
+            <div className="flex items-center justify-end">
+                <DatePickerRange
+                    value={{
+                        from: filters.start_date
+                            ? new Date(filters.start_date)
+                            : undefined,
+                        to: filters.end_date
+                            ? new Date(filters.end_date)
+                            : undefined,
+                    }}
+                    onChange={(range) => {
+                        if (range?.from && range?.to) {
+                            handleDateChange(
+                                "start_date",
+                                range.from.toISOString().slice(0, 10)
+                            )
+                            handleDateChange(
+                                "end_date",
+                                range.to.toISOString().slice(0, 10)
+                            )
+                        }
+                    }}
+                />
+            </div>
+
             <div className="grid grid-cols-1 gap-6">
                 <Card className="py-0">
                     <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row">

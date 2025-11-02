@@ -2,12 +2,23 @@ import { type ColumnDef } from "@tanstack/react-table"
 
 import type { Company } from "@/features/director/api/companiesApi"
 import { Link } from "react-router-dom"
-import { Eye } from "lucide-react"
 
 export const CompanyColumns: ColumnDef<Company>[] = [
     {
         header: "Name",
-        accessorKey: "name",
+        cell: ({ row }) => {
+            const company = row.original
+            const name = company.name
+
+            return (
+                <Link
+                    to={`/director/companies/${company.id}`}
+                    className="text-blue-700 hover:underline"
+                >
+                    {name}
+                </Link>
+            )
+        },
     },
     {
         header: "Company Email",
@@ -38,18 +49,18 @@ export const CompanyColumns: ColumnDef<Company>[] = [
         header: "Students",
         accessorKey: "students_count",
     },
-    {
-        header: "Action",
-        cell: ({ row }) => {
-            const company = row.original
-            return (
-                <Link
-                    to={`/director/companies/${company.id}`}
-                    className="text-primary hover:underline flex items-center gap-1"
-                >
-                    <Eye className="w-4 h-4" />
-                </Link>
-            )
-        },
-    },
+    // {
+    //     header: "Action",
+    //     cell: ({ row }) => {
+    //         const company = row.original
+    //         return (
+    //             <Link
+    //                 to={`/director/companies/${company.id}`}
+    //                 className="text-primary hover:underline flex items-center gap-1"
+    //             >
+    //                 <Eye className="w-4 h-4" />
+    //             </Link>
+    //         )
+    //     },
+    // },
 ]

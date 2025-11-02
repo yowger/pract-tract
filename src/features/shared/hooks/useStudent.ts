@@ -6,5 +6,6 @@ export const useStudent = (agentId: number) => {
     return useQuery({
         queryKey: ["students", agentId],
         queryFn: () => getStudent(agentId),
+        enabled: !!agentId,
     })
 }

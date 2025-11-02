@@ -7,7 +7,7 @@ import { useStudent } from "../hooks/useStudent"
 import StudentProfileCard from "./StudentProfileCard"
 import StudentAttendanceInfoCard from "./StudentAttendanceInfoCard"
 import WorkScheduleCard from "./WorkScheduleCard"
-import NoScheduleCard from "./NoScheduleCard"
+import { Card, CardContent } from "@/components/ui/card"
 
 export default function StudentTabs({ id }: { id: string | number }) {
     const { data: student, isLoading } = useStudent(Number(id))
@@ -16,7 +16,7 @@ export default function StudentTabs({ id }: { id: string | number }) {
     if (!student) return <div>Student not found.</div>
 
     const userData = student.user
-    const studentSchedule = student.company.schedule
+    const studentSchedule = student?.company?.schedule
 
     return (
         <div className="max-w-4xl mx-auto px-4 space-y-6">
@@ -77,7 +77,14 @@ export default function StudentTabs({ id }: { id: string | number }) {
                             formatTime={formatTime}
                         />
                     ) : (
-                        <NoScheduleCard />
+                        <Card>
+                            <CardContent>
+                                <p>
+                                    No schedule has been assigned to this
+                                    student yet.
+                                </p>
+                            </CardContent>
+                        </Card>
                     )}
                 </TabsContent>
 
