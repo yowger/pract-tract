@@ -1,5 +1,4 @@
 import { Navigate, Outlet } from "react-router-dom"
-
 import type { UserRole } from "@/types/roles"
 import { useUser } from "../../hooks/useUser"
 
@@ -16,7 +15,9 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
 
     if (!allowedRoles.includes(user.user.role)) {
         const redirectPath =
-            user.user.role === "director"
+            user.user.role === "admin"
+                ? "/admin/dashboard"
+                : user.user.role === "director"
                 ? "/director/dashboard"
                 : user.user.role === "student"
                 ? "/student/dashboard"

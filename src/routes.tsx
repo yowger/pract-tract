@@ -12,6 +12,9 @@ import AgentCreateSchedulePage from "./pages/agent/AgentCreateSchedule"
 import DirectorCompanyProfilePage from "./pages/director/DirectorCompanyProfilePage"
 import DirectorStudentProfilePage from "./pages/director/DirectorStudentProfilePage"
 import DirectorAdvisorProfilePage from "./pages/director/DirectorAdvisorProfilePage"
+import AdminLayout from "./layouts/AdminLayout"
+import AdminDashboard from "./pages/admin/AdminDashboard"
+import AgentCreatePage from "./pages/admin/AgentCreatePage"
 
 const LandingPage = lazy(() => import("@/pages/LandingPage"))
 const SignInFormPage = lazy(() => import("@/pages/signUp/SignInFormPage"))
@@ -137,6 +140,20 @@ const routes = [
                     },
 
                     // { path: "reports", element: <ReportsPage /> },
+                ],
+            },
+        ],
+    },
+
+    {
+        path: "/admin",
+        element: <ProtectedRoute allowedRoles={["admin"]} />,
+        children: [
+            {
+                element: <AdminLayout />,
+                children: [
+                    { path: "dashboard", element: <AdminDashboard /> },
+                    { path: "agents", element: <AgentCreatePage /> },
                 ],
             },
         ],
