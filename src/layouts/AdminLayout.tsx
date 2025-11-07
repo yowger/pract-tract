@@ -12,6 +12,11 @@ import DashboardLayout from "./dashboard/DashboardLayout"
 const adminLinks = [
     { name: "Dashboard", path: "/admin/dashboard", icon: Home },
     { name: "Agents", path: "/admin/agents", icon: User },
+    {
+        name: "Advisors",
+        path: "/admin/advisors",
+        icon: User,
+    },
 ]
 
 const AdminLayout = () => {

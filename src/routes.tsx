@@ -15,6 +15,7 @@ import DirectorAdvisorProfilePage from "./pages/director/DirectorAdvisorProfileP
 import AdminLayout from "./layouts/AdminLayout"
 import AdminDashboard from "./pages/admin/AdminDashboard"
 import AgentCreatePage from "./pages/admin/AgentCreatePage"
+import AdvisorCreatePage from "./pages/admin/AdvisorCreatePage"
 
 const LandingPage = lazy(() => import("@/pages/LandingPage"))
 const SignInFormPage = lazy(() => import("@/pages/signUp/SignInFormPage"))
@@ -154,6 +155,7 @@ const routes = [
                 children: [
                     { path: "dashboard", element: <AdminDashboard /> },
                     { path: "agents", element: <AgentCreatePage /> },
+                    { path: "advisors", element: <AdvisorCreatePage /> },
                 ],
             },
         ],
