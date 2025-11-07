@@ -40,7 +40,7 @@ export const StudentColumns: ColumnDef<Student>[] = [
                     to={`/director/students/${studentId}`}
                     className="text-blue-700 hover:underline"
                 >
-                    {name} {studentId}
+                    {name}
                 </Link>
             )
         },

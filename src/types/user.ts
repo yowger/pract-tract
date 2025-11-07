@@ -46,7 +46,7 @@ interface Section {
 
 export interface Student {
     id: number
-    student_id: string
+    student_id: number
     program: Program
     section: Section
     schedule_id: number | null

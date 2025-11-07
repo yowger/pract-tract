@@ -21,6 +21,7 @@ const studentLinks = [
     // { name: "Dashboard", path: "/student/dashboard", icon: Home },
     // { name: "Profile", path: "/student/profile", icon: User },
     { name: "Attendance", path: "/student/attendance", icon: CalendarCheck },
+    { name: "Excuse", path: "/student/excuse", icon: CalendarCheck },
     // { name: "Reports", path: "/student/reports", icon: FileText },
     // { name: "Documents", path: "/student/documents", icon: FolderOpen },
     // { name: "Evaluation", path: "/student/evaluation", icon: ClipboardList },
