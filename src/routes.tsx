@@ -16,6 +16,8 @@ import AdminLayout from "./layouts/AdminLayout"
 import AdminDashboard from "./pages/admin/AdminDashboard"
 import AgentCreatePage from "./pages/admin/AgentCreatePage"
 import AdvisorCreatePage from "./pages/admin/AdvisorCreatePage"
+import AdvisorLayout from "./layouts/AdvisorLayout"
+import AdvisorProfilePage from "./pages/advisor/AdvisorProfilePage"
 
 const LandingPage = lazy(() => import("@/pages/LandingPage"))
 const SignInFormPage = lazy(() => import("@/pages/signUp/SignInFormPage"))
@@ -108,6 +110,25 @@ const routes = [
                     { path: "dashboard", element: <StudentProfilePage /> },
                     // { path: "profile", element: <StudentProfilePage /> },
                     { path: "attendance", element: <StudentAttendancePage /> },
+                    // { path: "reports", element: <StudentReportsPage /> },
+                    // { path: "documents", element: <DocumentsPage /> },
+                    // { path: "evaluation", element: <StudentEvaluationPage /> },
+                ],
+            },
+        ],
+    },
+
+    {
+        path: "/advisor",
+        element: <ProtectedRoute allowedRoles={["advisor"]} />,
+        children: [
+            {
+                element: <StudentLayout />,
+                children: [
+                    // { path: "dashboard", element: <StudentDashboardPage /> },
+                    { path: "dashboard", element: <AdvisorProfilePage /> },
+                    // { path: "profile", element: <StudentProfilePage /> },
+                    // { path: "attendance", element: <StudentAttendancePage /> },
                     // { path: "reports", element: <StudentReportsPage /> },
                     // { path: "documents", element: <DocumentsPage /> },
                     // { path: "evaluation", element: <StudentEvaluationPage /> },

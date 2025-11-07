@@ -26,6 +26,13 @@ export interface AgentRegisterPayload extends BaseRegisterPayload {
     company_email: string
 }
 
+export interface AdvisorResponse extends BaseRegisterPayload {
+    advisor: {
+        id: number
+        user_id: number
+    }
+}
+
 export type RegisterPayload =
     | StudentRegisterPayload
     | AgentRegisterPayload
@@ -33,7 +40,7 @@ export type RegisterPayload =
 
 export type UserResponse =
     | UserStudent
-    // | AdvisorResponse
+    | AdvisorResponse
     | UserAgent
     | UserDirector
 // | AdminResponse
@@ -48,6 +55,10 @@ export function isStudent(user: UserResponse): user is UserStudent {
 
 export function isAgent(user: UserResponse): user is UserAgent {
     return user.role === "agent"
+}
+
+export function isAdvisor(user: UserResponse): user is AdvisorResponse {
+    return user.role === "advisor"
 }
 
 export type AuthResponse = { user: UserResponse }
