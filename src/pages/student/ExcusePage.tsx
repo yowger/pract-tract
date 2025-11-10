@@ -2,22 +2,22 @@ import { Button } from "@/components/ui/button"
 import { useExcuses } from "@/features/shared/api/excuseApi"
 import { Link } from "react-router-dom"
 import { type ColumnDef } from "@tanstack/react-table"
-import type { ExcuseResponse } from "@/features/shared/api/excuseApi"
+import type {
+    ExcuseQuery,
+    ExcuseResponse,
+} from "@/features/shared/api/excuseApi"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import DataTable from "@/features/shared/components/Datatable"
 import { useState } from "react"
 import { File, Image } from "lucide-react"
 import { ExcuseModal } from "@/features/shared/components/ExcuseModal"
+import { useUser } from "@/features/auth/hooks/useUser"
+import { isStudent } from "@/features/auth/types/auth"
 
 const getExcuseColumns = (
     onRowClick: (excuse: ExcuseResponse) => void
 ): ColumnDef<ExcuseResponse>[] => [
-    {
-        accessorKey: "student.student_id",
-        header: "Student ID",
-        cell: ({ row }) => row.original.student?.student_id ?? "-",
-    },
     {
         accessorKey: "title",
         header: "Title",
@@ -87,9 +87,15 @@ const getExcuseColumns = (
 ]
 
 export const ExcusePage = () => {
-    const [filters, setFilters] = useState({ page: 1, per_page: 10 })
+    const { data: user } = useUser()
+    const studentId =
+        user && isStudent(user?.user) ? user.user.student.id : undefined
+    const [filters, setFilters] = useState<ExcuseQuery>({
+        page: 1,
+        per_page: 10,
+        student_id: studentId,
+    })
     const { data, isLoading } = useExcuses(filters)
-    console.log("🚀 ~ ExcusePage ~ data:", data)
 
     const [modalOpen, setModalOpen] = useState(false)
     const [selectedExcuse, setSelectedExcuse] = useState<ExcuseResponse | null>(

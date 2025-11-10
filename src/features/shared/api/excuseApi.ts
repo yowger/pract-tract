@@ -20,8 +20,8 @@ export interface ExcuseQuery {
     status?: ExcuseStatus
     student_id?: number
     name?: string
-    per_page?: number
-    page?: number
+    per_page: number
+    page: number
 }
 
 export interface ExcuseAttachment {
