@@ -16,9 +16,15 @@ interface ExcuseModalProps {
     open: boolean
     onOpenChange: (open: boolean) => void
     excuse?: ExcuseResponse
+    showActions?: boolean
 }
 
-export function ExcuseModal({ open, onOpenChange, excuse }: ExcuseModalProps) {
+export function ExcuseModal({
+    open,
+    onOpenChange,
+    excuse,
+    showActions = true,
+}: ExcuseModalProps) {
     if (!excuse) return null
 
     const formatDate = (dateString: string) =>
@@ -210,13 +216,13 @@ export function ExcuseModal({ open, onOpenChange, excuse }: ExcuseModalProps) {
                     </DialogClose>
 
                     <div className="flex gap-2">
-                        {excuse.status === "pending" && (
-                            <>
+                        {showActions && excuse.status === "pending" && (
+                            <div className="flex gap-2">
                                 <Button className="bg-green-600 hover:bg-green-700">
                                     Approve
                                 </Button>
                                 <Button variant="destructive">Reject</Button>
-                            </>
+                            </div>
                         )}
                     </div>
                 </div>

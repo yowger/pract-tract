@@ -136,6 +136,7 @@ export const ExcusePage = () => {
                 open={modalOpen}
                 onOpenChange={setModalOpen}
                 excuse={selectedExcuse ?? undefined}
+                showActions={false}
             />
         </div>
     )

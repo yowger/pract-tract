@@ -30,7 +30,7 @@ export function ExcuseCreatePage() {
                     name: values.files![i].name,
                     url: file.url,
                 })),
-                ...uploadedPhotos.map((file, i) => ({
+                ...uploadedPhotos.map((_file, i) => ({
                     type: "image",
                     name: values.photos![i].name,
                     url: uploadedPhotos[i].url,
