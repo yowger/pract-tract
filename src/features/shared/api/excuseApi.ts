@@ -3,12 +3,6 @@ import { privateApi } from "@/lib/axiosClient"
 
 export type ExcuseStatus = "pending" | "approved" | "rejected"
 
-export interface ExcuseAttachment {
-    url: string
-    name: string
-    type: string
-}
-
 export interface Excuse {
     id?: number
     student_id: number
@@ -30,24 +24,59 @@ export interface ExcuseQuery {
     page?: number
 }
 
+export interface ExcuseAttachment {
+    url: string
+    name: string
+    type: string
+}
+
+export interface ExcuseCompany {
+    id: number
+    name: string
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    created_at: string
+    updated_at: string
+    user_id?: number
+    is_active?: number
+}
+
+export interface ExcuseAdvisor {
+    id: number
+    user: {
+        id: number
+        name: string
+        email?: string | null
+        phone?: string | null
+        created_at: string
+        updated_at: string
+    }
+    user_id?: number
+}
+
 export interface ExcuseStudent {
     id: number
     user_id: number
     student_id: string
     program_id: number
     section_id: number
+    advisor_id?: number
+    company_id?: number
     user?: {
         id: number
         name: string
         email: string
     }
+    company?: ExcuseCompany
+    advisor?: ExcuseAdvisor
 }
 
 export interface ExcuseResponse {
     id: number
     student_id: number
     attendance_id?: number | null
-    title: string
+    title: string | null
     description?: string | null
     date: string
     attachments?: ExcuseAttachment[]

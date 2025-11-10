@@ -8,8 +8,11 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import DataTable from "@/features/shared/components/Datatable"
 import { useState } from "react"
 import { File, Image } from "lucide-react"
+import { ExcuseModal } from "@/features/shared/components/ExcuseModal"
 
-const ExcuseColumns: ColumnDef<ExcuseResponse>[] = [
+const getExcuseColumns = (
+    onRowClick: (excuse: ExcuseResponse) => void
+): ColumnDef<ExcuseResponse>[] => [
     {
         accessorKey: "student.student_id",
         header: "Student ID",
@@ -68,16 +71,37 @@ const ExcuseColumns: ColumnDef<ExcuseResponse>[] = [
             )
         },
     },
+    {
+        id: "actions",
+        header: "Actions",
+        cell: ({ row }) => (
+            <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onRowClick(row.original)}
+            >
+                View
+            </Button>
+        ),
+    },
 ]
 
 export const ExcusePage = () => {
-    const [filters, setFilters] = useState({
-        page: 1,
-        per_page: 10,
-    })
-
+    const [filters, setFilters] = useState({ page: 1, per_page: 10 })
     const { data, isLoading } = useExcuses(filters)
     console.log("🚀 ~ ExcusePage ~ data:", data)
+
+    const [modalOpen, setModalOpen] = useState(false)
+    const [selectedExcuse, setSelectedExcuse] = useState<ExcuseResponse | null>(
+        null
+    )
+
+    const handleRowClick = (excuse: ExcuseResponse) => {
+        setSelectedExcuse(excuse)
+        setModalOpen(true)
+    }
+
+    const columns = getExcuseColumns(handleRowClick)
 
     return (
         <div className="space-y-4">
@@ -91,7 +115,7 @@ export const ExcusePage = () => {
             <ScrollArea type="always" className="w-full overflow-x-auto">
                 <DataTable
                     data={data?.data ?? []}
-                    columns={ExcuseColumns}
+                    columns={columns}
                     isLoading={isLoading}
                     manualPagination
                     pagination={{
@@ -107,6 +131,12 @@ export const ExcusePage = () => {
                 />
                 <ScrollBar orientation="horizontal" />
             </ScrollArea>
+
+            <ExcuseModal
+                open={modalOpen}
+                onOpenChange={setModalOpen}
+                excuse={selectedExcuse ?? undefined}
+            />
         </div>
     )
 }
