@@ -67,6 +67,7 @@ const LoginForm = () => {
                     break
             }
         } catch (error) {
+            console.log("🚀 ~ onSubmit ~ error:", error)
             if (error instanceof AxiosError) {
                 toast.error(
                     error?.response?.data?.message ||

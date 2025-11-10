@@ -1,6 +1,8 @@
+import { format } from "date-fns"
 import { useForm } from "react-hook-form"
+import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
+
 import {
     Form,
     FormField,
@@ -8,111 +10,166 @@ import {
     FormLabel,
     FormControl,
     FormMessage,
+    FormDescription,
 } from "@/components/ui/form"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
+import { Calendar } from "@/components/ui/calendar"
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
-const excuseFormSchema = z.object({
-    student_id: z.number().optional(),
-    reason: z.string().min(1, "Reason is required"),
-    description: z.string().optional(),
-    date: z.string().min(1, "Date is required"),
+export const EXCUSES = [
+    { value: "sick", label: "Sick" },
+    { value: "family", label: "Family Emergency" },
+    { value: "school", label: "School Activity" },
+    { value: "other", label: "Other" },
+    { value: "personal", label: "Personal Reasons" },
+    { value: "medical", label: "Medical Appointment" },
+    { value: "travel", label: "Travel" },
+] as const
+
+export type ExcuseValue = (typeof EXCUSES)[number]["value"]
+
+const today = new Date()
+today.setHours(0, 0, 0, 0)
+
+const excuseSchema = z.object({
+    date: z.date().min(today, "Date cannot be in the past"),
+    title: z.enum(
+        EXCUSES.map((e) => e.value) as [ExcuseValue, ...ExcuseValue[]],
+        {
+            error: () => ({ message: "Please select a title" }),
+        }
+    ),
+    reason: z.string().min(3, "Reason must be at least 3 characters."),
+    files: z
+        .array(z.instanceof(File))
+        .max(5, "You can only upload up to 5 supporting files")
+        .optional(),
+    photos: z
+        .array(z.any())
+        .max(5, "You can only upload up to 5 photos")
+        .optional(),
 })
 
-export type ExcuseFormValues = z.infer<typeof excuseFormSchema>
-
-interface ExcuseFormProps {
-    onSubmit: (values: ExcuseFormValues) => void
-    disabled?: boolean
-    hideStudentId?: boolean
-}
+export type ExcuseFormValues = z.infer<typeof excuseSchema>
 
 export function ExcuseForm({
     onSubmit,
-    disabled,
-    hideStudentId = false,
-}: ExcuseFormProps) {
+    loading = false,
+}: {
+    onSubmit: (data: ExcuseFormValues) => Promise<void> | void
+    loading?: boolean
+}) {
     const form = useForm<ExcuseFormValues>({
-        resolver: zodResolver(excuseFormSchema),
+        resolver: zodResolver(excuseSchema),
         defaultValues: {
-            student_id: 0,
+            date: new Date(),
             reason: "",
-            description: "",
-            date: "",
         },
     })
+
+    const isSubmitting = form.formState.isSubmitting || loading
 
     return (
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-6 max-w-xl mx-auto"
+                className="space-y-4 max-w-md"
             >
-                <div>
-                    <h2 className="text-xl font-semibold mb-1">
-                        Submit Excuse Form
-                    </h2>
-                    <p className="text-sm text-muted-foreground">
-                        Provide details about your absence.
-                    </p>
-                </div>
-
-                <Separator />
-
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {!hideStudentId && (
-                        <FormField
-                            control={form.control}
-                            name="student_id"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Student ID</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            type="number"
-                                            placeholder="Enter student ID"
-                                            {...field}
-                                            value={field.value || ""}
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    Number(e.target.value)
-                                                )
+                <FormField
+                    control={form.control}
+                    name="date"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Date of Absence</FormLabel>
+                            <FormControl>
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            className="justify-start text-left font-normal"
+                                            disabled={isSubmitting}
+                                        >
+                                            {field.value
+                                                ? format(field.value, "PPP")
+                                                : "Pick a date"}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="p-0">
+                                        <Calendar
+                                            mode="single"
+                                            selected={field.value}
+                                            onSelect={(d) =>
+                                                field.onChange(d ?? new Date())
                                             }
+                                            disabled={isSubmitting}
                                         />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
+                                    </PopoverContent>
+                                </Popover>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
                     )}
+                />
 
-                    <FormField
-                        control={form.control}
-                        name="date"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Date of Absence</FormLabel>
+                <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Title</FormLabel>
+                            <Select
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                                disabled={isSubmitting}
+                            >
                                 <FormControl>
-                                    <Input type="date" {...field} />
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select a title" />
+                                    </SelectTrigger>
                                 </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </section>
+                                <SelectContent>
+                                    {EXCUSES.map((excuse) => (
+                                        <SelectItem
+                                            key={excuse.value}
+                                            value={excuse.value}
+                                        >
+                                            {excuse.label}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
                 <FormField
                     control={form.control}
                     name="reason"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Reason</FormLabel>
+                            <FormLabel>Reason for Absence</FormLabel>
                             <FormControl>
-                                <Input
-                                    placeholder="e.g. Medical, Family Emergency"
+                                <Textarea
+                                    placeholder="e.g. Sick leave, school activity..."
+                                    className="w-full h-32"
                                     {...field}
+                                    disabled={isSubmitting}
                                 />
                             </FormControl>
                             <FormMessage />
@@ -122,31 +179,92 @@ export function ExcuseForm({
 
                 <FormField
                     control={form.control}
-                    name="description"
+                    name="files"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Description (optional)</FormLabel>
+                            <FormLabel>Supporting Files</FormLabel>
                             <FormControl>
-                                <Textarea
-                                    placeholder="Additional details if necessary"
-                                    {...field}
+                                <Input
+                                    type="file"
+                                    accept=".pdf,.jpg,.png,.docx"
+                                    multiple
+                                    onChange={(e) => {
+                                        const files = Array.from(
+                                            e.target.files || []
+                                        )
+                                        if (files.length > 5) {
+                                            alert(
+                                                "You can only upload up to 5 files"
+                                            )
+                                            return
+                                        }
+                                        field.onChange(files)
+                                    }}
+                                    disabled={isSubmitting}
                                 />
                             </FormControl>
+                            {field.value?.length ? (
+                                <ul className="text-xs text-muted-foreground list-disc pl-4">
+                                    {field.value.map((file, i) => (
+                                        <li key={i}>{file.name}</li>
+                                    ))}
+                                </ul>
+                            ) : null}
+                            <FormDescription>
+                                Max 5 supporting files can be uploaded.
+                            </FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
 
-                <Separator />
+                <FormField
+                    control={form.control}
+                    name="photos"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Photo Evidence</FormLabel>
+                            <FormControl>
+                                <Input
+                                    type="file"
+                                    accept="image/*"
+                                    multiple
+                                    onChange={(e) => {
+                                        const files = Array.from(
+                                            e.target.files || []
+                                        )
+                                        if (files.length > 5) {
+                                            alert(
+                                                "You can only upload up to 5 photos"
+                                            )
+                                            return
+                                        }
+                                        field.onChange(files)
+                                    }}
+                                    disabled={isSubmitting}
+                                />
+                            </FormControl>
+                            <FormDescription>
+                                Max 3 photos can be uploaded.
+                            </FormDescription>
+                            {field.value?.length ? (
+                                <ul className="text-xs text-muted-foreground list-disc pl-4">
+                                    {field.value.map((file, i) => (
+                                        <li key={i}>{file.name}</li>
+                                    ))}
+                                </ul>
+                            ) : null}
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
 
                 <Button
                     type="submit"
                     className="w-full"
-                    disabled={disabled || form.formState.isSubmitting}
+                    disabled={isSubmitting}
                 >
-                    {form.formState.isSubmitting
-                        ? "Submitting Excuse..."
-                        : "Submit Excuse"}
+                    {isSubmitting ? "Submitting..." : "Submit Excuse"}
                 </Button>
             </form>
         </Form>

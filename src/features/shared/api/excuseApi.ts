@@ -1,28 +1,34 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { privateApi } from "@/lib/axiosClient"
 
+export type ExcuseStatus = "pending" | "approved" | "rejected"
+
+export interface ExcuseAttachment {
+    url: string
+    name: string
+    type: string
+}
+
 export interface Excuse {
     id?: number
     student_id: number
     attendance_id?: number | null
-    reason: string
+    title: string
     description?: string
     date: string
-    images?: string[]
-    status?: "pending" | "approved" | "rejected"
+    attachments?: ExcuseAttachment[]
+    status?: ExcuseStatus
     created_at?: string
     updated_at?: string
 }
 
 export interface ExcuseQuery {
-    status?: "pending" | "approved" | "rejected"
+    status?: ExcuseStatus
     student_id?: number
     name?: string
     per_page?: number
     page?: number
 }
-
-export type ExcuseStatus = "pending" | "approved" | "rejected"
 
 export interface ExcuseStudent {
     id: number
@@ -41,39 +47,53 @@ export interface ExcuseResponse {
     id: number
     student_id: number
     attendance_id?: number | null
-    reason: string
+    title: string
     description?: string | null
     date: string
-    images?: string[]
+    attachments?: ExcuseAttachment[]
     status: ExcuseStatus
     created_at: string
     updated_at: string
     student: ExcuseStudent
 }
 
-export const getExcuses = async (params?: ExcuseQuery) => {
+export interface PaginatedResponse<T> {
+    data: T[]
+    meta?: {
+        current_page: number
+        last_page: number
+        per_page: number
+        total: number
+    }
+}
+
+export const getExcuses = async (
+    params?: ExcuseQuery
+): Promise<PaginatedResponse<ExcuseResponse>> => {
     const { data } = await privateApi.get(`/api/excuses`, { params })
     return data
 }
 
-export const getExcuseById = async (id: number) => {
+export const getExcuseById = async (id: number): Promise<ExcuseResponse> => {
     const { data } = await privateApi.get(`/api/excuses/${id}`)
     return data
 }
 
-export const createExcuse = async (excuse: Excuse) => {
+export const createExcuse = async (excuse: Excuse): Promise<ExcuseResponse> => {
     const { data } = await privateApi.post(`/api/excuses`, excuse)
     return data
 }
 
-export const updateExcuse = async (id: number, excuse: Partial<Excuse>) => {
+export const updateExcuse = async (
+    id: number,
+    excuse: Partial<Excuse>
+): Promise<ExcuseResponse> => {
     const { data } = await privateApi.put(`/api/excuses/${id}`, excuse)
     return data
 }
 
-export const deleteExcuse = async (id: number) => {
-    const { data } = await privateApi.delete(`/api/excuses/${id}`)
-    return data
+export const deleteExcuse = async (id: number): Promise<void> => {
+    await privateApi.delete(`/api/excuses/${id}`)
 }
 
 export const useExcuses = (filters?: ExcuseQuery) => {
@@ -95,7 +115,6 @@ export const useExcuse = (id?: number) => {
 
 export const useCreateExcuse = () => {
     const queryClient = useQueryClient()
-
     return useMutation({
         mutationFn: (payload: Excuse) => createExcuse(payload),
         onSuccess: () => {
@@ -106,7 +125,6 @@ export const useCreateExcuse = () => {
 
 export const useUpdateExcuse = () => {
     const queryClient = useQueryClient()
-
     return useMutation({
         mutationFn: ({
             id,
@@ -115,7 +133,6 @@ export const useUpdateExcuse = () => {
             id: number
             payload: Partial<Excuse>
         }) => updateExcuse(id, payload),
-
         onSuccess: (_, { id }) => {
             queryClient.invalidateQueries({ queryKey: ["excuses"] })
             queryClient.invalidateQueries({ queryKey: ["excuse", id] })
@@ -125,7 +142,6 @@ export const useUpdateExcuse = () => {
 
 export const useDeleteExcuse = () => {
     const queryClient = useQueryClient()
-
     return useMutation({
         mutationFn: (id: number) => deleteExcuse(id),
         onSuccess: () => {

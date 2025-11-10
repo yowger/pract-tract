@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import DataTable from "@/features/shared/components/Datatable"
 import { useState } from "react"
+import { File, Image } from "lucide-react"
 
 const ExcuseColumns: ColumnDef<ExcuseResponse>[] = [
     {
@@ -15,8 +16,8 @@ const ExcuseColumns: ColumnDef<ExcuseResponse>[] = [
         cell: ({ row }) => row.original.student?.student_id ?? "-",
     },
     {
-        accessorKey: "reason",
-        header: "Reason",
+        accessorKey: "title",
+        header: "Title",
     },
     {
         accessorKey: "description",
@@ -34,15 +35,39 @@ const ExcuseColumns: ColumnDef<ExcuseResponse>[] = [
         header: "Status",
         cell: ({ row }) => <Badge>{row.original.status}</Badge>,
     },
-    // {
-    //     id: "actions",
-    //     header: "Actions",
-    //     cell: ({ row }) => (
-    //         <Button asChild variant="outline" size="sm">
-    //             <Link to={`/student/excuse/${row.original.id}`}>View</Link>
-    //         </Button>
-    //     ),
-    // },
+    {
+        accessorKey: "attachments",
+        header: "Attachments",
+        cell: ({ row }) => {
+            const attachments = row.original.attachments || []
+
+            if (!attachments.length) return "-"
+
+            const fileCount = attachments.filter(
+                (a) => a.type === "file"
+            ).length
+            const imageCount = attachments.filter(
+                (a) => a.type === "image"
+            ).length
+
+            return (
+                <div className="flex gap-4 items-center">
+                    {fileCount > 0 && (
+                        <div className="flex items-center gap-1">
+                            <File className="w-4 h-4 text-gray-600" />
+                            <span className="text-sm">{fileCount}</span>
+                        </div>
+                    )}
+                    {imageCount > 0 && (
+                        <div className="flex items-center gap-1">
+                            <Image className="w-4 h-4 text-gray-600" />
+                            <span className="text-sm">{imageCount}</span>
+                        </div>
+                    )}
+                </div>
+            )
+        },
+    },
 ]
 
 export const ExcusePage = () => {
@@ -52,6 +77,7 @@ export const ExcusePage = () => {
     })
 
     const { data, isLoading } = useExcuses(filters)
+    console.log("🚀 ~ ExcusePage ~ data:", data)
 
     return (
         <div className="space-y-4">
