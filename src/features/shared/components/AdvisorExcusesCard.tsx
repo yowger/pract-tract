@@ -14,6 +14,7 @@ import { File, Image } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ExcuseModal } from "./ExcuseModal"
 import { Badge } from "@/components/ui/badge"
+import { toast } from "sonner"
 
 const getExcuseColumns = (
     onRowClick: (excuse: ExcuseResponse) => void
@@ -109,8 +110,8 @@ const AdvisorExcusesCard = ({ advisorId }: { advisorId: number }) => {
         setModalOpen(true)
     }
 
-    const { mutate: approveExcuse } = useApproveExcuse()
-    const { mutate: rejectExcuse } = useRejectExcuse()
+    const { mutateAsync: approveExcuse } = useApproveExcuse()
+    const { mutateAsync: rejectExcuse } = useRejectExcuse()
 
     const columns = getExcuseColumns(handleRowClick)
 
@@ -142,8 +143,34 @@ const AdvisorExcusesCard = ({ advisorId }: { advisorId: number }) => {
                 open={modalOpen}
                 onOpenChange={setModalOpen}
                 excuse={selectedExcuse ?? undefined}
-                onApprove={(excuse) => approveExcuse(excuse.id)}
-                onReject={(excuse) => rejectExcuse(excuse.id)}
+                onApprove={(excuse) => {
+                    try {
+                        approveExcuse(excuse.id)
+
+                        toast.success("Excuse approved successfully.")
+
+                        setModalOpen(false)
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            toast.error(
+                                "Failed to approve excuse. Please try again."
+                            )
+                        }
+                    }
+                }}
+                onReject={(excuse) => {
+                    try {
+                        rejectExcuse(excuse.id)
+
+                        toast.success("Excuse rejected successfully.")
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            toast.error(
+                                "Failed to reject excuse. Please try again."
+                            )
+                        }
+                    }
+                }}
             />
         </>
     )
