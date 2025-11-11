@@ -1,10 +1,21 @@
 import LoginForm from "@/features/auth/components/forms/LoginForm"
+import { ArrowLeft } from "lucide-react"
 import { Link } from "react-router-dom"
 
 const SignInFormPage = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4">
             <div className="w-full max-w-md">
+                <div className="mb-6">
+                    <Link
+                        to="/landing"
+                        className="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                    >
+                        <ArrowLeft className="mr-2 w-4 h-4" />
+                        Back to landing page
+                    </Link>
+                </div>
+
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-600 mb-4 shadow-lg">
                         <svg

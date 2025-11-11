@@ -114,7 +114,9 @@ export const ExcusePage = () => {
             <div className="flex justify-between items-center">
                 <h1 className="text-xl font-semibold">Excuses</h1>
                 <Button asChild>
-                    <Link to="/student/excuse/create">Create Excuse</Link>
+                    <Link to="/student/excuse/create">
+                        File Excused Absence
+                    </Link>
                 </Button>
             </div>
 

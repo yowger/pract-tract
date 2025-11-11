@@ -4,6 +4,7 @@ import { useUser } from "@/features/auth/hooks/useUser"
 import { isStudent } from "@/features/auth/types/auth"
 import { toast } from "sonner"
 import { useCloudinaryBulkUpload } from "@/hooks/use-upload-bulk"
+import { useNavigate } from "react-router-dom"
 
 export function ExcuseCreatePage() {
     const { data: user, isLoading } = useUser()
@@ -11,6 +12,8 @@ export function ExcuseCreatePage() {
         user && isStudent(user?.user) ? user.user.student.id : undefined
     const { mutateAsync: createExcuse } = useCreateExcuse()
     const { upload, uploading, error: uploadError } = useCloudinaryBulkUpload()
+
+    const navigate = useNavigate()
 
     const handleSubmit = async (values: ExcuseFormValues) => {
         if (!studentId) return
@@ -47,6 +50,8 @@ export function ExcuseCreatePage() {
             }
 
             await createExcuse(payload)
+
+            navigate("/student/excuse")
 
             toast.success("Successfully created excuse")
         } catch (err) {
