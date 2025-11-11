@@ -1,4 +1,4 @@
-import { Calendar, User, Users } from "lucide-react"
+import { AlertCircle, Calendar, User, Users } from "lucide-react"
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { useAdvisor } from "@/features/director/hooks/useAdvisors"
@@ -36,13 +36,20 @@ const AdvisorTabs = ({ id }: { id: number }) => {
                         value="students"
                         className="flex items-center gap-2"
                     >
-                        <Users className="w-4 h-4" /> Students
+                        <Users className="w-4 h-4" /> Student List
                     </TabsTrigger>
                     <TabsTrigger
                         value="excuses"
                         className="flex items-center gap-2"
                     >
-                        <Calendar className="w-4 h-4" /> Excuses
+                        <Calendar className="w-4 h-4" />Student Excuses
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="violations"
+                        className="flex items-center gap-2"
+                    >
+                        {/* violation icon */}
+                        <AlertCircle className="w-4 h-4" />Student Violations
                     </TabsTrigger>
                     {/* <TabsTrigger
                         value="reports"
@@ -68,6 +75,10 @@ const AdvisorTabs = ({ id }: { id: number }) => {
                 </TabsContent>
 
                 <TabsContent value="excuses">
+                    <AdvisorExcusesCard advisorId={advisor.id} />
+                </TabsContent>
+
+                <TabsContent value="violations">
                     <AdvisorExcusesCard advisorId={advisor.id} />
                 </TabsContent>
 
