@@ -9,7 +9,14 @@ import {
     DialogClose,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { FileText, Calendar, User, Building, Clock } from "lucide-react"
+import {
+    FileText,
+    Calendar,
+    User,
+    Building,
+    Clock,
+    Loader2,
+} from "lucide-react"
 import type { ExcuseResponse } from "@/features/shared/api/excuseApi"
 
 interface ExcuseModalProps {
@@ -19,6 +26,8 @@ interface ExcuseModalProps {
     showActions?: boolean
     onApprove?: (excuse: ExcuseResponse) => void
     onReject?: (excuse: ExcuseResponse) => void
+    isApproving?: boolean
+    isRejecting?: boolean
 }
 
 export function ExcuseModal({
@@ -28,6 +37,8 @@ export function ExcuseModal({
     showActions = true,
     onApprove,
     onReject,
+    isApproving = false,
+    isRejecting = false,
 }: ExcuseModalProps) {
     if (!excuse) return null
 
@@ -225,14 +236,31 @@ export function ExcuseModal({
                                 <Button
                                     className="bg-green-600 hover:bg-green-700"
                                     onClick={() => onApprove?.(excuse)}
+                                    disabled={isApproving || isRejecting}
                                 >
-                                    Approve
+                                    {isApproving ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                            Approving...
+                                        </>
+                                    ) : (
+                                        "Approve"
+                                    )}
                                 </Button>
+
                                 <Button
                                     variant="destructive"
                                     onClick={() => onReject?.(excuse)}
+                                    disabled={isApproving || isRejecting}
                                 >
-                                    Reject
+                                    {isRejecting ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                            Rejecting...
+                                        </>
+                                    ) : (
+                                        "Reject"
+                                    )}
                                 </Button>
                             </div>
                         )}

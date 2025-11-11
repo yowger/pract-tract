@@ -44,7 +44,7 @@ export interface Company {
 
 export interface Student {
     id: number
-    student_id: string
+    student_id: number
     status: string
     user: User
     program: Program | null

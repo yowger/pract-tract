@@ -1,8 +1,23 @@
 import type { ColumnDef } from "@tanstack/react-table"
 import { Link } from "react-router-dom"
 import type { Student } from "@/types/studentList"
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
+import { MoreHorizontal } from "lucide-react"
 
-export const CompanyStudentColumns: ColumnDef<Student>[] = [
+interface CompanyStudentColumnsProps {
+    onReportViolation?: (student: Student) => void
+}
+
+export const CompanyStudentColumns = ({
+    onReportViolation,
+}: CompanyStudentColumnsProps): ColumnDef<Student>[] => [
     {
         accessorKey: "user.name",
         header: "Name",
@@ -45,6 +60,33 @@ export const CompanyStudentColumns: ColumnDef<Student>[] = [
                 row.original.user.created_at
             ).toLocaleDateString()
             return <span>{createdAt}</span>
+        },
+    },
+    {
+        id: "actions",
+        header: "",
+        size: 56,
+        cell: ({ row }) => {
+            const student = row.original
+
+            return (
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="h-8 w-8 p-0">
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuGroup>
+                            <DropdownMenuItem
+                                onClick={() => onReportViolation?.(student)}
+                            >
+                                Report Violation
+                            </DropdownMenuItem>
+                        </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            )
         },
     },
 ]
