@@ -1,10 +1,11 @@
-import { User, Users } from "lucide-react"
+import { Calendar, User, Users } from "lucide-react"
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { useAdvisor } from "@/features/director/hooks/useAdvisors"
 import ProfileHeader from "@/features/shared/components/ProfileHeader"
 import AdvisorInfoCard from "./AdvisorInfoCard"
 import AdvisorStudentsCard from "./AdvisorStudentsCard"
+import AdvisorExcusesCard from "./AdvisorExcusesCard"
 
 const AdvisorTabs = ({ id }: { id: number }) => {
     const { data: advisor, isLoading } = useAdvisor(id)
@@ -37,6 +38,12 @@ const AdvisorTabs = ({ id }: { id: number }) => {
                     >
                         <Users className="w-4 h-4" /> Students
                     </TabsTrigger>
+                    <TabsTrigger
+                        value="excuses"
+                        className="flex items-center gap-2"
+                    >
+                        <Calendar className="w-4 h-4" /> Excuses
+                    </TabsTrigger>
                     {/* <TabsTrigger
                         value="reports"
                         className="flex items-center gap-2"
@@ -58,6 +65,10 @@ const AdvisorTabs = ({ id }: { id: number }) => {
 
                 <TabsContent value="students">
                     <AdvisorStudentsCard advisorId={advisor.id} />
+                </TabsContent>
+
+                <TabsContent value="excuses">
+                    <AdvisorExcusesCard advisorId={advisor.id} />
                 </TabsContent>
 
                 {/* <TabsContent value="reports">

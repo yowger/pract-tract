@@ -127,7 +127,7 @@ const routes = [
         element: <ProtectedRoute allowedRoles={["advisor"]} />,
         children: [
             {
-                element: <StudentLayout />,
+                element: <AdvisorLayout />,
                 children: [
                     // { path: "dashboard", element: <StudentDashboardPage /> },
                     { path: "dashboard", element: <AdvisorProfilePage /> },

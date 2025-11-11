@@ -19,6 +19,7 @@ export interface Excuse {
 export interface ExcuseQuery {
     status?: ExcuseStatus
     student_id?: number
+    advisor_id?: number
     name?: string
     per_page: number
     page: number
@@ -175,6 +176,40 @@ export const useDeleteExcuse = () => {
         mutationFn: (id: number) => deleteExcuse(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["excuses"] })
+        },
+    })
+}
+
+const approveExcuse = async (id: number): Promise<ExcuseResponse> => {
+    const { data } = await privateApi.patch(`/api/excuses/${id}/approve`)
+    return data.excuse
+}
+
+const rejectExcuse = async (id: number): Promise<ExcuseResponse> => {
+    const { data } = await privateApi.patch(`/api/excuses/${id}/reject`)
+    return data.excuse
+}
+
+export const useApproveExcuse = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: (id: number) => approveExcuse(id),
+        onSuccess: (_, id) => {
+            queryClient.invalidateQueries({ queryKey: ["excuses"] })
+            queryClient.invalidateQueries({ queryKey: ["excuse", id] })
+        },
+    })
+}
+
+export const useRejectExcuse = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: (id: number) => rejectExcuse(id),
+        onSuccess: (_, id) => {
+            queryClient.invalidateQueries({ queryKey: ["excuses"] })
+            queryClient.invalidateQueries({ queryKey: ["excuse", id] })
         },
     })
 }

@@ -16,7 +16,7 @@ import Sidebar from "./dashboard/Sidebar"
 import DashboardLayout from "./dashboard/DashboardLayout"
 import Navbar from "./dashboard/Navbar"
 
-const studentLinks = [
+const advisorLinks = [
     { name: "Profile", path: "/advisor/dashboard", icon: User },
 ]
 
@@ -51,7 +51,7 @@ const AdvisorLayout = () => {
                         }}
                     />
                 }
-                sidebar={<Sidebar links={studentLinks} title="Student" />}
+                sidebar={<Sidebar links={advisorLinks} title="advisor" />}
             >
                 <Outlet />
             </DashboardLayout>

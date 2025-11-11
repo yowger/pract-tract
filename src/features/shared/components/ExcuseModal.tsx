@@ -17,6 +17,8 @@ interface ExcuseModalProps {
     onOpenChange: (open: boolean) => void
     excuse?: ExcuseResponse
     showActions?: boolean
+    onApprove?: (excuse: ExcuseResponse) => void
+    onReject?: (excuse: ExcuseResponse) => void
 }
 
 export function ExcuseModal({
@@ -24,6 +26,8 @@ export function ExcuseModal({
     onOpenChange,
     excuse,
     showActions = true,
+    onApprove,
+    onReject,
 }: ExcuseModalProps) {
     if (!excuse) return null
 
@@ -218,10 +222,18 @@ export function ExcuseModal({
                     <div className="flex gap-2">
                         {showActions && excuse.status === "pending" && (
                             <div className="flex gap-2">
-                                <Button className="bg-green-600 hover:bg-green-700">
+                                <Button
+                                    className="bg-green-600 hover:bg-green-700"
+                                    onClick={() => onApprove?.(excuse)}
+                                >
                                     Approve
                                 </Button>
-                                <Button variant="destructive">Reject</Button>
+                                <Button
+                                    variant="destructive"
+                                    onClick={() => onReject?.(excuse)}
+                                >
+                                    Reject
+                                </Button>
                             </div>
                         )}
                     </div>
