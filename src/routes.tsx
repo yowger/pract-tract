@@ -22,6 +22,7 @@ import ExcusePage from "./pages/student/ExcusePage"
 import { ExcuseCreatePage } from "./pages/student/ExcuseCreatePage"
 import DirectorEvaluationsPage from "./pages/director/DirectorEvaluationsPage"
 import DirectorCreateEvaluationsPage from "./pages/director/DirectorCreateEvaluationsPage"
+import DocumentsUploadsPage from "./pages/student/DocumentsUploadsPage"
 
 const LandingPage = lazy(() => import("@/pages/LandingPage"))
 const SignInFormPage = lazy(() => import("@/pages/signUp/SignInFormPage"))
@@ -116,6 +117,11 @@ const routes = [
                     { path: "attendance", element: <StudentAttendancePage /> },
                     { path: "excuse", element: <ExcusePage /> },
                     { path: "excuse/create", element: <ExcuseCreatePage /> },
+                    { path: "documents", element: <DocumentsPage /> },
+                    {
+                        path: "documents/create",
+                        element: <DocumentsUploadsPage />,
+                    },
                     // { path: "reports", element: <StudentReportsPage /> },
                     // { path: "documents", element: <DocumentsPage /> },
                     // { path: "evaluation", element: <StudentEvaluationPage /> },

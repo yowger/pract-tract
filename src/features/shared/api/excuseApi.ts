@@ -20,6 +20,7 @@ export interface ExcuseQuery {
     status?: ExcuseStatus
     student_id?: number
     advisor_id?: number
+    company_id?: number
     name?: string
     per_page: number
     page: number

@@ -10,6 +10,7 @@ import NoScheduleCard from "@/features/shared/components/NoScheduleCard"
 import ProfileHeader from "@/features/shared/components/ProfileHeader"
 import StudentInfoCard from "@/features/shared/components/StudentInfoCard"
 import AttendanceInfoCard from "@/features/shared/components/AttendanceInfoCard"
+import CompanyStudentExcusesCard from "./CompanyStudentExcuse"
 
 export default function CompanyTabs({ id }: { id: string | number }) {
     const { data: company, isLoading } = useCompany(Number(id))
@@ -54,7 +55,13 @@ export default function CompanyTabs({ id }: { id: string | number }) {
                             value="students"
                             className="flex items-center gap-2"
                         >
-                            <Users className="w-4 h-4" /> Students
+                            <Users className="w-4 h-4" /> Students List
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="excuses"
+                            className="flex items-center gap-2"
+                        >
+                            <Users className="w-4 h-4" /> Students Excuse
                         </TabsTrigger>
                         <TabsTrigger
                             value="attendance"
@@ -100,6 +107,10 @@ export default function CompanyTabs({ id }: { id: string | number }) {
 
                 <TabsContent value="students">
                     <StudentInfoCard companyId={company.id} />
+                </TabsContent>
+
+                <TabsContent value="excuse">
+                    <CompanyStudentExcusesCard companyId={company.id} />
                 </TabsContent>
 
                 <TabsContent value="attendance">

@@ -1,5 +1,18 @@
+import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+
 const DocumentsPage = () => {
-    return <div>DocumentsPage</div>
+    return (
+        <div className="p-4">
+            <div className="flex justify-end">
+                <Button asChild>
+                    <Link to="create">Create Document</Link>
+                </Button>
+            </div>
+
+            <div className="mt-4">DocumentsPage</div>
+        </div>
+    )
 }
 
 export default DocumentsPage

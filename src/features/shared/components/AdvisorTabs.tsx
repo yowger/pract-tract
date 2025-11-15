@@ -42,14 +42,15 @@ const AdvisorTabs = ({ id }: { id: number }) => {
                         value="excuses"
                         className="flex items-center gap-2"
                     >
-                        <Calendar className="w-4 h-4" />Student Excuses
+                        <Calendar className="w-4 h-4" />
+                        Student Excuses
                     </TabsTrigger>
                     <TabsTrigger
                         value="violations"
                         className="flex items-center gap-2"
                     >
-                        {/* violation icon */}
-                        <AlertCircle className="w-4 h-4" />Student Violations
+                        <AlertCircle className="w-4 h-4" />
+                        Student Violations
                     </TabsTrigger>
                     {/* <TabsTrigger
                         value="reports"

@@ -3,9 +3,9 @@ import { useState } from "react"
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
 import DataTable from "./Datatable"
 import {
-    // useApproveExcuse,
+    useApproveExcuse,
     useExcuses,
-    // useRejectExcuse,
+    useRejectExcuse,
     type ExcuseQuery,
     type ExcuseResponse,
 } from "../api/excuseApi"
@@ -14,7 +14,7 @@ import { File, Image } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ExcuseModal } from "./ExcuseModal"
 import { Badge } from "@/components/ui/badge"
-// import { toast } from "sonner"
+import { toast } from "sonner"
 
 const getExcuseColumns = (
     onRowClick: (excuse: ExcuseResponse) => void
@@ -92,11 +92,11 @@ const getExcuseColumns = (
     },
 ]
 
-const AdvisorExcusesCard = ({ advisorId }: { advisorId: number }) => {
+const CompanyStudentExcusesCard = ({ companyId }: { companyId: number }) => {
     const [filters, setFilters] = useState<ExcuseQuery>({
         page: 1,
         per_page: 10,
-        advisor_id: advisorId,
+        company_id: companyId,
     })
     const { data, isLoading } = useExcuses(filters)
 
@@ -110,8 +110,8 @@ const AdvisorExcusesCard = ({ advisorId }: { advisorId: number }) => {
         setModalOpen(true)
     }
 
-    // const { mutateAsync: approveExcuse } = useApproveExcuse()
-    // const { mutateAsync: rejectExcuse } = useRejectExcuse()
+    const { mutateAsync: approveExcuse } = useApproveExcuse()
+    const { mutateAsync: rejectExcuse } = useRejectExcuse()
 
     const columns = getExcuseColumns(handleRowClick)
 
@@ -144,37 +144,37 @@ const AdvisorExcusesCard = ({ advisorId }: { advisorId: number }) => {
                 onOpenChange={setModalOpen}
                 showActions={false}
                 excuse={selectedExcuse ?? undefined}
-                // onApprove={(excuse) => {
-                //     try {
-                //         approveExcuse(excuse.id)
+                onApprove={(excuse) => {
+                    try {
+                        approveExcuse(excuse.id)
 
-                //         toast.success("Excuse approved successfully.")
+                        toast.success("Excuse approved successfully.")
 
-                //         setModalOpen(false)
-                //     } catch (error) {
-                //         if (error instanceof Error) {
-                //             toast.error(
-                //                 "Failed to approve excuse. Please try again."
-                //             )
-                //         }
-                //     }
-                // }}
-                // onReject={(excuse) => {
-                //     try {
-                //         rejectExcuse(excuse.id)
+                        setModalOpen(false)
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            toast.error(
+                                "Failed to approve excuse. Please try again."
+                            )
+                        }
+                    }
+                }}
+                onReject={(excuse) => {
+                    try {
+                        rejectExcuse(excuse.id)
 
-                //         toast.success("Excuse rejected successfully.")
-                //     } catch (error) {
-                //         if (error instanceof Error) {
-                //             toast.error(
-                //                 "Failed to reject excuse. Please try again."
-                //             )
-                //         }
-                //     }
-                // }}
+                        toast.success("Excuse rejected successfully.")
+                    } catch (error) {
+                        if (error instanceof Error) {
+                            toast.error(
+                                "Failed to reject excuse. Please try again."
+                            )
+                        }
+                    }
+                }}
             />
         </>
     )
 }
 
-export default AdvisorExcusesCard
+export default CompanyStudentExcusesCard
