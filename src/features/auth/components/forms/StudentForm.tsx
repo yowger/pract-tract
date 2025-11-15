@@ -17,6 +17,14 @@ import { useRegister } from "@/features/auth/hooks/useRegister"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
 
+import {
+    Select,
+    SelectTrigger,
+    SelectContent,
+    SelectItem,
+    SelectValue,
+} from "@/components/ui/select"
+
 const studentFormSchema = z
     .object({
         name: z.string().min(2, "Name is required"),
@@ -209,7 +217,7 @@ const StudentForm = () => {
                     )}
                 />
 
-                <div className="grid grid-cols-2 gap-4">
+                {/* <div className="grid grid-cols-2 gap-4">
                     <FormField
                         control={form.control}
                         name="program_id"
@@ -251,6 +259,102 @@ const StudentForm = () => {
                                             placeholder="e.g., 12"
                                             className="pl-11 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         />
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div> */}
+
+                <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                        control={form.control}
+                        name="program_id"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Program</FormLabel>
+                                <FormControl>
+                                    <div className="relative">
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                            <BookOpen className="w-5 h-5" />
+                                        </div>
+
+                                        <Select
+                                            onValueChange={(value) =>
+                                                field.onChange(Number(value))
+                                            }
+                                            defaultValue={String(field.value)}
+                                        >
+                                            <SelectTrigger className="pl-11 h-12 w-full">
+                                                <SelectValue placeholder="Select program" />
+                                            </SelectTrigger>
+
+                                            <SelectContent>
+                                                <SelectItem value="1">
+                                                    BSIT
+                                                </SelectItem>
+                                                <SelectItem value="2">
+                                                    BSCS
+                                                </SelectItem>
+                                                <SelectItem value="3">
+                                                    BSBA
+                                                </SelectItem>
+                                                <SelectItem value="4">
+                                                    BSA
+                                                </SelectItem>
+                                                <SelectItem value="5">
+                                                    BSED
+                                                </SelectItem>
+                                                <SelectItem value="6">
+                                                    BSAT
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <FormField
+                        control={form.control}
+                        name="section_id"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Section</FormLabel>
+                                <FormControl>
+                                    <div className="relative">
+                                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                            <Users className="w-5 h-5 " />
+                                        </div>
+
+                                        <Select
+                                            onValueChange={(value) =>
+                                                field.onChange(Number(value))
+                                            }
+                                            defaultValue={String(field.value)}
+                                        >
+                                            <SelectTrigger className="pl-11 h-12 w-full">
+                                                <SelectValue placeholder="Select section" />
+                                            </SelectTrigger>
+
+                                            <SelectContent>
+                                                <SelectItem value="1">
+                                                    Section A
+                                                </SelectItem>
+                                                <SelectItem value="2">
+                                                    Section B
+                                                </SelectItem>
+                                                <SelectItem value="3">
+                                                    Section C
+                                                </SelectItem>
+                                                <SelectItem value="4">
+                                                    Section D
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                 </FormControl>
                                 <FormMessage />

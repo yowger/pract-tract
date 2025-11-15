@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import { Home, Users, Building2, UserCog } from "lucide-react"
+import { Home, Users, Building2, UserCog, ListIcon } from "lucide-react"
 import { toast } from "sonner"
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
@@ -14,6 +14,7 @@ const adminLinks = [
     { name: "Students", path: "/director/students", icon: Users },
     { name: "Advisors", path: "/director/advisors", icon: UserCog },
     { name: "Companies", path: "/director/companies", icon: Building2 },
+    { name: "Evaluation", path: "/director/evaluations", icon: ListIcon },
 ]
 
 const DirectorLayout = () => {

@@ -20,6 +20,8 @@ import AdvisorLayout from "./layouts/AdvisorLayout"
 import AdvisorProfilePage from "./pages/advisor/AdvisorProfilePage"
 import ExcusePage from "./pages/student/ExcusePage"
 import { ExcuseCreatePage } from "./pages/student/ExcuseCreatePage"
+import DirectorEvaluationsPage from "./pages/director/DirectorEvaluationsPage"
+import DirectorCreateEvaluationsPage from "./pages/director/DirectorCreateEvaluationsPage"
 
 const LandingPage = lazy(() => import("@/pages/LandingPage"))
 const SignInFormPage = lazy(() => import("@/pages/signUp/SignInFormPage"))
@@ -163,6 +165,14 @@ const routes = [
                     {
                         path: "advisors/:id",
                         element: <DirectorAdvisorProfilePage />,
+                    },
+                    {
+                        path: "evaluations",
+                        element: <DirectorEvaluationsPage />,
+                    },
+                    {
+                        path: "evaluations/create",
+                        element: <DirectorCreateEvaluationsPage />,
                     },
 
                     // { path: "reports", element: <ReportsPage /> },
