@@ -142,7 +142,6 @@ const CompanyStudentExcusesCard = ({ companyId }: { companyId: number }) => {
             <ExcuseModal
                 open={modalOpen}
                 onOpenChange={setModalOpen}
-                showActions={false}
                 excuse={selectedExcuse ?? undefined}
                 onApprove={(excuse) => {
                     try {

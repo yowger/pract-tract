@@ -109,7 +109,7 @@ export default function CompanyTabs({ id }: { id: string | number }) {
                     <StudentInfoCard companyId={company.id} />
                 </TabsContent>
 
-                <TabsContent value="excuse">
+                <TabsContent value="excuses">
                     <CompanyStudentExcusesCard companyId={company.id} />
                 </TabsContent>
 
