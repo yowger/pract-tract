@@ -40,7 +40,7 @@ const AgentCreateSchedulePage = () => {
 
     return (
         <div>
-            <div className="max-w-2xl">
+            <div className="max-w-2xl bg-white p-6 rounded-xl">
                 <ScheduleForm onSubmit={handleSubmit} disabled={isPending} />
             </div>
         </div>

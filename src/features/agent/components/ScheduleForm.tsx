@@ -14,6 +14,18 @@ import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
 import { formSchema, type ScheduleFormValues } from "../api/schedule"
+import {
+    Layer,
+    Map,
+    Source,
+    useMap,
+    type MapLayerMouseEvent,
+} from "@vis.gl/react-maplibre"
+import { useEffect, useState } from "react"
+import { Label } from "@/components/ui/label"
+import { toast } from "sonner"
+import { LocateIcon } from "lucide-react"
+import "maplibre-gl/dist/maplibre-gl.css"
 
 const daysOfWeek = [
     { key: "mon", label: "Monday" },
@@ -28,6 +40,109 @@ const daysOfWeek = [
 interface ScheduleFormProps {
     onSubmit: (data: ScheduleFormValues) => void
     disabled?: boolean
+}
+
+const MAP_STYLE =
+    "https://api.maptiler.com/maps/streets-v4/style.json?key=l60bj9KIXXKDXbsOvzuz"
+
+export function FlyToMyLocationButton({
+    onLocationFound,
+}: {
+    onLocationFound: (lat: number, lng: number) => void
+}) {
+    const mapContext = useMap()
+
+    const handleClick = () => {
+        if (!mapContext?.current) {
+            toast.error("Map is not ready yet")
+            return
+        }
+
+        if (!navigator.geolocation) {
+            toast.error("Geolocation is not supported by your browser")
+            return
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            ({ coords: { latitude, longitude } }) => {
+                mapContext.current!.flyTo({
+                    center: [longitude, latitude],
+                    zoom: 15,
+                    speed: 1.2,
+                    curve: 1.5,
+                    essential: true,
+                })
+
+                onLocationFound(latitude, longitude)
+            },
+            (err) => {
+                console.error(err)
+                toast.error("Unable to get location")
+            },
+            { enableHighAccuracy: true }
+        )
+    }
+
+    return (
+        <button
+            type="button"
+            onClick={handleClick}
+            className="absolute top-2 right-2 z-50 bg-white p-2 rounded shadow hover:bg-gray-100 transition"
+        >
+            <LocateIcon />
+        </button>
+    )
+}
+
+export function ClickMapPicker({
+    onPick,
+}: {
+    onPick: (lat: number, lng: number) => void
+}) {
+    const mapContext = useMap()
+
+    useEffect(() => {
+        if (!mapContext.current) return
+
+        const handleClick = (e: MapLayerMouseEvent) => {
+            const { lng, lat } = e.lngLat
+            onPick(lat, lng)
+        }
+
+        mapContext.current.on("click", handleClick)
+
+        return () => {
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            mapContext?.current?.off("click", handleClick)
+        }
+    }, [mapContext, onPick])
+
+    return null
+}
+
+function createCircleGeoJSON(lng: number, lat: number, radiusMeters: number) {
+    const points = 64
+    const coords = []
+    const distanceX = radiusMeters / (111320 * Math.cos((lat * Math.PI) / 180))
+    const distanceY = radiusMeters / 110540
+
+    for (let i = 0; i <= points; i++) {
+        const angle = (i * 360) / points
+        const rad = (angle * Math.PI) / 180
+        coords.push([
+            lng + distanceX * Math.cos(rad),
+            lat + distanceY * Math.sin(rad),
+        ])
+    }
+
+    return {
+        type: "Feature",
+        geometry: {
+            type: "Polygon",
+            coordinates: [coords],
+        },
+        properties: {},
+    }
 }
 
 export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
@@ -55,6 +170,13 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
             early_in_limit_minutes: 15,
         },
     })
+
+    const [userLocation, setUserLocation] = useState<{
+        lat: number
+        lng: number
+    } | null>(null)
+
+    const [radius, setRadius] = useState(30)
 
     return (
         <Form {...form}>
@@ -132,7 +254,157 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
 
                 <Separator />
 
-                {/* AM Schedule */}
+                <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Pick Location</FormLabel>
+                            <FormControl>
+                                <div className="flex flex-col gap-2">
+                                    <div className="w-full h-64 border rounded overflow-hidden relative">
+                                        <Map
+                                            attributionControl={false}
+                                            initialViewState={{
+                                                longitude:
+                                                    userLocation?.lng ?? -100,
+                                                latitude:
+                                                    userLocation?.lat ?? 40,
+                                                zoom: 10,
+                                            }}
+                                            style={{
+                                                width: "100%",
+                                                height: "100%",
+                                            }}
+                                            mapStyle={MAP_STYLE}
+                                        >
+                                            <FlyToMyLocationButton
+                                                onLocationFound={(lat, lng) => {
+                                                    setUserLocation({
+                                                        lat,
+                                                        lng,
+                                                    })
+                                                    form.setValue(
+                                                        "location",
+                                                        `${lat},${lng}`
+                                                    )
+                                                }}
+                                            />
+                                            <ClickMapPicker
+                                                onPick={(lat, lng) => {
+                                                    setUserLocation({
+                                                        lat,
+                                                        lng,
+                                                    })
+                                                    form.setValue(
+                                                        "location",
+                                                        `${lat},${lng}`
+                                                    )
+                                                }}
+                                            />
+                                            {userLocation && (
+                                                <>
+                                                    {/* Location Marker */}
+                                                    <Source
+                                                        id="selected-location"
+                                                        type="geojson"
+                                                        data={{
+                                                            type: "Feature",
+                                                            properties: {},
+                                                            geometry: {
+                                                                type: "Point",
+                                                                coordinates: [
+                                                                    userLocation.lng,
+                                                                    userLocation.lat,
+                                                                ],
+                                                            },
+                                                        }}
+                                                    />
+
+                                                    <Layer
+                                                        id="selected-location-circle"
+                                                        type="circle"
+                                                        source="selected-location"
+                                                        paint={{
+                                                            "circle-radius": 6,
+                                                            "circle-color":
+                                                                "#2563eb",
+                                                            "circle-stroke-color":
+                                                                "#1e40af",
+                                                            "circle-stroke-width": 2,
+                                                        }}
+                                                    />
+
+                                                    <Source
+                                                        key={radius}
+                                                        id="geofence-circle"
+                                                        type="geojson"
+                                                        data={createCircleGeoJSON(
+                                                            userLocation.lng,
+                                                            userLocation.lat,
+                                                            radius
+                                                        )}
+                                                    />
+
+                                                    <Layer
+                                                        id="geofence-outline"
+                                                        type="line"
+                                                        source="geofence-circle"
+                                                        paint={{
+                                                            "line-color":
+                                                                "#1e40af",
+                                                            "line-width": 2,
+                                                        }}
+                                                    />
+                                                </>
+                                            )}
+                                        </Map>
+
+                                        <div className="absolute top-2 left-2 z-50 flex flex-col gap-2">
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setRadius((r) =>
+                                                        Math.min(r + 2, 300)
+                                                    )
+                                                }}
+                                                className="bg-white px-2 py-1 rounded shadow hover:bg-gray-100"
+                                            >
+                                                +
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    setRadius((r) =>
+                                                        Math.max(r - 2, 5)
+                                                    )
+                                                }
+                                                className="bg-white px-2 py-1 rounded shadow hover:bg-gray-100"
+                                            >
+                                                –
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <Label>Coords</Label>
+                                    <Input
+                                        readOnly
+                                        placeholder="Latitude,Longitude"
+                                        value={
+                                            typeof field.value === "string"
+                                                ? field.value
+                                                : ""
+                                        }
+                                    />
+                                </div>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <Separator />
+
                 <section>
                     <h3 className="text-lg font-medium mb-2">AM Schedule</h3>
                     <div className="grid grid-cols-2 gap-4">

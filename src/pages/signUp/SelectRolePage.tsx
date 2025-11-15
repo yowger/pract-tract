@@ -1,4 +1,4 @@
-import { GraduationCap } from "lucide-react"
+import { GraduationCap, UserCheck, Users } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 
 interface RoleSelectHandler {
@@ -60,7 +60,7 @@ const SelectRolePage = () => {
                         </div>
                     </button>
 
-                    {/* <button
+                    <button
                         onClick={() => handleSelect("agent")}
                         className="bg-white rounded-lg p-8 shadow-sm hover:shadow-md transition-all duration-200 border-2 border-transparent hover:border-green-500 text-center group"
                     >
@@ -89,9 +89,9 @@ const SelectRolePage = () => {
                                 />
                             </svg>
                         </div>
-                    </button> */}
+                    </button>
 
-                    {/* <button
+                    <button
                         onClick={() => handleSelect("advisor")}
                         className="bg-white rounded-lg p-8 shadow-sm hover:shadow-md transition-all duration-200 border-2 border-transparent hover:border-purple-500 text-center group"
                     >
@@ -120,7 +120,7 @@ const SelectRolePage = () => {
                                 />
                             </svg>
                         </div>
-                    </button> */}
+                    </button>
                 </div>
 
                 <div className="text-center mt-8">

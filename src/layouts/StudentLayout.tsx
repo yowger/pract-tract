@@ -56,7 +56,7 @@ const StudentLayout = () => {
                         onLogout={handleLogout}
                         user={{
                             name: user.user.name,
-                            role: user.user.role,
+                            role: "Student",
                         }}
                     />
                 }

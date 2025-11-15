@@ -6,7 +6,7 @@ const DocumentsPage = () => {
         <div className="p-4">
             <div className="flex justify-end">
                 <Button asChild>
-                    <Link to="create">Create Document</Link>
+                    <Link to="create">Upload report</Link>
                 </Button>
             </div>
 

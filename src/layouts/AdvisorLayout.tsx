@@ -47,11 +47,11 @@ const AdvisorLayout = () => {
                         onLogout={handleLogout}
                         user={{
                             name: user.user.name,
-                            role: user.user.role,
+                            role: "Advisor",
                         }}
                     />
                 }
-                sidebar={<Sidebar links={advisorLinks} title="advisor" />}
+                sidebar={<Sidebar links={advisorLinks} title="Advisor" />}
             >
                 <Outlet />
             </DashboardLayout>

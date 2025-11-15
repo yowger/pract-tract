@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import { Home, User, CalendarCheck, FolderOpen } from "lucide-react"
+import { Home } from "lucide-react"
 import { toast } from "sonner"
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
@@ -44,11 +44,11 @@ const AgentLayout = () => {
                         onLogout={handleLogout}
                         user={{
                             name: user.user.name,
-                            role: user.user.role,
+                            role: "Agency",
                         }}
                     />
                 }
-                sidebar={<Sidebar links={AgentLinks} title="Student" />}
+                sidebar={<Sidebar links={AgentLinks} title="Agency" />}
             >
                 <Outlet />
             </DashboardLayout>

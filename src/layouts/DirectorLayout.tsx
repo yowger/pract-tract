@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import { Home, Users, Building2, UserCog, ListIcon } from "lucide-react"
+import { Home, Users, Building2, UserCog } from "lucide-react"
 import { toast } from "sonner"
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
@@ -44,11 +44,11 @@ const DirectorLayout = () => {
                         onLogout={handleLogout}
                         user={{
                             name: user.user.name,
-                            role: user.user.role,
+                            role: "Chair Person",
                         }}
                     />
                 }
-                sidebar={<Sidebar links={adminLinks} title="Director" />}
+                sidebar={<Sidebar links={adminLinks} title="Chair Person" />}
             >
                 <Outlet />
             </DashboardLayout>
