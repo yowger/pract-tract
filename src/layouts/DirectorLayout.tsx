@@ -14,7 +14,7 @@ const adminLinks = [
     { name: "Students", path: "/director/students", icon: Users },
     { name: "Advisors", path: "/director/advisors", icon: UserCog },
     { name: "Companies", path: "/director/companies", icon: Building2 },
-    { name: "Evaluation", path: "/director/evaluations", icon: ListIcon },
+    // { name: "Evaluation", path: "/director/evaluations", icon: ListIcon },
 ]
 
 const DirectorLayout = () => {

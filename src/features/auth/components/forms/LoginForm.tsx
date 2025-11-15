@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
+import { Eye, EyeOff } from "lucide-react"
 
 import {
     Form,
@@ -17,6 +18,7 @@ import { Button } from "@/components/ui/button"
 
 import { useLogin } from "@/features/auth/hooks/useLogin"
 import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 
 const loginSchema = z.object({
     email: z.string().email("Invalid email address"),
@@ -27,6 +29,7 @@ type LoginFormValues = z.infer<typeof loginSchema>
 
 const LoginForm = () => {
     const navigate = useNavigate()
+    const [showPassword, setShowPassword] = useState<boolean>(false)
 
     const form = useForm<LoginFormValues>({
         resolver: zodResolver(loginSchema),
@@ -116,12 +119,30 @@ const LoginForm = () => {
                                 Password
                             </FormLabel>
                             <FormControl>
-                                <Input
-                                    type="password"
-                                    placeholder="Enter your password"
-                                    className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
-                                    {...field}
-                                />
+                                <div className="relative">
+                                    <Input
+                                        type={
+                                            showPassword ? "text" : "password"
+                                        }
+                                        placeholder="Enter your password"
+                                        className="h-11 border-gray-300 focus:border-blue-500 focus:ring-blue-500 pr-12"
+                                        {...field}
+                                    />
+
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setShowPassword((prev) => !prev)
+                                        }
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff className="w-5 h-5" />
+                                        ) : (
+                                            <Eye className="w-5 h-5" />
+                                        )}
+                                    </button>
+                                </div>
                             </FormControl>
                             <FormMessage />
                         </FormItem>

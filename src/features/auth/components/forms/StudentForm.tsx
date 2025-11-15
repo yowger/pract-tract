@@ -16,6 +16,8 @@ import { Button } from "@/components/ui/button"
 import { useRegister } from "@/features/auth/hooks/useRegister"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
+import { Eye, EyeOff } from "lucide-react"
+import { useState } from "react"
 
 import {
     Select,
@@ -59,6 +61,8 @@ const StudentForm = () => {
     })
 
     const { mutateAsync: register, isPending } = useRegister()
+    const [showPassword, setShowPassword] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
     const onSubmit = async (values: StudentFormValues) => {
         try {
@@ -146,12 +150,29 @@ const StudentForm = () => {
                                     <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                                         <Lock className="w-5 h-5" />
                                     </div>
+
                                     <Input
                                         {...field}
-                                        type="password"
+                                        type={
+                                            showPassword ? "text" : "password"
+                                        }
                                         placeholder="Min. 8 characters"
-                                        className="pl-11 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="pl-11 pr-12 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     />
+
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setShowPassword((prev) => !prev)
+                                        }
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff className="w-5 h-5" />
+                                        ) : (
+                                            <Eye className="w-5 h-5" />
+                                        )}
+                                    </button>
                                 </div>
                             </FormControl>
                             <FormMessage />
@@ -170,12 +191,33 @@ const StudentForm = () => {
                                     <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                                         <Lock className="w-5 h-5" />
                                     </div>
+
                                     <Input
                                         {...field}
-                                        type="password"
+                                        type={
+                                            showConfirmPassword
+                                                ? "text"
+                                                : "password"
+                                        }
                                         placeholder="Re-enter your password"
-                                        className="pl-11 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        className="pl-11 pr-12 h-12 rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                     />
+
+                                    <button
+                                        type="button"
+                                        onClick={() =>
+                                            setShowConfirmPassword(
+                                                (prev) => !prev
+                                            )
+                                        }
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                    >
+                                        {showConfirmPassword ? (
+                                            <EyeOff className="w-5 h-5" />
+                                        ) : (
+                                            <Eye className="w-5 h-5" />
+                                        )}
+                                    </button>
                                 </div>
                             </FormControl>
                             <FormMessage />
