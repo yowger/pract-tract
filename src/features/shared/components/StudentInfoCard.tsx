@@ -20,7 +20,7 @@ const StudentInfoCard = ({ companyId }: { companyId: number }) => {
             <ScrollArea type="always" className="w-full overflow-x-auto">
                 <DataTable
                     data={students ? students.data : []}
-                    columns={CompanyStudentColumns}
+                    columns={CompanyStudentColumns({})}
                     isLoading={isLoading}
                     manualPagination
                     pageCount={students?.meta.last_page}
