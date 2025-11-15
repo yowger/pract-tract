@@ -29,6 +29,7 @@ export const formSchema = z.object({
     early_in_limit_minutes: z.coerce.number<number>().default(0).optional(),
 
     location: z.string(),
+    radius: z.number().min(1),
 })
 
 export type ScheduleFormValues = z.infer<typeof formSchema>

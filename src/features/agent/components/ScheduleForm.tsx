@@ -257,7 +257,7 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
                 <FormField
                     control={form.control}
                     name="location"
-                    render={({ field }) => (
+                    render={() => (
                         <FormItem>
                             <FormLabel>Pick Location</FormLabel>
                             <FormControl>
@@ -304,7 +304,6 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
                                             />
                                             {userLocation && (
                                                 <>
-                                                    {/* Location Marker */}
                                                     <Source
                                                         id="selected-location"
                                                         type="geojson"
@@ -364,9 +363,15 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
                                             <button
                                                 type="button"
                                                 onClick={() => {
-                                                    setRadius((r) =>
-                                                        Math.min(r + 2, 300)
-                                                    )
+                                                    setRadius((r) => {
+                                                        const newRadius =
+                                                            Math.min(r + 1, 300)
+                                                        form.setValue(
+                                                            "radius",
+                                                            newRadius
+                                                        )
+                                                        return newRadius
+                                                    })
                                                 }}
                                                 className="bg-white px-2 py-1 rounded shadow hover:bg-gray-100"
                                             >
@@ -374,11 +379,17 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
                                             </button>
                                             <button
                                                 type="button"
-                                                onClick={() =>
-                                                    setRadius((r) =>
-                                                        Math.max(r - 2, 5)
-                                                    )
-                                                }
+                                                onClick={() => {
+                                                    setRadius((r) => {
+                                                        const newRadius =
+                                                            Math.max(r - 1, 5)
+                                                        form.setValue(
+                                                            "radius",
+                                                            newRadius
+                                                        )
+                                                        return newRadius
+                                                    })
+                                                }}
                                                 className="bg-white px-2 py-1 rounded shadow hover:bg-gray-100"
                                             >
                                                 –
@@ -386,13 +397,19 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
                                         </div>
                                     </div>
 
+                                    <Label>Radius</Label>
+                                    <input
+                                        {...form.register("radius")}
+                                        value={radius}
+                                    />
+
                                     <Label>Coords</Label>
                                     <Input
                                         readOnly
                                         placeholder="Latitude,Longitude"
                                         value={
-                                            typeof field.value === "string"
-                                                ? field.value
+                                            userLocation
+                                                ? `${userLocation.lat},${userLocation.lng}`
                                                 : ""
                                         }
                                     />
