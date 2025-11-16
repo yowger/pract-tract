@@ -140,22 +140,29 @@ const StudentAttendancePage = () => {
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
             <div className="max-w-2xl mx-auto">
-                <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-                    <div className="text-center">
-                        <p className="text-slate-600 text-lg mb-2">
+                <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 mb-6 transition-all hover:shadow-md">
+                    <div className="text-center space-y-3">
+                        <p className="text-slate-500 text-sm font-medium tracking-wide uppercase">
                             {formatDate(currentTime)}
                         </p>
-                        <div className="text-6xl font-bold text-blue-600 font-mono mb-4">
-                            {currentTime.toLocaleTimeString()}
+                        <div className="text-7xl font-normal text-slate-800 tracking-tight">
+                            {currentTime.toLocaleTimeString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit",
+                            })}
                         </div>
                     </div>
 
-                    <div className="flex gap-4 justify-center">
+                    <div className="mt-8 flex justify-center">
                         <button
                             onClick={handleClockIn}
-                            className="flex items-center gap-2 px-8 py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition shadow-lg text-lg"
+                            className="group flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-all shadow-sm hover:shadow-md active:scale-95"
                         >
-                            <Clock size={24} />
+                            <Clock
+                                size={20}
+                                className="group-hover:rotate-12 transition-transform"
+                            />
                             Clock In
                         </button>
                     </div>
