@@ -20,6 +20,7 @@ export default function CompanyTabs({ id }: { id: string | number }) {
 
     const userData = company.owner
     const companySchedule = company.schedule
+    console.log("🚀 ~ CompanyTabs ~ companySchedule:", companySchedule)
 
     return (
         <div className="max-w-4xl mx-auto px-4 space-y-6">

@@ -1,6 +1,9 @@
-import { Clock } from "lucide-react"
-
+import { Clock, LocateIcon } from "lucide-react"
 import type { Schedule } from "@/types/schedule"
+import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button"
+import { Map, Source, Layer } from "@vis.gl/react-maplibre"
+import "maplibre-gl/dist/maplibre-gl.css"
 
 interface WorkScheduleCardProps {
     schedule: Schedule
@@ -32,6 +35,31 @@ function Requirement({
     )
 }
 
+function createCircleGeoJSON(lng: number, lat: number, radiusMeters: number) {
+    const points = 64
+    const coords = []
+    const distanceX = radiusMeters / (111320 * Math.cos((lat * Math.PI) / 180))
+    const distanceY = radiusMeters / 110540
+
+    for (let i = 0; i <= points; i++) {
+        const angle = (i * 360) / points
+        const rad = (angle * Math.PI) / 180
+        coords.push([
+            lng + distanceX * Math.cos(rad),
+            lat + distanceY * Math.sin(rad),
+        ])
+    }
+
+    return {
+        type: "Feature",
+        geometry: { type: "Polygon", coordinates: [coords] },
+        properties: {},
+    }
+}
+
+const MAP_STYLE =
+    "https://api.maptiler.com/maps/streets-v4/style.json?key=l60bj9KIXXKDXbsOvzuz"
+
 export default function WorkScheduleCard({
     schedule,
     formatDate,
@@ -39,9 +67,15 @@ export default function WorkScheduleCard({
 }: WorkScheduleCardProps) {
     return (
         <div className="bg-white rounded-lg shadow-lg p-8 space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Work Schedule
-            </h2>
+            <div className="flex justify-between">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                    Work Schedule
+                </h2>
+
+                <Link to={`/agent/schedule/${schedule.id}/edit`}>
+                    <Button variant="default">Update Schedule</Button>
+                </Link>
+            </div>
 
             <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -177,6 +211,72 @@ export default function WorkScheduleCard({
                         />
                     </div>
                 </div>
+
+                {schedule.lat && schedule.lng && (
+                    <div className="border-t pt-6">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                            Location
+                        </h3>
+                        <div className="w-full h-64 border rounded overflow-hidden">
+                            <Map
+                                attributionControl={false}
+                                initialViewState={{
+                                    longitude: schedule.lng,
+                                    latitude: schedule.lat,
+                                    zoom: 14,
+                                }}
+                                style={{ width: "100%", height: "100%" }}
+                                mapStyle={MAP_STYLE}
+                            >
+                                <Source
+                                    id="location-point"
+                                    type="geojson"
+                                    data={{
+                                        type: "Feature",
+                                        geometry: {
+                                            type: "Point",
+                                            coordinates: [
+                                                schedule.lng,
+                                                schedule.lat,
+                                            ],
+                                        },
+                                        properties: {},
+                                    }}
+                                />
+                                <Layer
+                                    id="location-point-layer"
+                                    type="circle"
+                                    source="location-point"
+                                    paint={{
+                                        "circle-radius": 6,
+                                        "circle-color": "#2563eb",
+                                        "circle-stroke-color": "#1e40af",
+                                        "circle-stroke-width": 2,
+                                    }}
+                                />
+
+                                <Source
+                                    id="location-radius"
+                                    type="geojson"
+                                    data={createCircleGeoJSON(
+                                        schedule.lng,
+                                        schedule.lat,
+                                        schedule.radius
+                                    )}
+                                />
+                                <Layer
+                                    id="location-radius-layer"
+                                    type="line"
+                                    source="location-radius"
+                                    paint={{
+                                        "line-color": "#1e40af",
+                                        "line-width": 2,
+                                    }}
+                                />
+                            </Map>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )

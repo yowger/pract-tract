@@ -20,11 +20,12 @@ const AgentCreateSchedulePage = () => {
 
     const companyId = data?.user?.agent?.company_id
 
-    const handleSubmit = (formData: ScheduleFormValues) => {
-        console.log("🚀 ~ handleSubmit ~ formData:", formData)
+    const handleUpdateSchedule = (formData: ScheduleFormValues) => {
         const cleanedData = {
             ...cleanUndefined(formData),
             company_id: companyId,
+            lat: Number(formData.location.split(",")[0]),
+            lng: Number(formData.location.split(",")[1]),
         }
 
         createSchedule(cleanedData, {
@@ -41,7 +42,10 @@ const AgentCreateSchedulePage = () => {
     return (
         <div>
             <div className="max-w-2xl bg-white p-6 rounded-xl">
-                <ScheduleForm onSubmit={handleSubmit} disabled={isPending} />
+                <ScheduleForm
+                    onSubmit={handleUpdateSchedule}
+                    disabled={isPending}
+                />
             </div>
         </div>
     )

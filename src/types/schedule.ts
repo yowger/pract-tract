@@ -24,6 +24,9 @@ export interface Schedule {
     pm_require_photo_out: boolean
     pm_require_location_in: boolean
     pm_require_location_out: boolean
+    lat?: number | null
+    lng?: number | null
+    radius: number
 
     created_at: string
     updated_at: string

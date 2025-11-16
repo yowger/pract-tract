@@ -23,6 +23,7 @@ import { ExcuseCreatePage } from "./pages/student/ExcuseCreatePage"
 import DirectorEvaluationsPage from "./pages/director/DirectorEvaluationsPage"
 import DirectorCreateEvaluationsPage from "./pages/director/DirectorCreateEvaluationsPage"
 import DocumentsUploadsPage from "./pages/student/DocumentsUploadsPage"
+import AgentUpdateSchedulePage from "./pages/agent/AgentUpdateSchedulePage"
 
 const LandingPage = lazy(() => import("@/pages/LandingPage"))
 const SignInFormPage = lazy(() => import("@/pages/signUp/SignInFormPage"))
@@ -97,6 +98,10 @@ const routes = [
                     {
                         path: "schedule/create",
                         element: <AgentCreateSchedulePage />,
+                    },
+                    {
+                        path: "schedule/:id/edit",
+                        element: <AgentUpdateSchedulePage />,
                     },
                     { path: "dashboard", element: <AgentProfilePage /> },
                 ],

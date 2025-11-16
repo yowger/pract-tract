@@ -40,6 +40,7 @@ const daysOfWeek = [
 interface ScheduleFormProps {
     onSubmit: (data: ScheduleFormValues) => void
     disabled?: boolean
+    initialValues?: ScheduleFormValues
 }
 
 const MAP_STYLE =
@@ -145,10 +146,21 @@ function createCircleGeoJSON(lng: number, lat: number, radiusMeters: number) {
     }
 }
 
-export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
+export function ScheduleForm({
+    onSubmit,
+    disabled,
+    initialValues,
+}: ScheduleFormProps) {
+    const [userLocation, setUserLocation] = useState<{
+        lat: number
+        lng: number
+    } | null>(null)
+
+    const [radius, setRadius] = useState(30)
+
     const form = useForm<ScheduleFormValues>({
         resolver: zodResolver(formSchema),
-        defaultValues: {
+        defaultValues: initialValues ?? {
             day_of_week: ["mon", "tue", "wed", "thu", "fri"],
             am_time_in: "08:00",
             am_time_out: "11:30",
@@ -171,12 +183,20 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
         },
     })
 
-    const [userLocation, setUserLocation] = useState<{
-        lat: number
-        lng: number
-    } | null>(null)
+    useEffect(() => {
+        if (initialValues) {
+            form.reset(initialValues)
+        }
 
-    const [radius, setRadius] = useState(30)
+        if (initialValues?.location) {
+            const [lat, lng] = initialValues.location.split(",").map(Number)
+            setUserLocation({ lat, lng })
+        }
+
+        if (initialValues?.radius) {
+            setRadius(initialValues.radius)
+        }
+    }, [initialValues, form])
 
     return (
         <Form {...form}>
@@ -373,10 +393,10 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
                                                         return newRadius
                                                     })
                                                 }}
-                                                className="bg-white px-2 py-1 rounded shadow hover:bg-gray-100"
                                             >
                                                 +
                                             </button>
+
                                             <button
                                                 type="button"
                                                 onClick={() => {
@@ -390,7 +410,6 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
                                                         return newRadius
                                                     })
                                                 }}
-                                                className="bg-white px-2 py-1 rounded shadow hover:bg-gray-100"
                                             >
                                                 –
                                             </button>
@@ -399,8 +418,17 @@ export function ScheduleForm({ onSubmit, disabled }: ScheduleFormProps) {
 
                                     <Label>Radius</Label>
                                     <input
+                                        type="number"
                                         {...form.register("radius")}
                                         value={radius}
+                                        onChange={(e) => {
+                                            const newVal = Number(
+                                                e.target.value
+                                            )
+                                            setRadius(newVal)
+                                            form.setValue("radius", newVal)
+                                        }}
+                                        className="border p-2 rounded"
                                     />
 
                                     <Label>Coords</Label>
