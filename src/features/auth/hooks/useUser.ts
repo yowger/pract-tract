@@ -1,9 +1,7 @@
-import { useQuery, type UseQueryResult } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { getCurrentUser } from "../api/authApi"
 
-export const useUser = (): UseQueryResult<
-    Awaited<ReturnType<typeof getCurrentUser>>
-> => {
+export const useUser = () => {
     return useQuery({
         queryKey: ["user"],
         queryFn: getCurrentUser,
