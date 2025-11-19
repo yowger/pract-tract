@@ -152,7 +152,7 @@ export const AgentAttendanceColumns: ColumnDef<AttendanceWithStudent>[] = [
                 { src: am_photo_out, label: "AM Out" },
                 { src: pm_photo_in, label: "PM In" },
                 { src: pm_photo_out, label: "PM Out" },
-            ].filter((p) => p.src)
+            ].filter((p): p is { src: string; label: string } => !!p.src)
 
             if (photos.length === 0) {
                 return <span className="text-gray-400 text-sm">No photo</span>
