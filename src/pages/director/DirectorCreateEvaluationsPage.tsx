@@ -7,18 +7,32 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 type QuestionType = "multiple" | "text"
 
 interface Question {
+    name: string
+    description: string
     type: QuestionType
     title: string
     options?: string[]
 }
 
 interface FormValues {
+    name: string
+    description: string
     questions: Question[]
 }
 
 const DirectorCreateEvaluationsPage = () => {
-    const { control, register, watch, handleSubmit } = useForm<FormValues>({
-        defaultValues: { questions: [] },
+    const {
+        control,
+        register,
+        watch,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormValues>({
+        defaultValues: {
+            name: "",
+            description: "",
+            questions: [],
+        },
     })
 
     const { fields, append, remove } = useFieldArray({
@@ -29,7 +43,8 @@ const DirectorCreateEvaluationsPage = () => {
     const questions = watch("questions")
 
     const onSubmit = (data: FormValues) => {
-        alert("Saved: " + JSON.stringify(data, null, 2))
+        console.log("🚀 ~ onSubmit ~ data:", data)
+        // alert("Saved: " + JSON.stringify(data, null, 2))
     }
 
     return (
@@ -38,6 +53,27 @@ const DirectorCreateEvaluationsPage = () => {
                 <h1 className="text-2xl font-bold">Create Evaluation</h1>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <div className="space-y-2">
+                        <Input
+                            {...register("name", {
+                                required: "Name is required",
+                            })}
+                            placeholder="Questionnaire Name"
+                            className="w-full"
+                        />
+                        {errors.name && (
+                            <p className="text-red-500 text-sm">
+                                {errors.name.message}
+                            </p>
+                        )}
+
+                        <Textarea
+                            {...register("description")}
+                            placeholder="Description (optional)"
+                            className="w-full"
+                        />
+                    </div>
+
                     {fields.map((field, index) => {
                         const type = watch(`questions.${index}.type`)
                         return (
@@ -156,6 +192,8 @@ const DirectorCreateEvaluationsPage = () => {
                         type="button"
                         onClick={() =>
                             append({
+                                name: "",
+                                description: "",
                                 type: "multiple",
                                 title: "",
                                 options: [""],
