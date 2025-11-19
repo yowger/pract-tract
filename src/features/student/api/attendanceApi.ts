@@ -15,10 +15,12 @@ export async function recordSelfAttendance({
     student_id,
     lat,
     lng,
+    photo = null,
 }: {
     student_id: number
     lat: number
     lng: number
+    photo?: string | null
 }) {
     if (!lat || !lng) throw new Error("Latitude and longitude are required")
 
@@ -26,6 +28,7 @@ export async function recordSelfAttendance({
         student_id,
         lat,
         lng,
+        photo,
     })
     return response.data
 }

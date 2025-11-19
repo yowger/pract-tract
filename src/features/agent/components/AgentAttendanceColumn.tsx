@@ -135,18 +135,53 @@ export const AgentAttendanceColumns: ColumnDef<AttendanceWithStudent>[] = [
         },
     },
 
+    // {
+    //     accessorKey: "remarks",
+    //     header: "Remarks",
+    //     cell: ({ row }) => row.original.remarks,
+    // },
     {
-        accessorKey: "remarks",
-        header: "Remarks",
-        cell: ({ row }) => row.original.remarks,
+        id: "photo",
+        header: "Photo",
+        cell: ({ row }) => {
+            const { am_photo_in, am_photo_out, pm_photo_in, pm_photo_out } =
+                row.original
+
+            const photos = [
+                { src: am_photo_in, label: "AM In" },
+                { src: am_photo_out, label: "AM Out" },
+                { src: pm_photo_in, label: "PM In" },
+                { src: pm_photo_out, label: "PM Out" },
+            ].filter((p) => p.src)
+
+            if (photos.length === 0) {
+                return <span className="text-gray-400 text-sm">No photo</span>
+            }
+
+            return (
+                <div className="flex gap-2 flex-wrap">
+                    {photos.map((p, i) => (
+                        <img
+                            key={i}
+                            src={p.src}
+                            alt={p.label}
+                            title={p.label}
+                            className="w-10 h-10 object-cover rounded cursor-pointer border border-gray-200"
+                            onClick={() => window.open(p.src, "_blank")}
+                        />
+                    ))}
+                </div>
+            )
+        },
     },
-    {
-        id: "actions",
-        header: "Actions",
-        cell: () => (
-            <button className="text-blue-600 hover:underline text-sm">
-                View
-            </button>
-        ),
-    },
+
+    // {
+    //     id: "actions",
+    //     header: "Actions",
+    //     cell: () => (
+    //         <button className="text-blue-600 hover:underline text-sm">
+    //             View
+    //         </button>
+    //     ),
+    // },
 ]
