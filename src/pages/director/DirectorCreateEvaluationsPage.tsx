@@ -8,6 +8,7 @@ import {
     type EvaluationPayload,
 } from "@/features/shared/api/evaluationsApi"
 import { toast } from "sonner"
+import { useNavigate } from "react-router-dom"
 
 type QuestionType = "multiple" | "text"
 
@@ -27,6 +28,7 @@ interface FormValues {
 
 const DirectorCreateEvaluationsPage = () => {
     const { mutateAsync, isPending } = useCreateEvaluation()
+    const navigate = useNavigate()
 
     const {
         control,
@@ -61,9 +63,9 @@ const DirectorCreateEvaluationsPage = () => {
         }
 
         try {
-            const created = await mutateAsync(payload)
-            console.log("🚀 ~ onSubmit ~ created:", created)
+            await mutateAsync(payload)
 
+            navigate("/director/evaluations")
             toast.success("Evaluation created successfully!")
         } catch (err) {
             console.error(err)
