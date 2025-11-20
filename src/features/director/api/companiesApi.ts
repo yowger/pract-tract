@@ -14,7 +14,23 @@ export interface Company {
     created_at: string
     updated_at: string
     owner?: User
+    owner_evaluations: Evaluation[]
     students_count?: number
+}
+
+export interface Evaluation {
+    id: number
+    name: string
+    description?: string | null
+    questions: Question[]
+    created_at: string
+    updated_at: string
+}
+
+export interface Question {
+    type: "multiple" | "text"
+    title: string
+    options?: string[]
 }
 
 export interface CompanyFilters {

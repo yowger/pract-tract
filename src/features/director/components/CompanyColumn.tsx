@@ -49,18 +49,11 @@ export const CompanyColumns: ColumnDef<Company>[] = [
         header: "Students",
         accessorKey: "students_count",
     },
-    // {
-    //     header: "Action",
-    //     cell: ({ row }) => {
-    //         const company = row.original
-    //         return (
-    //             <Link
-    //                 to={`/director/companies/${company.id}`}
-    //                 className="text-primary hover:underline flex items-center gap-1"
-    //             >
-    //                 <Eye className="w-4 h-4" />
-    //             </Link>
-    //         )
-    //     },
-    // },
+    {
+        header: "Evaluations",
+        accessorFn: (row) =>
+            row.owner_evaluations.length > 0
+                ? row.owner_evaluations.map((ev) => ev.name).join(", ")
+                : "-",
+    },
 ]

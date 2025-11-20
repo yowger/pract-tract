@@ -1,6 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { privateApi } from "@/lib/axiosClient"
 
+export interface User {
+    id: number
+    name: string
+    email: string
+    phone?: string | null
+    address?: string | null
+    role: string
+    status: string
+    is_active: boolean | number
+    email_verified_at?: string | null
+    created_at: string
+    updated_at: string
+}
+
 export interface Question {
     type: "multiple" | "text"
     title: string
@@ -10,8 +24,9 @@ export interface Question {
 export interface Evaluation {
     id: number
     name: string
-    description?: string
+    description?: string | null
     questions: Question[]
+    users?: User[]
     created_at: string
     updated_at: string
 }
