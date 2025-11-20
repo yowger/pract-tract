@@ -3,6 +3,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import {
+    useCreateEvaluation,
+    type EvaluationPayload,
+} from "@/features/shared/api/evaluationsApi"
+import { toast } from "sonner"
 
 type QuestionType = "multiple" | "text"
 
@@ -21,6 +26,8 @@ interface FormValues {
 }
 
 const DirectorCreateEvaluationsPage = () => {
+    const { mutateAsync, isPending } = useCreateEvaluation()
+
     const {
         control,
         register,
@@ -42,9 +49,27 @@ const DirectorCreateEvaluationsPage = () => {
 
     const questions = watch("questions")
 
-    const onSubmit = (data: FormValues) => {
-        console.log("🚀 ~ onSubmit ~ data:", data)
-        // alert("Saved: " + JSON.stringify(data, null, 2))
+    const onSubmit = async (data: FormValues) => {
+        const payload: EvaluationPayload = {
+            name: data.name,
+            description: data.description,
+            questions: data.questions.map((q) => ({
+                type: q.type,
+                title: q.title,
+                options: q.options,
+            })),
+        }
+
+        try {
+            const created = await mutateAsync(payload)
+            console.log("🚀 ~ onSubmit ~ created:", created)
+
+            toast.success("Evaluation created successfully!")
+        } catch (err) {
+            console.error(err)
+
+            toast.error("Failed to create evaluation")
+        }
     }
 
     return (
@@ -203,7 +228,9 @@ const DirectorCreateEvaluationsPage = () => {
                         Add Question
                     </Button>
 
-                    <Button type="submit">Save Evaluation</Button>
+                    <Button type="submit" disabled={isPending}>
+                        {isPending ? "Saving..." : "Save Evaluation"}
+                    </Button>
                 </form>
             </div>
 
