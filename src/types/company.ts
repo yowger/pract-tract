@@ -1,3 +1,4 @@
+import type { Evaluation } from "@/features/shared/api/evaluationsApi"
 import type { Schedule } from "./schedule"
 import type { Agent, User } from "./user"
 
@@ -15,6 +16,8 @@ export interface Company {
     schedule: Schedule | null
     agents: Agent[]
     owner: User
+
+    owner_evaluations: Evaluation[]
 
     students_count: number
 }

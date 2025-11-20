@@ -1,5 +1,4 @@
 import { Users, Calendar, CheckSquare, User, Home } from "lucide-react"
-
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { useCompany } from "@/features/shared/hooks/useCompany"
 import PersonalInfoCard from "@/features/shared/components/PersonalInfoCard"
@@ -11,6 +10,7 @@ import ProfileHeader from "@/features/shared/components/ProfileHeader"
 import StudentInfoCard from "@/features/shared/components/StudentInfoCard"
 import AttendanceInfoCard from "@/features/shared/components/AttendanceInfoCard"
 import CompanyStudentExcusesCard from "./CompanyStudentExcuse"
+import { EvaluationsTable } from "@/features/shared/components/EvaluationsTable"
 
 export default function CompanyTabs({ id }: { id: string | number }) {
     const { data: company, isLoading } = useCompany(Number(id))
@@ -20,7 +20,6 @@ export default function CompanyTabs({ id }: { id: string | number }) {
 
     const userData = company.owner
     const companySchedule = company.schedule
-    console.log("🚀 ~ CompanyTabs ~ companySchedule:", companySchedule)
 
     return (
         <div className="max-w-4xl mx-auto px-4 space-y-6">
@@ -33,44 +32,48 @@ export default function CompanyTabs({ id }: { id: string | number }) {
 
             <Tabs defaultValue="company">
                 <TabsList className="bg-gray-100 rounded-lg mb-6">
-                    <TabsList className="bg-gray-100 rounded-lg">
-                        <TabsTrigger
-                            value="company"
-                            className="flex items-center gap-2"
-                        >
-                            <Home className="w-4 h-4" /> Company
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="owner"
-                            className="flex items-center gap-2"
-                        >
-                            <User className="w-4 h-4" /> Owner
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="schedule"
-                            className="flex items-center gap-2"
-                        >
-                            <Calendar className="w-4 h-4" /> Schedule
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="students"
-                            className="flex items-center gap-2"
-                        >
-                            <Users className="w-4 h-4" /> Students List
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="excuses"
-                            className="flex items-center gap-2"
-                        >
-                            <Users className="w-4 h-4" /> Students Excuse
-                        </TabsTrigger>
-                        <TabsTrigger
-                            value="attendance"
-                            className="flex items-center gap-2"
-                        >
-                            <CheckSquare className="w-4 h-4" /> Attendance
-                        </TabsTrigger>
-                    </TabsList>
+                    <TabsTrigger
+                        value="company"
+                        className="flex items-center gap-2"
+                    >
+                        <Home className="w-4 h-4" /> Company
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="owner"
+                        className="flex items-center gap-2"
+                    >
+                        <User className="w-4 h-4" /> Owner
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="schedule"
+                        className="flex items-center gap-2"
+                    >
+                        <Calendar className="w-4 h-4" /> Schedule
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="students"
+                        className="flex items-center gap-2"
+                    >
+                        <Users className="w-4 h-4" /> Students List
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="excuses"
+                        className="flex items-center gap-2"
+                    >
+                        <Users className="w-4 h-4" /> Students Excuse
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="attendance"
+                        className="flex items-center gap-2"
+                    >
+                        <CheckSquare className="w-4 h-4" /> Attendance
+                    </TabsTrigger>
+                    <TabsTrigger
+                        value="evaluations"
+                        className="flex items-center gap-2"
+                    >
+                        <CheckSquare className="w-4 h-4" /> Evaluations
+                    </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="company">
@@ -116,6 +119,14 @@ export default function CompanyTabs({ id }: { id: string | number }) {
 
                 <TabsContent value="attendance">
                     <AttendanceInfoCard companyId={company.id} />
+                </TabsContent>
+
+                <TabsContent value="evaluations">
+                    {company.owner_evaluations.length === 0 ? (
+                        <p>No evaluations assigned.</p>
+                    ) : (
+                        <EvaluationsTable data={company.owner_evaluations} />
+                    )}
                 </TabsContent>
             </Tabs>
         </div>
