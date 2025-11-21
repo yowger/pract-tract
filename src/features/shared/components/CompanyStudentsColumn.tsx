@@ -10,15 +10,18 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
+import type { UserRole } from "@/types/roles"
 
 interface CompanyStudentColumnsProps {
     onReportViolation?: (student: Student) => void
     onEvaluate?: (student: Student) => void
+    role?: UserRole
 }
 
 export const CompanyStudentColumns = ({
     onReportViolation,
     onEvaluate,
+    role,
 }: CompanyStudentColumnsProps): ColumnDef<Student>[] => [
     {
         accessorKey: "user.name",
@@ -27,9 +30,12 @@ export const CompanyStudentColumns = ({
             const studentId = row.original.id
             const name = row.original.user?.name || "Unknown"
 
+            const basePath =
+                role === "agent" ? "/agent/students" : "/director/students"
+
             return (
                 <Link
-                    to={`/director/students/${studentId}`}
+                    to={`${basePath}/${studentId}`}
                     className="text-blue-700 hover:underline"
                 >
                     {name}
@@ -62,6 +68,14 @@ export const CompanyStudentColumns = ({
                 row.original.user.created_at
             ).toLocaleDateString()
             return <span>{createdAt}</span>
+        },
+    },
+    {
+        accessorKey: "evaluation_answers_count",
+        header: "Evaluations",
+        cell: ({ row }) => {
+            const count = row.original.evaluation_answers_count || 0
+            return <span>{count}</span>
         },
     },
     {

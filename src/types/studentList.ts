@@ -51,6 +51,7 @@ export interface Student {
     section: Section | null
     advisor: Advisor | null
     company: Company | null
+    evaluation_answers_count?: number
 }
 
 export type StudentPaginatedResponse = PaginatedResponse<Student>

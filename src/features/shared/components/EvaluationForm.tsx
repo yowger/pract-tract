@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/sheet"
 import { AlertCircle, CheckCircle2 } from "lucide-react"
 import type { Evaluation } from "../api/evaluationsApi"
+import { useSubmitEvaluation } from "../api/evlationsAnswersApi"
 
 export function EvaluationSheet({
     open,
@@ -30,10 +31,11 @@ export function EvaluationSheet({
             answer: "",
         }))
     )
-
     const [errors, setErrors] = useState<number[]>([])
-    const [isSubmitting, setIsSubmitting] = useState(false)
     const [showSuccess, setShowSuccess] = useState(false)
+
+    const { mutateAsync: submitEvaluation, isPending: isSubmitting } =
+        useSubmitEvaluation()
 
     const handleChange = (index: number, value: string) => {
         setAnswers((prev) =>
@@ -44,11 +46,9 @@ export function EvaluationSheet({
 
     const validateForm = () => {
         const newErrors: number[] = []
-
         answers.forEach((a, idx) => {
             if (!a.answer.trim()) newErrors.push(idx)
         })
-
         setErrors(newErrors)
         return newErrors.length === 0
     }
@@ -56,19 +56,12 @@ export function EvaluationSheet({
     const submitEval = async () => {
         if (!validateForm()) return
 
-        setIsSubmitting(true)
-
         try {
-            await fetch(`/api/evaluations/submit`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    student_id: studentId,
-                    evaluation_id: evaluation.id,
-                    answers,
-                }),
+            await submitEvaluation({
+                evaluation_id: evaluation.id,
+                student_id: studentId,
+                answers,
             })
-
             setShowSuccess(true)
             setTimeout(() => {
                 onSubmitSuccess()
@@ -76,7 +69,6 @@ export function EvaluationSheet({
             }, 1500)
         } catch (err) {
             console.error(err)
-            setIsSubmitting(false)
         }
     }
 
@@ -132,7 +124,6 @@ export function EvaluationSheet({
                                         <label className="block font-semibold text-gray-900 text-lg">
                                             {i + 1}. {q.title}
                                         </label>
-
                                         {answers[i].answer.trim() && (
                                             <CheckCircle2 className="w-5 h-5 text-green-500" />
                                         )}
@@ -209,7 +200,7 @@ export function EvaluationSheet({
                             </div>
                         )}
 
-                        <div className="flex justify-between items-center my-4 ">
+                        <div className="flex justify-between items-center my-4">
                             <Button
                                 variant="ghost"
                                 onClick={() => onOpenChange(false)}

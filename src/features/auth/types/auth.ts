@@ -61,6 +61,23 @@ export function isAdvisor(user: UserResponse): user is AdvisorResponse {
     return user.role === "advisor"
 }
 
+export type UserRole =
+    | "student"
+    | "director"
+    | "agent"
+    | "advisor"
+    | "admin"
+    | "unknown"
+
+export function getUserRole(user: UserResponse): UserRole {
+    if (isStudent(user)) return "student"
+    if (isDirector(user)) return "director"
+    if (isAgent(user)) return "agent"
+    if (isAdvisor(user)) return "advisor"
+
+    return "unknown"
+}
+
 export type AuthResponse = { user: UserResponse }
 
 export type CurrentUserResponse = AuthResponse

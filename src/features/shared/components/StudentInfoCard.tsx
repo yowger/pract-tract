@@ -7,6 +7,9 @@ import type { StudentQueryParams } from "@/features/director/api/studentApi"
 import { CompanyStudentColumns } from "./CompanyStudentsColumn"
 import type { Student } from "@/types/studentList"
 import StudentEvaluationModal from "./StudentEvaluationModal"
+import { useUser } from "@/features/auth/hooks/useUser"
+import { getUserRole } from "@/features/auth/types/auth"
+import type { UserRole } from "@/types/roles"
 
 const StudentInfoCard = ({ companyId }: { companyId: number }) => {
     const [filters, setFilters] = useState<StudentQueryParams>({
@@ -19,6 +22,10 @@ const StudentInfoCard = ({ companyId }: { companyId: number }) => {
 
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
 
+    const { data: currentUser } = useUser()
+
+    const role = currentUser?.user ? getUserRole(currentUser.user) : undefined
+
     return (
         <div className="bg-white rounded-lg shadow-lg p-8 space-y-6">
             <ScrollArea type="always" className="w-full overflow-x-auto">
@@ -27,6 +34,7 @@ const StudentInfoCard = ({ companyId }: { companyId: number }) => {
                     columns={CompanyStudentColumns({
                         onReportViolation: () => {},
                         onEvaluate: (student) => setSelectedStudent(student),
+                        role: role as UserRole,
                     })}
                     isLoading={isLoading}
                     manualPagination
