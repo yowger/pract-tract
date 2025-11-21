@@ -13,10 +13,12 @@ import { MoreHorizontal } from "lucide-react"
 
 interface CompanyStudentColumnsProps {
     onReportViolation?: (student: Student) => void
+    onEvaluate?: (student: Student) => void
 }
 
 export const CompanyStudentColumns = ({
     onReportViolation,
+    onEvaluate,
 }: CompanyStudentColumnsProps): ColumnDef<Student>[] => [
     {
         accessorKey: "user.name",
@@ -82,6 +84,12 @@ export const CompanyStudentColumns = ({
                                 onClick={() => onReportViolation?.(student)}
                             >
                                 Report Violation
+                            </DropdownMenuItem>
+
+                            <DropdownMenuItem
+                                onClick={() => onEvaluate?.(student)}
+                            >
+                                Evaluate Student
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                     </DropdownMenuContent>

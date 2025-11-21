@@ -153,7 +153,6 @@ const routes = [
             },
         ],
     },
-
     {
         path: "/director",
         element: <ProtectedRoute allowedRoles={["director"]} />,
