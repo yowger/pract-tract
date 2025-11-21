@@ -47,6 +47,7 @@ export default function StudentEvaluationsTab({
                             <th className="p-3 text-left">
                                 Questions Answered
                             </th>
+                            <th className="p-3 text-left">Submitter</th>
                             <th className="p-3 text-left">Actions</th>
                         </tr>
                     </thead>
@@ -66,6 +67,11 @@ export default function StudentEvaluationsTab({
                                 </td>
                                 <td className="p-3">
                                     {evalAnswer.answers.length}
+                                </td>
+                                <td className="p-3">
+                                    {evalAnswer.submitter
+                                        ? `${evalAnswer.submitter.name} (${evalAnswer.submitter.role})`
+                                        : "Unknown"}
                                 </td>
                                 <td className="p-3">
                                     <Button

@@ -74,6 +74,11 @@ export interface EvaluationAnswer {
         created_at: string
         updated_at: string
     }
+    submitter?: {
+        id: number
+        name: string
+        role: "student" | "director" | "agent" | "advisor" | "admin"
+    }
 }
 
 export interface StudentResponse {
