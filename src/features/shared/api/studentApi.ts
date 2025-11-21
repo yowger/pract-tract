@@ -53,6 +53,29 @@ export interface Company {
     schedule: Schedule | null
 }
 
+export interface EvaluationAnswerItem {
+    question: string
+    type: string
+    answer: string
+}
+
+export interface EvaluationAnswer {
+    id: number
+    student_id: number
+    evaluation_id: number
+    answers: EvaluationAnswerItem[]
+    created_at: string
+    updated_at: string
+    evaluation: {
+        id: number
+        name: string
+        description: string | null
+        questions: { title: string; type: string; options?: string[] }[]
+        created_at: string
+        updated_at: string
+    }
+}
+
 export interface StudentResponse {
     id: number
     student_id: number
@@ -68,6 +91,7 @@ export interface StudentResponse {
     user: User
     advisor: Advisor
     company: Company
+    evaluation_answers: EvaluationAnswer[]
 }
 
 export const getStudent = async (

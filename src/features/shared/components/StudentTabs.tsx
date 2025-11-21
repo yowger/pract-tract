@@ -1,4 +1,4 @@
-import { Calendar, CheckSquare, Home } from "lucide-react"
+import { Calendar, CheckSquare, CheckSquare2, Home } from "lucide-react"
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { formatDate, formatTime } from "@/utils/utils"
@@ -8,9 +8,11 @@ import StudentProfileCard from "./StudentProfileCard"
 import StudentAttendanceInfoCard from "./StudentAttendanceInfoCard"
 import WorkScheduleCard from "./WorkScheduleCard"
 import { Card, CardContent } from "@/components/ui/card"
+import StudentEvaluationsTab from "./StudentEvaluationsTab"
 
 export default function StudentTabs({ id }: { id: string | number }) {
     const { data: student, isLoading } = useStudent(Number(id))
+    console.log("🚀 ~ StudentTabs ~ student:", student)
 
     if (isLoading) return <div>Loading...</div>
     if (!student) return <div>Student not found.</div>
@@ -48,19 +50,14 @@ export default function StudentTabs({ id }: { id: string | number }) {
                         >
                             <CheckSquare className="w-4 h-4" /> Attendance
                         </TabsTrigger>
+                        <TabsTrigger
+                            value="evaluations"
+                            className="flex items-center gap-2"
+                        >
+                            <CheckSquare2 className="w-4 h-4" /> Evaluations
+                        </TabsTrigger>
                     </TabsList>
                 </TabsList>
-                {/* 
-                <TabsContent value="company">
-                    <CompanyInfoCard
-                        name={company.name}
-                        email={company.email}
-                        phone={company.phone}
-                        address={company.address}
-                        isActive={company.is_active}
-                        studentsCount={company.students_count}
-                    />
-                </TabsContent> */}
 
                 <TabsContent value="info">
                     <StudentProfileCard
@@ -93,6 +90,12 @@ export default function StudentTabs({ id }: { id: string | number }) {
                         userId={student.user.id}
                         studentId={student.student_id}
                         companyId={student.company_id}
+                    />
+                </TabsContent>
+
+                <TabsContent value="evaluations">
+                    <StudentEvaluationsTab
+                        evaluationAnswers={student.evaluation_answers}
                     />
                 </TabsContent>
             </Tabs>

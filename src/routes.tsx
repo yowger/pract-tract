@@ -104,6 +104,10 @@ const routes = [
                         element: <AgentUpdateSchedulePage />,
                     },
                     { path: "dashboard", element: <AgentProfilePage /> },
+                    {
+                        path: "students/:id",
+                        element: <DirectorStudentProfilePage />,
+                    },
                 ],
             },
         ],
@@ -127,6 +131,7 @@ const routes = [
                         path: "documents/create",
                         element: <DocumentsUploadsPage />,
                     },
+
                     // { path: "reports", element: <StudentReportsPage /> },
                     // { path: "documents", element: <DocumentsPage /> },
                     // { path: "evaluation", element: <StudentEvaluationPage /> },
@@ -144,6 +149,7 @@ const routes = [
                 children: [
                     // { path: "dashboard", element: <StudentDashboardPage /> },
                     { path: "dashboard", element: <AdvisorProfilePage /> },
+
                     // { path: "profile", element: <StudentProfilePage /> },
                     // { path: "attendance", element: <StudentAttendancePage /> },
                     // { path: "reports", element: <StudentReportsPage /> },
