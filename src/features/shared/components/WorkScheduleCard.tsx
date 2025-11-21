@@ -10,6 +10,8 @@ import { Link } from "react-router-dom"
 import { Map, Source, Layer } from "@vis.gl/react-maplibre"
 import "maplibre-gl/dist/maplibre-gl.css"
 import type { Schedule } from "@/types/schedule"
+import { useUser } from "@/features/auth/hooks/useUser"
+import { getUserRole } from "@/features/auth/types/auth"
 
 interface WorkScheduleCardProps {
     schedule: Schedule
@@ -162,10 +164,12 @@ const WorkScheduleCard: React.FC<WorkScheduleCardProps> = ({
     formatDate,
     formatTime,
 }) => {
+    const { data } = useUser()
+    const role = data && getUserRole(data.user)
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 p-6">
             <div className="max-w-5xl mx-auto">
-                {/* HEADER */}
                 <div className="flex items-start justify-between mb-8">
                     <div>
                         <h1 className="text-3xl font-semibold text-slate-900 mb-2">
@@ -176,12 +180,14 @@ const WorkScheduleCard: React.FC<WorkScheduleCardProps> = ({
                         </p>
                     </div>
 
-                    <Link to={`/agent/schedule/${schedule.id}/edit`}>
-                        <button className="flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-all shadow-sm hover:shadow-md active:scale-95">
-                            <Edit size={18} />
-                            Edit Schedule
-                        </button>
-                    </Link>
+                    {role === "agent" && (
+                        <Link to={`/agent/schedule/${schedule.id}/edit`}>
+                            <button className="flex items-center gap-2 px-5 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-all shadow-sm hover:shadow-md active:scale-95">
+                                <Edit size={18} />
+                                Edit Schedule
+                            </button>
+                        </Link>
+                    )}
                 </div>
 
                 <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 space-y-8">

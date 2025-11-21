@@ -9,6 +9,7 @@ import StudentAttendanceInfoCard from "./StudentAttendanceInfoCard"
 import WorkScheduleCard from "./WorkScheduleCard"
 import { Card, CardContent } from "@/components/ui/card"
 import StudentEvaluationsTab from "./StudentEvaluationsTab"
+import StudentDocumentsTab from "./StudentDocumentTab"
 
 export default function StudentTabs({ id }: { id: string | number }) {
     const { data: student, isLoading } = useStudent(Number(id))
@@ -56,6 +57,12 @@ export default function StudentTabs({ id }: { id: string | number }) {
                         >
                             <CheckSquare2 className="w-4 h-4" /> Evaluations
                         </TabsTrigger>
+                        <TabsTrigger
+                            value="documents"
+                            className="flex items-center gap-2"
+                        >
+                            <CheckSquare2 className="w-4 h-4" /> Documents
+                        </TabsTrigger>
                     </TabsList>
                 </TabsList>
 
@@ -97,6 +104,10 @@ export default function StudentTabs({ id }: { id: string | number }) {
                     <StudentEvaluationsTab
                         evaluationAnswers={student.evaluation_answers}
                     />
+                </TabsContent>
+
+                <TabsContent value="documents">
+                    <StudentDocumentsTab studentId={student.id} />
                 </TabsContent>
             </Tabs>
         </div>

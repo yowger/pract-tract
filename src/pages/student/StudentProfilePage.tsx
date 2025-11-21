@@ -397,7 +397,7 @@
 //     </div>
 // )
 
-import { Calendar, CheckSquare, Home } from "lucide-react"
+import { Calendar, CheckSquare, CheckSquare2, Home } from "lucide-react"
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { formatDate, formatTime } from "@/utils/utils"
@@ -410,6 +410,8 @@ import StudentProfileCard from "@/features/shared/components/StudentProfileCard"
 import WorkScheduleCard from "@/features/shared/components/WorkScheduleCard"
 import StudentAttendanceInfoCard from "@/features/shared/components/StudentAttendanceInfoCard"
 import { isStudent } from "@/features/auth/types/auth"
+import StudentEvaluationsTab from "@/features/shared/components/StudentEvaluationsTab"
+import StudentDocumentsTab from "@/features/shared/components/StudentDocumentTab"
 
 const StudentProfilePage = () => {
     const { data: user } = useUser()
@@ -462,6 +464,19 @@ const StudentProfilePage = () => {
                             className="flex items-center gap-2"
                         >
                             <CheckSquare className="w-4 h-4" /> Attendance
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="evaluations"
+                            className="flex items-center gap-2"
+                        >
+                            <CheckSquare2 className="w-4 h-4" /> Evaluations
+                        </TabsTrigger>
+
+                        <TabsTrigger
+                            value="documents"
+                            className="flex items-center gap-2"
+                        >
+                            <CheckSquare2 className="w-4 h-4" /> Documents
                         </TabsTrigger>
                     </TabsList>
                 </TabsList>
@@ -521,6 +536,18 @@ const StudentProfilePage = () => {
                         />
                     )}
                 </TabsContent>
+
+                <TabsContent value="evaluations">
+                    <StudentEvaluationsTab
+                        evaluationAnswers={student.evaluation_answers}
+                    />
+                </TabsContent>
+
+                {studentId && (
+                    <TabsContent value="documents">
+                        <StudentDocumentsTab studentId={studentId} />
+                    </TabsContent>
+                )}
             </Tabs>
         </div>
     )

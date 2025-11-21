@@ -3,36 +3,66 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { useCloudinaryBulkUpload } from "@/hooks/use-upload-bulk"
+import {
+    useCreateStudentDocument,
+    type CreateDocumentPayload,
+} from "@/features/shared/api/studentDocumentApi"
+import { useUser } from "@/features/auth/hooks/useUser"
+import { isStudent } from "@/features/auth/types/auth"
+import { toast } from "sonner"
 
 const DocumentsUploadsPage = () => {
+    const { data: user } = useUser()
+
+    const studentId = user && isStudent(user.user) ? user.user.student.id : null
+
     const [name, setName] = useState("")
-    const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+    const [selectedFile, setSelectedFile] = useState<File | null>(null)
     const { upload, uploading, error, results } = useCloudinaryBulkUpload()
+    const createDocument = useCreateStudentDocument()
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            setSelectedFiles(Array.from(e.target.files))
+        if (e.target.files && e.target.files[0]) {
+            setSelectedFile(e.target.files[0])
         }
     }
 
     const handleUpload = async () => {
+        if (!studentId) return
+
         if (!name.trim()) {
-            alert("Please enter document name")
+            toast.error("Please enter document name")
             return
         }
 
-        if (selectedFiles.length === 0) {
-            alert("Please select at least one file")
+        if (!selectedFile) {
+            toast.error("Please select a file")
             return
         }
 
-        await upload(selectedFiles)
-        console.log("Uploaded:", results)
+        try {
+            const [uploadedFile] = await upload(selectedFile)
+
+            const payload: CreateDocumentPayload = {
+                student_id: studentId,
+                name,
+                type: uploadedFile.resource_type,
+                url: uploadedFile.url,
+            }
+
+            await createDocument.mutateAsync(payload)
+
+            toast.success("Document uploaded successfully!")
+            setName("")
+            setSelectedFile(null)
+        } catch (err) {
+            console.error(err)
+        }
     }
 
     return (
         <div className="max-w-xl mx-auto space-y-6">
-            <h1 className="text-2xl font-semibold mb-4">Upload Documents</h1>
+            <h1 className="text-2xl font-semibold mb-4">Upload Document</h1>
 
             <div className="space-y-2">
                 <Label>Document Name</Label>
@@ -44,38 +74,40 @@ const DocumentsUploadsPage = () => {
             </div>
 
             <div className="space-y-2">
-                <Label>Select File(s)</Label>
-                <Input type="file" multiple onChange={handleFileChange} />
+                <Label>Select File</Label>
+                <Input type="file" onChange={handleFileChange} />
             </div>
 
-            <Button onClick={handleUpload} disabled={uploading}>
-                {uploading ? "Uploading..." : "Upload"}
+            <Button
+                onClick={handleUpload}
+                disabled={uploading || createDocument.isPending}
+            >
+                {uploading || createDocument.isPending
+                    ? "Uploading..."
+                    : "Upload"}
             </Button>
 
             {error && <p className="text-red-600 text-sm">{error}</p>}
 
             {results.length > 0 && (
                 <div className="mt-6 space-y-3">
-                    <h2 className="font-semibold text-lg">Uploaded Files</h2>
+                    <h2 className="font-semibold text-lg">
+                        Uploaded File (Cloudinary)
+                    </h2>
 
-                    {results.map((file, i) => (
-                        <div
-                            key={i}
-                            className="border p-3 rounded-lg bg-gray-50"
+                    <div className="border p-3 rounded-lg bg-gray-50">
+                        <p className="font-medium">{name}</p>
+                        <p className="text-sm text-gray-700">
+                            File: {results[0].public_id}.{results[0].format}
+                        </p>
+                        <a
+                            href={results[0].url}
+                            target="_blank"
+                            className="text-blue-600 underline text-sm"
                         >
-                            <p className="font-medium">{name}</p>
-                            <p className="text-sm text-gray-700">
-                                File: {file.public_id}.{file.format}
-                            </p>
-                            <a
-                                href={file.url}
-                                target="_blank"
-                                className="text-blue-600 underline text-sm"
-                            >
-                                View File
-                            </a>
-                        </div>
-                    ))}
+                            View File
+                        </a>
+                    </div>
                 </div>
             )}
         </div>
