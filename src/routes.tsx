@@ -149,6 +149,10 @@ const routes = [
                 children: [
                     // { path: "dashboard", element: <StudentDashboardPage /> },
                     { path: "dashboard", element: <AdvisorProfilePage /> },
+                    {
+                        path: "students/:id",
+                        element: <DirectorStudentProfilePage />,
+                    },
 
                     // { path: "profile", element: <StudentProfilePage /> },
                     // { path: "attendance", element: <StudentAttendancePage /> },

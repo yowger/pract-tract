@@ -6,6 +6,7 @@ import ProfileHeader from "@/features/shared/components/ProfileHeader"
 import AdvisorInfoCard from "./AdvisorInfoCard"
 import AdvisorStudentsCard from "./AdvisorStudentsCard"
 import AdvisorExcusesCard from "./AdvisorExcusesCard"
+import ViolationsTable from "./ViolationTabs"
 
 const AdvisorTabs = ({ id }: { id: number }) => {
     const { data: advisor, isLoading } = useAdvisor(id)
@@ -80,7 +81,7 @@ const AdvisorTabs = ({ id }: { id: number }) => {
                 </TabsContent>
 
                 <TabsContent value="violations">
-                    <AdvisorExcusesCard advisorId={advisor.id} />
+                    <ViolationsTable createdBy={advisor.id} />
                 </TabsContent>
 
                 {/* <TabsContent value="reports">

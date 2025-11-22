@@ -31,7 +31,11 @@ export const CompanyStudentColumns = ({
             const name = row.original.user?.name || "Unknown"
 
             const basePath =
-                role === "agent" ? "/agent/students" : "/director/students"
+                role === "agent"
+                    ? "/agent/students"
+                    : role === "advisor"
+                    ? "/advisor/students"
+                    : "/director/students"
 
             return (
                 <Link

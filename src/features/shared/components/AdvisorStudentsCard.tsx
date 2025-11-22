@@ -39,6 +39,7 @@ const AdvisorStudentsCard = ({ advisorId }: { advisorId: number }) => {
                         data={students ? students.data : []}
                         columns={CompanyStudentColumns({
                             onReportViolation: onReportViolation,
+                            role: "advisor",
                         })}
                         isLoading={isLoading}
                         manualPagination
@@ -65,6 +66,8 @@ const AdvisorStudentsCard = ({ advisorId }: { advisorId: number }) => {
                 studentId={selectedStudent?.student_id}
                 studentName={selectedStudent?.user.name}
                 onSubmit={async (values) => {
+                    if (!selectedStudent) return
+
                     try {
                         let attachmentUrls: string[] = []
 
@@ -78,7 +81,7 @@ const AdvisorStudentsCard = ({ advisorId }: { advisorId: number }) => {
                             remarks: values.remarks,
                             violation_type: values.violationType,
                             name: values.name,
-                            student_id: values.studentId,
+                            student_id: selectedStudent?.id,
                             attachments: attachmentUrls,
                         })
 

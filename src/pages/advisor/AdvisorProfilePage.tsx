@@ -4,6 +4,7 @@ import AdvisorTabs from "@/features/shared/components/AdvisorTabs"
 
 const AdvisorProfilePage = () => {
     const { data: user } = useUser()
+    console.log("🚀 ~ AdvisorProfilePage ~ user:", user)
 
     const advisorId = user && isAdvisor(user.user) ? user.user.advisor.id : null
 
