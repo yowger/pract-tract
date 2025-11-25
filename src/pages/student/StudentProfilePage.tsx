@@ -412,7 +412,6 @@ import StudentAttendanceInfoCard from "@/features/shared/components/StudentAtten
 import { isStudent } from "@/features/auth/types/auth"
 import StudentEvaluationsTab from "@/features/shared/components/StudentEvaluationsTab"
 import StudentDocumentsTab from "@/features/shared/components/StudentDocumentTab"
-import StudentEvaluationPage from "./StudentEvaluationPage"
 import StudentViolationsPage from "./StudentViolationsPage"
 
 const StudentProfilePage = () => {

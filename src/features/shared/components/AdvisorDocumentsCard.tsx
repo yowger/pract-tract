@@ -10,19 +10,14 @@ import {
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
+import { useUser } from "@/features/auth/hooks/useUser"
 
-interface StudentDocumentsProps {
-    studentId: number
-}
+export default function AdvisorDocumentsCard() {
+    const { data: user } = useUser()
+    console.log("🚀 ~ AdvisorDocumentsCard ~ user:", user)
 
-export default function StudentDocumentsTable({
-    studentId,
-}: StudentDocumentsProps) {
-    const {
-        data: documents,
-        isLoading,
-        isError,
-    } = useStudentDocuments({ studentId })
+    const { data: documents, isLoading, isError } = useStudentDocuments({})
+    console.log("🚀 ~ AdvisorDocumentsCard ~ documents:", documents)
 
     if (isLoading) return <p>Loading documents...</p>
     if (isError) return <p>Failed to load documents.</p>
@@ -36,7 +31,7 @@ export default function StudentDocumentsTable({
     return (
         <Card>
             <CardContent className="px-4 py-2">
-                <div className="flex justify-end mb-8">
+                <div className="flex justify-end mb-4">
                     <Button asChild>
                         <Link to="/student/documents/create">
                             Upload report
@@ -49,6 +44,7 @@ export default function StudentDocumentsTable({
                         <TableRow>
                             <TableHead>Name</TableHead>
                             <TableHead>Type</TableHead>
+                            <TableHead>Uploader</TableHead>
                             <TableHead>Date</TableHead>
                             <TableHead className="text-right">Action</TableHead>
                         </TableRow>
@@ -58,6 +54,9 @@ export default function StudentDocumentsTable({
                             <TableRow key={doc.id}>
                                 <TableCell>{doc.name}</TableCell>
                                 <TableCell>{doc.type || "—"}</TableCell>
+                                <TableCell>
+                                    {doc.uploader?.name || "—"}
+                                </TableCell>
                                 <TableCell>
                                     {new Date(doc.created_at).toLocaleString()}
                                 </TableCell>

@@ -17,13 +17,31 @@ export interface StudentDocument {
     }
 }
 
+export interface StudentDocumentFilters {
+    studentId?: number | string
+    studentName?: string
+    uploadedBy?: number | string
+    uploaderName?: string
+}
+
 export const getStudentDocuments = async (
-    studentId: number | string
+    filters: StudentDocumentFilters = {}
 ): Promise<StudentDocument[]> => {
+    const params = new URLSearchParams()
+
+    if (filters.studentId)
+        params.append("student_id", filters.studentId.toString())
+    if (filters.studentName) params.append("student_name", filters.studentName)
+    if (filters.uploadedBy)
+        params.append("uploaded_by", filters.uploadedBy.toString())
+    if (filters.uploaderName)
+        params.append("uploader_name", filters.uploaderName)
+
     const { data } = await privateApi.get<{
         success: boolean
         data: StudentDocument[]
-    }>(`/api/student-documents?student_id=${studentId}`)
+    }>(`/api/student-documents?${params.toString()}`)
+
     return data.data
 }
 
@@ -44,11 +62,10 @@ export const createStudentDocument = async (
     return data.data
 }
 
-export const useStudentDocuments = (studentId: number | string) => {
+export const useStudentDocuments = (filters: StudentDocumentFilters) => {
     return useQuery({
-        queryKey: ["student-documents", studentId],
-        queryFn: () => getStudentDocuments(studentId),
-        enabled: !!studentId,
+        queryKey: ["student-documents", filters],
+        queryFn: () => getStudentDocuments(filters),
     })
 }
 

@@ -7,6 +7,7 @@ import AdvisorInfoCard from "./AdvisorInfoCard"
 import AdvisorStudentsCard from "./AdvisorStudentsCard"
 import AdvisorExcusesCard from "./AdvisorExcusesCard"
 import ViolationsTable from "./ViolationTabs"
+import AdvisorDocumentsCard from "./AdvisorDocumentsCard"
 
 const AdvisorTabs = ({ id }: { id: number }) => {
     const { data: advisor, isLoading } = useAdvisor(id)
@@ -46,6 +47,13 @@ const AdvisorTabs = ({ id }: { id: number }) => {
                         <Calendar className="w-4 h-4" />
                         Student Excuses
                     </TabsTrigger>
+                    <TabsTrigger
+                        value="documents"
+                        className="flex items-center gap-2"
+                    >
+                        <Calendar className="w-4 h-4" />
+                        Student Documents
+                    </TabsTrigger>
                     {/* <TabsTrigger
                         value="violations"
                         className="flex items-center gap-2"
@@ -78,6 +86,10 @@ const AdvisorTabs = ({ id }: { id: number }) => {
 
                 <TabsContent value="excuses">
                     <AdvisorExcusesCard advisorId={advisor.id} />
+                </TabsContent>
+
+                <TabsContent value="documents">
+                    <AdvisorDocumentsCard />
                 </TabsContent>
 
                 {/* <TabsContent value="violations">
