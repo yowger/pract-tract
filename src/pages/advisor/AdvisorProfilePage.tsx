@@ -7,6 +7,7 @@ const AdvisorProfilePage = () => {
     console.log("🚀 ~ AdvisorProfilePage ~ user:", user)
 
     const advisorId = user && isAdvisor(user.user) ? user.user.advisor.id : null
+    console.log("🚀 ~ AdvisorProfilePage ~ advisorId:", advisorId)
 
     return <AdvisorTabs id={Number(advisorId)} />
 }

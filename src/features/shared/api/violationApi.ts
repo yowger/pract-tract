@@ -32,28 +32,39 @@ export interface ViolationResponse {
 
 export type ViolationsResponse = PaginatedResponse<ViolationResponse>
 
-export const getViolations = async (
-    studentId?: number | string,
+export interface ViolationFilters {
+    studentId?: number | string
+    studentName?: string
     createdBy?: number | string
+    advisorId?: number | string
+}
+
+export const getViolations = async (
+    filters: ViolationFilters = {}
 ): Promise<ViolationsResponse> => {
     const params: Record<string, string | number> = {}
-    
-    if (studentId) params.student_id = studentId
-    if (createdBy) params.created_by = createdBy
+
+    if (filters.studentId) params.student_id = filters.studentId
+    if (filters.studentName) params.student_name = filters.studentName
+    if (filters.createdBy) params.created_by = filters.createdBy
+    if (filters.advisorId) params.advisor_id = filters.advisorId
 
     const { data } = await privateApi.get("/api/violations", { params })
     return data
 }
 
-export const useViolations = (
-    studentId?: number | string,
-    createdBy?: number | string
-) => {
+export const useViolations = (filters: ViolationFilters = {}) => {
     return useQuery({
-        queryKey: ["violations", studentId, createdBy],
-        queryFn: () => getViolations(studentId, createdBy),
+        queryKey: ["violations", filters],
+        queryFn: () => getViolations(filters),
+        enabled:
+            !!filters.studentId ||
+            !!filters.studentName ||
+            !!filters.createdBy ||
+            !!filters.advisorId,
     })
 }
+
 export const createViolation = async (
     payload: ViolationPayload
 ): Promise<ViolationResponse> => {

@@ -5,13 +5,19 @@ import { format } from "date-fns"
 interface ViolationsTableProps {
     studentId?: number
     createdBy?: number
+    advisorId?: number
 }
 
 export default function ViolationsTable({
     studentId,
     createdBy,
+    advisorId,
 }: ViolationsTableProps) {
-    const { data, isLoading, isError } = useViolations(studentId, createdBy)
+    const { data, isLoading, isError } = useViolations({
+        studentId,
+        createdBy,
+        advisorId,
+    })
     console.log("🚀 ~ ViolationsTable ~ data:", data)
     const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
 

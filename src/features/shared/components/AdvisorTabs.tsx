@@ -54,13 +54,13 @@ const AdvisorTabs = ({ id }: { id: number }) => {
                         <Calendar className="w-4 h-4" />
                         Student Documents
                     </TabsTrigger>
-                    {/* <TabsTrigger
+                    <TabsTrigger
                         value="violations"
                         className="flex items-center gap-2"
                     >
                         <AlertCircle className="w-4 h-4" />
                         Student Violations
-                    </TabsTrigger> */}
+                    </TabsTrigger>
                     {/* <TabsTrigger
                         value="reports"
                         className="flex items-center gap-2"
@@ -92,9 +92,9 @@ const AdvisorTabs = ({ id }: { id: number }) => {
                     <AdvisorDocumentsCard />
                 </TabsContent>
 
-                {/* <TabsContent value="violations">
-                    <ViolationsTable createdBy={advisor.id} />
-                </TabsContent> */}
+                <TabsContent value="violations">
+                    <ViolationsTable advisorId={advisor.id} />
+                </TabsContent>
 
                 {/* <TabsContent value="reports">
                     <div className="p-4 border rounded-lg bg-white shadow-sm">
