@@ -39,9 +39,6 @@ const AdvisorFormPage = lazy(
 const StudentLayout = lazy(() => import("@/layouts/StudentLayout"))
 const DirectorLayout = lazy(() => import("@/layouts/DirectorLayout"))
 
-const StudentDashboardPage = lazy(
-    () => import("@/pages/student/StudentDashboardPage")
-)
 const StudentProfilePage = lazy(
     () => import("@/pages/student/StudentProfilePage")
 )
@@ -220,6 +217,5 @@ const routes = [
 ]
 
 export default routes
-
 
 //t --port 5173 subdomain dtr

@@ -66,3 +66,4 @@ export const fetchAttendanceCharts = async (params: {
 
     return response.data
 }
+

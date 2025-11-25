@@ -412,6 +412,8 @@ import StudentAttendanceInfoCard from "@/features/shared/components/StudentAtten
 import { isStudent } from "@/features/auth/types/auth"
 import StudentEvaluationsTab from "@/features/shared/components/StudentEvaluationsTab"
 import StudentDocumentsTab from "@/features/shared/components/StudentDocumentTab"
+import StudentEvaluationPage from "./StudentEvaluationPage"
+import StudentViolationsPage from "./StudentViolationsPage"
 
 const StudentProfilePage = () => {
     const { data: user } = useUser()
@@ -470,6 +472,13 @@ const StudentProfilePage = () => {
                             className="flex items-center gap-2"
                         >
                             <CheckSquare2 className="w-4 h-4" /> Evaluations
+                        </TabsTrigger>
+
+                        <TabsTrigger
+                            value="violations"
+                            className="flex items-center gap-2"
+                        >
+                            <CheckSquare2 className="w-4 h-4" /> Violations
                         </TabsTrigger>
 
                         <TabsTrigger
@@ -534,6 +543,12 @@ const StudentProfilePage = () => {
                             studentId={student.student_id}
                             companyId={student.company_id}
                         />
+                    )}
+                </TabsContent>
+
+                <TabsContent value="violations">
+                    {studentId && (
+                        <StudentViolationsPage studentId={studentId} />
                     )}
                 </TabsContent>
 
