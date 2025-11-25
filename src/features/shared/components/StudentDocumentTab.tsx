@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Link } from "react-router-dom"
 
 interface StudentDocumentsProps {
     studentId: number
@@ -34,7 +35,13 @@ export default function StudentDocumentsTable({
 
     return (
         <Card>
-            <CardContent className="p-4">
+            <CardContent className="px-4 py-2">
+                <div className="flex justify-end mb-8">
+                    <Button asChild>
+                        <Link to="/student/documents/create">Upload report</Link>
+                    </Button>
+                </div>
+
                 <Table>
                     <TableHeader>
                         <TableRow>

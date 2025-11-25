@@ -10,9 +10,11 @@ import {
 import { useUser } from "@/features/auth/hooks/useUser"
 import { isStudent } from "@/features/auth/types/auth"
 import { toast } from "sonner"
+import { useNavigate } from "react-router-dom"
 
 const DocumentsUploadsPage = () => {
     const { data: user } = useUser()
+    const navigate = useNavigate()
 
     const studentId = user && isStudent(user.user) ? user.user.student.id : null
 
@@ -55,6 +57,8 @@ const DocumentsUploadsPage = () => {
             toast.success("Document uploaded successfully!")
             setName("")
             setSelectedFile(null)
+
+            navigate("/student/dashboard")
         } catch (err) {
             console.error(err)
         }

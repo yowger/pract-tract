@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 import { fetchAttendances, type AttendanceFilters } from "../api/attendanceApi"
 import { privateApi } from "@/lib/axiosClient"
@@ -29,5 +29,27 @@ export const useAttendanceStatus = () => {
         queryKey: ["attendanceStatus"],
         queryFn: fetchAttendanceStatus,
         staleTime: 30 * 1000,
+    })
+}
+
+export const downloadAttendancePdf = async (filters: AttendanceFilters) => {
+    const response = await privateApi.get("/api/attendances/pdf", {
+        params: filters,
+        responseType: "blob",
+    })
+
+    const blob = new Blob([response.data], { type: "application/pdf" })
+
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = "attendance-report.pdf"
+    a.click()
+    URL.revokeObjectURL(url)
+}
+
+export const useDownloadAttendancePdf = () => {
+    return useMutation({
+        mutationFn: downloadAttendancePdf,
     })
 }

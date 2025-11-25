@@ -23,7 +23,7 @@ const studentLinks = [
     // { name: "Profile", path: "/student/profile", icon: User },
     { name: "Attendance", path: "/student/attendance", icon: CalendarCheck },
     { name: "Excuse", path: "/student/excuse", icon: CalendarCheck },
-    { name: "documents", path: "/student/documents", icon: SaveIcon },
+    // { name: "documents", path: "/student/documents", icon: SaveIcon },
     // { name: "Reports", path: "/student/reports", icon: FileText },
     // { name: "Documents", path: "/student/documents", icon: FolderOpen },
     // { name: "Evaluation", path: "/student/evaluation", icon: ClipboardList },

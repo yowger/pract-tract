@@ -44,11 +44,11 @@ const DirectorLayout = () => {
                         onLogout={handleLogout}
                         user={{
                             name: user.user.name,
-                            role: "Chair Person",
+                            role: "Program Coordinator",
                         }}
                     />
                 }
-                sidebar={<Sidebar links={adminLinks} title="Chair Person" />}
+                sidebar={<Sidebar links={adminLinks} title="Program Coordinator" />}
             >
                 <Outlet />
             </DashboardLayout>

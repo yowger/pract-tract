@@ -126,7 +126,7 @@ const routes = [
                     { path: "attendance", element: <StudentAttendancePage /> },
                     { path: "excuse", element: <ExcusePage /> },
                     { path: "excuse/create", element: <ExcuseCreatePage /> },
-                    { path: "documents", element: <DocumentsPage /> },
+                    // { path: "documents", element: <DocumentsPage /> },
                     {
                         path: "documents/create",
                         element: <DocumentsUploadsPage />,
@@ -220,3 +220,6 @@ const routes = [
 ]
 
 export default routes
+
+
+//t --port 5173 subdomain dtr

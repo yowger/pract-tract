@@ -9,7 +9,10 @@ import {
     SelectItem,
 } from "@/components/ui/select"
 import DataTable from "@/features/shared/components/Datatable"
-import { useAttendances } from "@/features/shared/hooks/useAttendance"
+import {
+    useAttendances,
+    useDownloadAttendancePdf,
+} from "@/features/shared/hooks/useAttendance"
 import { AgentAttendanceColumns } from "@/features/agent/components/AgentAttendanceColumn"
 import type { AttendanceFilters } from "@/features/shared/api/attendanceApi"
 import { XAxis, CartesianGrid, BarChart, Bar } from "recharts"
@@ -30,6 +33,8 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import DatePickerRange from "@/components/custom/DatePickerRange"
+import { Button } from "@/components/ui/button"
+import { DownloadIcon } from "lucide-react"
 
 const today = new Date()
 const thisMonthStart = startOfMonth(today)
@@ -43,6 +48,8 @@ const StudentAttendanceInfoCard = ({
     userId: number
     studentId: number
 }) => {
+    const pdfMutation = useDownloadAttendancePdf()
+
     const [filters, setFilters] = useState<AttendanceFilters>({
         page: 1,
         per_page: 10,
@@ -87,7 +94,15 @@ const StudentAttendanceInfoCard = ({
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end gap-2">
+                <Button
+                    onClick={() => pdfMutation.mutate(filters)}
+                    disabled={pdfMutation.isPending}
+                    variant="outline"
+                >
+                    <DownloadIcon />
+                </Button>
+
                 <DatePickerRange
                     value={{
                         from: filters.start_date
