@@ -9,7 +9,7 @@ export interface StudentQueryParams {
     advisor_id?: number
     company?: string
     company_id?: number
-
+    student_name?: string
     program_id?: number
     section_id?: number
     status?: string

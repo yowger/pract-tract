@@ -134,6 +134,11 @@ export const AgentAttendanceColumns: ColumnDef<AttendanceWithStudent>[] = [
             return <span>{formatted}</span>
         },
     },
+    {
+        id: "remarks",
+        header: "Remarks",
+        cell: ({ row }) => row.original.remarks || <span></span>,
+    },
 
     // {
     //     accessorKey: "remarks",

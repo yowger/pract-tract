@@ -15,12 +15,14 @@ import { ReportViolationModal } from "./ReportViolationModal"
 import { useCloudinaryBulkUpload } from "@/hooks/use-upload-bulk"
 import { useCreateViolation } from "../api/violationApi"
 import { toast } from "sonner"
+import { Input } from "@/components/ui/input"
 
 const StudentInfoCard = ({ companyId }: { companyId: number }) => {
     const [filters, setFilters] = useState<StudentQueryParams>({
         page: 1,
         per_page: 10,
         company_id: companyId,
+        student: "",
     })
 
     const { data: students, isLoading } = useStudents(filters)
@@ -43,6 +45,21 @@ const StudentInfoCard = ({ companyId }: { companyId: number }) => {
 
     return (
         <div className="bg-white rounded-lg shadow-lg p-8 space-y-6">
+            <div className="flex justify-end mb-4">
+                <Input
+                    placeholder="Search student name..."
+                    value={filters.student}
+                    onChange={(e) =>
+                        setFilters((f) => ({
+                            ...f,
+                            student: e.target.value,
+                            page: 1,
+                        }))
+                    }
+                    className="w-64"
+                />
+            </div>
+
             <ScrollArea type="always" className="w-full overflow-x-auto">
                 <DataTable
                     data={students ? students.data : []}
