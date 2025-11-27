@@ -51,6 +51,7 @@ const StudentManagementPage = () => {
     })
 
     const { data: students, isLoading } = useStudents(filters)
+    console.log("🚀 ~ StudentManagementPage ~ students:", students)
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value

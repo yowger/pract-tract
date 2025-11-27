@@ -101,6 +101,21 @@ export const StudentColumns: ColumnDef<Student>[] = [
         },
     },
     {
+        accessorKey: "hours_attended",
+        header: "Hours Attended",
+        cell: ({ row }) => <span>{row.original.hours_attended}</span>,
+    },
+    {
+        accessorKey: "required_hours",
+        header: "Required Hours",
+        cell: ({ row }) => <span>{row.original.required_hours}</span>,
+    },
+    {
+        accessorKey: "completion",
+        header: "Completion %",
+        cell: ({ row }) => <span>{row.original.completion}%</span>,
+    },
+    {
         accessorKey: "created_at",
         header: "Joined At",
         cell: ({ row }) => {

@@ -4,9 +4,9 @@ import { Navigate } from "react-router-dom"
 import { ProtectedRoute } from "@/features/auth/components/routes/ProtectedRoutes"
 import { PublicRoute } from "@/features/auth/components/routes/PublicRoutes"
 import AgentLayout from "./layouts/AgentLayout"
-import AgentDashboardPage from "./pages/agent/AgentDashboardPage"
-import AgentStudentsPage from "./pages/agent/AgentStudentsPage"
-import AgentAttendancePage from "./pages/agent/AgentAttendancePage"
+// import AgentDashboardPage from "./pages/agent/AgentDashboardPage"
+// import AgentStudentsPage from "./pages/agent/AgentStudentsPage"
+// import AgentAttendancePage from "./pages/agent/AgentAttendancePage"
 import AgentProfilePage from "./pages/agent/AgentProfilePage"
 import AgentCreateSchedulePage from "./pages/agent/AgentCreateSchedule"
 import DirectorCompanyProfilePage from "./pages/director/DirectorCompanyProfilePage"
@@ -45,13 +45,13 @@ const StudentProfilePage = lazy(
 const StudentAttendancePage = lazy(
     () => import("@/pages/student/StudentAttendancePage")
 )
-const StudentReportsPage = lazy(
-    () => import("@/pages/student/StudentReportsPage")
-)
-const DocumentsPage = lazy(() => import("@/pages/student/DocumentsPage"))
-const StudentEvaluationPage = lazy(
-    () => import("@/pages/student/StudentEvaluationPage")
-)
+// const StudentReportsPage = lazy(
+//     () => import("@/pages/student/StudentReportsPage")
+// )
+// const DocumentsPage = lazy(() => import("@/pages/student/DocumentsPage"))
+// const StudentEvaluationPage = lazy(
+//     () => import("@/pages/student/StudentEvaluationPage")
+// )
 
 const DirectorDashboardPage = lazy(
     () => import("@/pages/director/DirectorDashboardPage")
