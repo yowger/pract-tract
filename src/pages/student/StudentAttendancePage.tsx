@@ -18,7 +18,11 @@ import "maplibre-gl/dist/maplibre-gl.css"
 const MAP_STYLE =
     "https://api.maptiler.com/maps/streets-v4/style.json?key=l60bj9KIXXKDXbsOvzuz"
 
-function createCircleGeoJSON(lng: number, lat: number, radiusMeters: number) {
+function createCircleGeoJSON(
+    lng: number,
+    lat: number,
+    radiusMeters: number
+): Feature {
     const points = 64
     const coords = []
     const distanceX = radiusMeters / (111320 * Math.cos((lat * Math.PI) / 180))
@@ -44,9 +48,10 @@ import Webcam from "react-webcam"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useCloudinaryBulkUpload } from "@/hooks/use-upload-bulk"
+import type { Feature } from "geojson"
 
 const StudentAttendancePage = () => {
-    const { upload, uploading, error, results } = useCloudinaryBulkUpload()
+    const { upload } = useCloudinaryBulkUpload()
     const { data: status } = useAttendanceStatus()
     console.log("🚀 ~ StudentAttendancePage ~ status:", status)
     const [showCamera, setShowCamera] = useState(false)
