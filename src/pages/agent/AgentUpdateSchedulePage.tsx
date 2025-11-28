@@ -26,7 +26,7 @@ const AgentUpdateSchedulePage = () => {
         return <Navigate to="/signin" replace />
     }
 
-    const companyId = data?.user?.agent?.company_id
+    // const companyId = data?.user?.agent?.company_id
 
     const formattedInitialValue = schedule
         ? {
