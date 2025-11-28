@@ -12,6 +12,7 @@ import "maplibre-gl/dist/maplibre-gl.css"
 import type { Schedule } from "@/types/schedule"
 import { useUser } from "@/features/auth/hooks/useUser"
 import { getUserRole } from "@/features/auth/types/auth"
+import type { Feature } from "geojson"
 
 interface WorkScheduleCardProps {
     schedule: Schedule
@@ -19,7 +20,7 @@ interface WorkScheduleCardProps {
     formatTime: (time: string) => string
 }
 
-function createCircleGeoJSON(lng: number, lat: number, radiusMeters: number) {
+function createCircleGeoJSON(lng: number, lat: number, radiusMeters: number):Feature {
     const points = 64
     const coords: [number, number][] = []
 

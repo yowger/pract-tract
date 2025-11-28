@@ -26,6 +26,7 @@ import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import { LocateIcon } from "lucide-react"
 import "maplibre-gl/dist/maplibre-gl.css"
+import { type Feature } from "geojson"
 
 const daysOfWeek = [
     { key: "mon", label: "Monday" },
@@ -121,7 +122,11 @@ export function ClickMapPicker({
     return null
 }
 
-function createCircleGeoJSON(lng: number, lat: number, radiusMeters: number) {
+function createCircleGeoJSON(
+    lng: number,
+    lat: number,
+    radiusMeters: number
+): Feature {
     const points = 64
     const coords = []
     const distanceX = radiusMeters / (111320 * Math.cos((lat * Math.PI) / 180))
