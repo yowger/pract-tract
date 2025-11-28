@@ -12,7 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { StudentColumns } from "@/features/director/components/StudentColumns"
+import { StudentColumns } from "@/features/director/components/studentColumns"
 import {
     useStudents,
     // useUpdateStudentsAdvisor,
