@@ -425,8 +425,8 @@ const StudentProfilePage = () => {
     if (isLoading) return <div>Loading...</div>
     if (!student) return <div>Student not found.</div>
 
-    const userData = student.user
-    const studentSchedule = student?.company?.schedule
+    const userData = student.data.user
+    const studentSchedule = student.data?.company?.schedule
 
     if (!user) {
         return (
@@ -527,7 +527,7 @@ const StudentProfilePage = () => {
                 </TabsContent>
 
                 <TabsContent value="attendance">
-                    {student.company_id === null ? (
+                    {student.data.company_id === null ? (
                         <Card>
                             <CardContent>
                                 <p>
@@ -538,9 +538,10 @@ const StudentProfilePage = () => {
                         </Card>
                     ) : (
                         <StudentAttendanceInfoCard
-                            userId={student.user.id}
-                            studentId={student.student_id}
-                            companyId={student.company_id}
+                            userId={student.data.user.id}
+                            studentId={student.data.student_id}
+                            companyId={student.data.company_id}
+                            studentRealId={student.data.id}
                         />
                     )}
                 </TabsContent>
@@ -553,7 +554,7 @@ const StudentProfilePage = () => {
 
                 <TabsContent value="evaluations">
                     <StudentEvaluationsTab
-                        evaluationAnswers={student.evaluation_answers}
+                        evaluationAnswers={student.data.evaluation_answers}
                     />
                 </TabsContent>
 

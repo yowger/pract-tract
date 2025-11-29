@@ -25,7 +25,7 @@ export default function StudentProfileCard({
     formatDate,
 }: StudentProfileCardProps) {
     const { user, student_id, program, section, created_at, advisor, company } =
-        student
+        student.data
 
     return (
         <div className="space-y-6">

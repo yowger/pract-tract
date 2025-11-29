@@ -19,8 +19,8 @@ export default function StudentTabs({ id }: { id: string | number }) {
     if (isLoading) return <div>Loading...</div>
     if (!student) return <div>Student not found.</div>
 
-    const userData = student.user
-    const studentSchedule = student?.company?.schedule
+    const userData = student.data.user
+    const studentSchedule = student.data?.company?.schedule
 
     return (
         <div className="max-w-4xl mx-auto px-4 space-y-6">
@@ -101,24 +101,25 @@ export default function StudentTabs({ id }: { id: string | number }) {
 
                 <TabsContent value="attendance">
                     <StudentAttendanceInfoCard
-                        userId={student.user.id}
-                        studentId={student.student_id}
-                        companyId={student.company_id}
+                        userId={student.data.user.id}
+                        studentId={student.data.student_id}
+                        companyId={student.data.company_id}
+                        studentRealId={student.data.id}
                     />
                 </TabsContent>
 
                 <TabsContent value="evaluations">
                     <StudentEvaluationsTab
-                        evaluationAnswers={student.evaluation_answers}
+                        evaluationAnswers={student.data.evaluation_answers}
                     />
                 </TabsContent>
 
                 <TabsContent value="violations">
-                    <ViolationsTable studentId={student.id} />
+                    <ViolationsTable studentId={student.data.id} />
                 </TabsContent>
 
                 <TabsContent value="documents">
-                    <StudentDocumentsTab studentId={student.id} />
+                    <StudentDocumentsTab studentId={student.data.id} />
                 </TabsContent>
             </Tabs>
         </div>

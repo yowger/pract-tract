@@ -82,21 +82,35 @@ export interface EvaluationAnswer {
 }
 
 export interface StudentResponse {
-    id: number
-    student_id: number
-    advisor_id: number
-    company_id: number
-    program_id: number
-    section_id: number
-    created_at: string
-    updated_at: string
-    program: Program
-    section: Section
-    user_id: number
-    user: User
-    advisor: Advisor
-    company: Company
-    evaluation_answers: EvaluationAnswer[]
+    data: {
+        id: number
+        student_id: number
+        advisor_id: number
+        company_id: number
+        program_id: number
+        section_id: number
+        created_at: string
+        updated_at: string
+        program: Program
+        section: Section
+        user_id: number
+        user: User
+        advisor: Advisor
+        company: Company
+        evaluation_answers: EvaluationAnswer[]
+
+        hours_attended: number
+        absence_hours_manual: number
+        absence_hours_auto: number
+        auto_absences_count: number
+        total_absences_count: number
+        effective_required_hours: number
+        required_hours: number
+        completion: number
+        ojt_start_date: string | null
+        ojt_end_date: string | null
+        projected_end_date: string | null
+    }
 }
 
 export const getStudent = async (
