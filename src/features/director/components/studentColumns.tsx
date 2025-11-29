@@ -29,6 +29,11 @@ export const StudentColumns: ColumnDef<Student>[] = [
         enableHiding: false,
     },
     {
+        accessorKey: "id",
+        header: "Student ID",
+        cell: ({ row }) => <span>{row.original.student_id}</span>,
+    },
+    {
         accessorKey: "user.name",
         header: "Name",
         cell: ({ row }) => {
@@ -101,14 +106,39 @@ export const StudentColumns: ColumnDef<Student>[] = [
         },
     },
     {
+        accessorKey: "ojt_start_date",
+        header: "OJT Start",
+        cell: ({ row }) => {
+            const date = row.original.ojt_start_date
+                ? new Date(row.original.ojt_start_date).toLocaleDateString()
+                : ""
+            return <span>{date}</span>
+        },
+    },
+    {
+        accessorKey: "ojt_end_date",
+        header: "OJT End",
+        cell: ({ row }) => {
+            const date = row.original.ojt_end_date
+                ? new Date(row.original.ojt_end_date).toLocaleDateString()
+                : ""
+            return <span>{date}</span>
+        },
+    },
+    {
         accessorKey: "hours_attended",
         header: "Hours Attended",
         cell: ({ row }) => <span>{row.original.hours_attended}</span>,
     },
     {
-        accessorKey: "required_hours",
+        accessorKey: "effective_required_hours",
         header: "Required Hours",
-        cell: ({ row }) => <span>{row.original.required_hours}</span>,
+        cell: ({ row }) => <span>{row.original.effective_required_hours}</span>,
+    },
+    {
+        accessorKey: "total_absences_count",
+        header: "Absences",
+        cell: ({ row }) => <span>{row.original.total_absences_count}</span>,
     },
     {
         accessorKey: "completion",

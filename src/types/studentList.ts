@@ -54,6 +54,10 @@ export interface Student {
     evaluation_answers_count?: number
     hours_attended: number
     required_hours: number
+    effective_required_hours: number
+    total_absences_count: number
+    ojt_start_date: string | null
+    ojt_end_date: string | null
     completion: number
 }
 

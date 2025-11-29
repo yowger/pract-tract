@@ -21,6 +21,8 @@ export interface StudentQueryParams {
 export interface BulkUpdateCompanyPayload {
     user_ids: number[]
     company_id: number
+    ojt_start_date?: string
+    ojt_end_date?: string
 }
 
 export interface BulkUpdateAdvisorPayload {

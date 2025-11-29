@@ -12,7 +12,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { StudentColumns } from "@/features/director/components/studentColumns"
+import { StudentColumns } from "@/features/director/components/StudentColumns"
+// import { StudentColumns } from "@/features/director/components/studentColumns"
 import {
     useStudents,
     // useUpdateStudentsAdvisor,
@@ -49,6 +50,8 @@ const StudentManagementPage = () => {
         status: "",
         program_id: undefined as number | undefined,
     })
+    const [ojtStartDate, setOjtStartDate] = useState<string>("")
+    const [ojtEndDate, setOjtEndDate] = useState<string>("")
 
     const { data: students, isLoading } = useStudents(filters)
     console.log("🚀 ~ StudentManagementPage ~ students:", students)
@@ -104,6 +107,8 @@ const StudentManagementPage = () => {
             await updateCompany({
                 user_ids: selectedStudentsIds,
                 company_id: selectedCompanyId,
+                ojt_start_date: ojtStartDate,
+                ojt_end_date: ojtEndDate,
             })
 
             toast.success("Company assigned successfully")
@@ -261,6 +266,11 @@ const StudentManagementPage = () => {
 
                     <div className="space-y-4 py-2">
                         <Select
+                            value={
+                                selectedCompanyId === ""
+                                    ? ""
+                                    : String(selectedCompanyId)
+                            }
                             onValueChange={(val) =>
                                 setSelectedCompanyId(Number(val))
                             }
@@ -276,6 +286,23 @@ const StudentManagementPage = () => {
                                 ))}
                             </SelectContent>
                         </Select>
+
+                        <div className="flex gap-3 items-center">
+                            <Input
+                                type="date"
+                                placeholder="OJT Start"
+                                value={ojtStartDate || ""}
+                                onChange={(e) =>
+                                    setOjtStartDate(e.target.value)
+                                }
+                            />
+                            <Input
+                                type="date"
+                                placeholder="OJT End"
+                                value={ojtEndDate || ""}
+                                onChange={(e) => setOjtEndDate(e.target.value)}
+                            />
+                        </div>
                     </div>
 
                     <DialogFooter>
@@ -287,7 +314,11 @@ const StudentManagementPage = () => {
                         </Button>
                         <Button
                             onClick={handleBulkUpdateCompany}
-                            disabled={!selectedCompanyId}
+                            disabled={
+                                !selectedCompanyId ||
+                                !ojtStartDate ||
+                                !ojtEndDate
+                            }
                         >
                             Assign
                         </Button>
