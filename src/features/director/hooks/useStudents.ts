@@ -26,7 +26,9 @@ export const useUpdateStudentsCompany = () => {
     return useMutation({
         mutationFn: bulkUpdateCompany,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["students"] })
+            queryClient.invalidateQueries({
+                queryKey: ["students", "companies"],
+            })
         },
     })
 }
