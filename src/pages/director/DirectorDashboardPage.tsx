@@ -7,22 +7,22 @@ import {
     YAxis,
     ResponsiveContainer,
     Tooltip,
-    PieChart,
-    Pie,
-    Cell,
-    Legend,
+    // PieChart,
+    // Pie,
+    // Cell,
+    // Legend,
 } from "recharts"
 import { GraduationCap, Users, Building2 } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 
-const COLORS = [
-    "#0ea5e9",
-    "#22c55e",
-    "#facc15",
-    "#f87171",
-    "#a78bfa",
-    "#ec4899",
-]
+// const COLORS = [
+//     "#0ea5e9",
+//     "#22c55e",
+//     "#facc15",
+//     "#f87171",
+//     "#a78bfa",
+//     "#ec4899",
+// ]
 
 export const DirectorDashboardPage = () => {
     const { data, isLoading, isError } = useDirectorDashboard()
@@ -58,9 +58,9 @@ export const DirectorDashboardPage = () => {
             value: item.count,
         })) ?? []
 
-    const internshipStatusData = Object.entries(charts.internship_status).map(
-        ([name, value]) => ({ name, value })
-    )
+    // const internshipStatusData = Object.entries(charts.internship_status).map(
+    //     ([name, value]) => ({ name, value })
+    // )
 
     return (
         <div className="space-y-8">
@@ -157,7 +157,7 @@ export const DirectorDashboardPage = () => {
                     </CardContent>
                 </Card>
 
-                <Card>
+                {/* <Card>
                     <CardHeader>
                         <CardTitle>Internship Status</CardTitle>
                     </CardHeader>
@@ -183,7 +183,7 @@ export const DirectorDashboardPage = () => {
                             </PieChart>
                         </ResponsiveContainer>
                     </CardContent>
-                </Card>
+                </Card> */}
             </div>
         </div>
     )
