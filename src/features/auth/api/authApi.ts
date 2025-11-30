@@ -7,20 +7,15 @@ import type {
     RegisterResponse,
 } from "../types/auth"
 
-export const getCsrfCookie = async () => {
-    await privateApi.get(AUTH_ENDPOINTS.csrf)
-}
-
 export const login = async (
     email: string,
     password: string
 ): Promise<LoginResponse> => {
-    await getCsrfCookie()
     const { data } = await privateApi.post(AUTH_ENDPOINTS.login, {
         email,
         password,
     })
-    
+
     localStorage.setItem("token", data.token)
 
     return data
@@ -29,7 +24,6 @@ export const login = async (
 export const register = async (
     payload: RegisterPayload
 ): Promise<RegisterResponse> => {
-    await getCsrfCookie()
     const { data } = await privateApi.post(AUTH_ENDPOINTS.register, payload)
 
     localStorage.setItem("token", data.token)
