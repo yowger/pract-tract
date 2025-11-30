@@ -33,11 +33,13 @@ export const useUpdateStudentsCompany = () => {
 
 export const useUpdateStudentsAdvisor = () => {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
         mutationFn: bulkUpdateAdvisor,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["students"] })
+            queryClient.invalidateQueries({
+                queryKey: ["students", "advisors"],
+            })
         },
     })
 }

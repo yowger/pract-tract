@@ -4,8 +4,8 @@ import { privateApi } from "@/lib/axiosClient"
 
 export const formSchema = z.object({
     day_of_week: z.array(z.string().min(1)).min(1, "Select at least one day"),
-    start_date: z.string(),
-    end_date: z.string(),
+    // start_date: z.string(),
+    // end_date: z.string(),
 
     am_time_in: z.string().optional(),
     am_time_out: z.string().optional(),
@@ -50,8 +50,8 @@ export interface FetchedSchedule {
     company_id: number
     company?: Company
     day_of_week: string
-    start_date: string
-    end_date: string
+    // start_date: string
+    // end_date: string
     am_time_in: string
     am_time_out: string
     am_require_photo_in: 0 | 1

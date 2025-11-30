@@ -248,7 +248,7 @@ export function ScheduleForm({
                     />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                {/* <div className="grid grid-cols-2 gap-4">
                     <FormField
                         control={form.control}
                         name="start_date"
@@ -275,7 +275,7 @@ export function ScheduleForm({
                             </FormItem>
                         )}
                     />
-                </div>
+                </div> */}
 
                 <Separator />
 
