@@ -33,8 +33,8 @@ const AgentUpdateSchedulePage = () => {
               day_of_week: Array.isArray(schedule.day_of_week)
                   ? schedule.day_of_week
                   : JSON.parse(schedule.day_of_week),
-              start_date: schedule.start_date,
-              end_date: schedule.end_date,
+            //   start_date: schedule.start_date,
+            //   end_date: schedule.end_date,
               am_time_in: schedule.am_time_in?.slice(0, 5) || "",
               am_time_out: schedule.am_time_out?.slice(0, 5) || "",
               am_require_photo_in: Boolean(schedule.am_require_photo_in),
