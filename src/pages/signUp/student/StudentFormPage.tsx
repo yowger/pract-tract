@@ -51,12 +51,12 @@
 import { BookOpen, X } from "lucide-react"
 import { Link } from "react-router-dom"
 
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 import StudentForm from "@/features/auth/components/forms/StudentForm"
 import studentSignupImage from "@/img/Student-signup.png"
 
 const StudentFormPage = () => {
-    const formId = "student-signup-form"
+    // const formId = "student-signup-form"
 
     return (
         <div className="relative min-h-screen bg-gradient-to-b from-[#1F7A40] to-[#C2E866] flex items-center justify-center px-4 py-10 overflow-hidden">
@@ -78,7 +78,10 @@ const StudentFormPage = () => {
                     </div>
 
                     {/* Right panel */}
-                    <div className="relative bg-white/95 p-6 sm:p-8 md:p-10 flex flex-col gap-6 md:h-full md:overflow-hidden">
+                    <div
+                        className="relative bg-white/95 p-6 sm:p-8 md:p-10 flex flex-col gap-6
+                md:max-h-[85vh] md:overflow-y-auto"
+                    >
                         {/* Top image - mobile */}
                         <div className="relative md:hidden w-full h-52 rounded-2xl overflow-hidden shadow bg-[#0c3c6a] flex items-stretch justify-center">
                             <img
@@ -118,21 +121,21 @@ const StudentFormPage = () => {
 
                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-5">
                                 <StudentForm
-                                    // id={formId}
-                                    // showSubmitButton={false}
-                                    // className="bg-transparent shadow-none border-0 p-0 space-y-5"
+                                // id={formId}
+                                // showSubmitButton={false}
+                                // className="bg-transparent shadow-none border-0 p-0 space-y-5"
                                 />
                             </div>
                         </div>
 
                         <div className="sticky bottom-0 inset-x-0 bg-gradient-to-b from-transparent via-white to-white space-y-3 pt-1">
-                            <Button
+                            {/* <Button
                                 type="submit"
                                 form={formId}
                                 className="w-full h-12 bg-[#0c3c6a] hover:bg-[#0e4a86] text-white font-semibold shadow-md"
                             >
                                 Sign Up
-                            </Button>
+                            </Button> */}
 
                             <div className="flex items-center justify-between text-sm text-gray-700">
                                 <span>Already have an account?</span>

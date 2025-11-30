@@ -51,12 +51,12 @@
 import { BookOpen, X } from "lucide-react"
 import { Link } from "react-router-dom"
 
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 import AdvisorForm from "@/features/auth/components/forms/AdvisorForm"
 import advisorSignupImage from "@/img/Adviser-signup.png"
 
 const AdvisorFormPage = () => {
-    const formId = "advisor-signup-form"
+    // const formId = "advisor-signup-form"
 
     return (
         <div className="relative min-h-screen bg-gradient-to-b from-[#1F7A40] to-[#C2E866] flex items-center justify-center px-4 py-10 overflow-hidden">
@@ -118,21 +118,21 @@ const AdvisorFormPage = () => {
 
                             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 sm:p-5">
                                 <AdvisorForm
-                                    // id={formId}
-                                    // showSubmitButton={false}
-                                    // className="bg-transparent shadow-none border-0 p-0 space-y-5"
+                                // id={formId}
+                                // showSubmitButton={false}
+                                // className="bg-transparent shadow-none border-0 p-0 space-y-5"
                                 />
                             </div>
                         </div>
 
                         <div className="sticky bottom-0 inset-x-0 bg-gradient-to-b from-transparent via-white to-white space-y-3 pt-1">
-                            <Button
+                            {/* <Button
                                 type="submit"
                                 form={formId}
                                 className="w-full h-12 bg-[#0c3c6a] hover:bg-[#0e4a86] text-white font-semibold shadow-md"
                             >
                                 Sign Up
-                            </Button>
+                            </Button> */}
 
                             <div className="flex items-center justify-between text-sm text-gray-700">
                                 <span>Already have an account?</span>
