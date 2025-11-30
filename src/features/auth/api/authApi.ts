@@ -38,5 +38,6 @@ export const logout = async (): Promise<void> => {
 
 export const getCurrentUser = async (): Promise<CurrentUserResponse> => {
     const { data } = await privateApi.get(AUTH_ENDPOINTS.me)
+    console.log("🚀 ~ getCurrentUser ~ data:", data)
     return data
 }
