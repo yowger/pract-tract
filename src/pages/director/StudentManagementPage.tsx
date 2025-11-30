@@ -16,6 +16,7 @@ import {
 // import { StudentColumns } from "@/features/director/components/studentColumns"
 import {
     useStudents,
+    useUpdateStudentsAdvisor,
     // useUpdateStudentsAdvisor,
     useUpdateStudentsCompany,
 } from "@/features/director/hooks/useStudents"
@@ -32,18 +33,27 @@ import { useUpdateUsersStatus } from "@/features/director/hooks/useUpdateUsersSt
 import type { UserStatus } from "@/types/users"
 import { useCompanyOptions } from "@/features/shared/hooks/useCompany"
 import { StudentColumns } from "@/features/director/components/StudentNewColumns"
+import { useAdvisors } from "@/features/director/hooks/useAdvisors"
 
 const StudentManagementPage = () => {
     const [selectedStudentsIds, setSelectedStudentsIds] = useState<number[]>([])
     const [isStatusModalOpen, setIsStatusModalOpen] = useState(false)
     const [isCompanyModalOpen, setCompanyModalOpen] = useState(false)
     const { data: companies } = useCompanyOptions()
+    const { data: advisors } = useAdvisors({
+        page: 1,
+        per_page: 100,
+    })
+
+    const [selectedAdvisorId, setSelectedAdvisorId] = useState<number | "">("")
+    const [isAdvisorModalOpen, setAdvisorModalOpen] = useState(false)
+
     const [newStatus, setNewStatus] = useState<UserStatus | "">("")
     const [selectedCompanyId, setSelectedCompanyId] = useState<number | "">("")
     // const [selectedAdvisorId, setSelectedAdvisorId] = useState<number | "">("")
     const { mutateAsync: bulkUpdate, isPending } = useUpdateUsersStatus()
     const { mutateAsync: updateCompany } = useUpdateStudentsCompany()
-    // const { mutateAsync: updateAdvisor } = useUpdateStudentsAdvisor()
+    const { mutateAsync: updateAdvisor } = useUpdateStudentsAdvisor()
     const [filters, setFilters] = useState<StudentQueryParams>({
         page: 1,
         per_page: 10,
@@ -123,6 +133,26 @@ const StudentManagementPage = () => {
         }
     }
 
+    const handleBulkUpdateAdvisor = async () => {
+        if (!selectedAdvisorId || selectedStudentsIds.length === 0) return
+
+        try {
+            await updateAdvisor({
+                user_ids: selectedStudentsIds,
+                advisor_id: selectedAdvisorId,
+            })
+
+            toast.success("Advisor assigned successfully")
+            setAdvisorModalOpen(false)
+            setSelectedStudentsIds([])
+            setSelectedAdvisorId("")
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                toast.error("Failed to assign advisor")
+            }
+        }
+    }
+
     return (
         <>
             <div className="space-y-4">
@@ -146,6 +176,12 @@ const StudentManagementPage = () => {
                         {selectedStudentsIds.length > 0 && (
                             <Button onClick={() => setCompanyModalOpen(true)}>
                                 Assign Company ({selectedStudentsIds.length})
+                            </Button>
+                        )}
+
+                        {selectedStudentsIds.length > 0 && (
+                            <Button onClick={() => setAdvisorModalOpen(true)}>
+                                Assign Advisor ({selectedStudentsIds.length})
                             </Button>
                         )}
 
@@ -320,6 +356,59 @@ const StudentManagementPage = () => {
                                 !ojtStartDate ||
                                 !ojtEndDate
                             }
+                        >
+                            Assign
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={isAdvisorModalOpen}
+                onOpenChange={setAdvisorModalOpen}
+            >
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>
+                            Assign Advisor to {selectedStudentsIds.length}{" "}
+                            Student(s)
+                        </DialogTitle>
+                    </DialogHeader>
+
+                    <div className="space-y-4 py-2">
+                        <Select
+                            value={
+                                selectedAdvisorId === ""
+                                    ? ""
+                                    : String(selectedAdvisorId)
+                            }
+                            onValueChange={(val) =>
+                                setSelectedAdvisorId(Number(val))
+                            }
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Select Advisor" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {advisors?.data.map((a) => (
+                                    <SelectItem key={a.id} value={String(a.id)}>
+                                        {a.user.name}{" "}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <DialogFooter>
+                        <Button
+                            variant="outline"
+                            onClick={() => setAdvisorModalOpen(false)}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            onClick={handleBulkUpdateAdvisor}
+                            disabled={!selectedAdvisorId}
                         >
                             Assign
                         </Button>

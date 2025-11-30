@@ -33,6 +33,7 @@ export const useUpdateStudentsCompany = () => {
 
 export const useUpdateStudentsAdvisor = () => {
     const queryClient = useQueryClient()
+    
     return useMutation({
         mutationFn: bulkUpdateAdvisor,
         onSuccess: () => {
