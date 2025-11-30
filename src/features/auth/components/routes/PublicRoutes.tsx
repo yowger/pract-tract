@@ -9,6 +9,8 @@ export const PublicRoute = () => {
     if (isLoading) return <div>Loading...</div>
 
     if (user) {
+        console.log("🚀 ~ PublicRoute ~ user:", user)
+
         const roleRedirects: Record<UserRole, string> = {
             admin: "/admin/dashboard",
             director: "/director/dashboard",
@@ -21,6 +23,8 @@ export const PublicRoute = () => {
 
         return <Navigate to={redirectTo} replace />
     }
+
+    console.log("🚀 no user:", user)
 
     return <Outlet />
 }
