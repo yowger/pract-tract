@@ -78,7 +78,10 @@ const AdvisorFormPage = () => {
                     </div>
 
                     {/* Right panel */}
-                    <div className="relative bg-white/95 p-6 sm:p-8 md:p-10 flex flex-col gap-6 md:h-full md:overflow-hidden">
+                    <div
+                        className="relative bg-white/95 p-6 sm:p-8 md:p-10 flex flex-col gap-6
+                md:max-h-[85vh] md:overflow-y-auto"
+                    >
                         {/* Top image - mobile */}
                         <div className="relative md:hidden w-full h-52 rounded-2xl overflow-hidden shadow bg-[#0c3c6a] flex items-stretch justify-center">
                             <img

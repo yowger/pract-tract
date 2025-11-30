@@ -44,6 +44,7 @@ const StudentManagementPage = () => {
         page: 1,
         per_page: 100,
     })
+    console.log("🚀 ~ StudentManagementPage ~ advisors:", advisors)
 
     const [selectedAdvisorId, setSelectedAdvisorId] = useState<number | "">("")
     const [isAdvisorModalOpen, setAdvisorModalOpen] = useState(false)
@@ -65,7 +66,6 @@ const StudentManagementPage = () => {
     const [ojtEndDate, setOjtEndDate] = useState<string>("")
 
     const { data: students, isLoading } = useStudents(filters)
-    console.log("🚀 ~ StudentManagementPage ~ students:", students)
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
