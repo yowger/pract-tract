@@ -20,6 +20,9 @@ export const login = async (
         email,
         password,
     })
+    
+    localStorage.setItem("token", data.token)
+
     return data
 }
 
@@ -28,6 +31,8 @@ export const register = async (
 ): Promise<RegisterResponse> => {
     await getCsrfCookie()
     const { data } = await privateApi.post(AUTH_ENDPOINTS.register, payload)
+
+    localStorage.setItem("token", data.token)
     return data
 }
 
@@ -38,6 +43,5 @@ export const logout = async (): Promise<void> => {
 
 export const getCurrentUser = async (): Promise<CurrentUserResponse> => {
     const { data } = await privateApi.get(AUTH_ENDPOINTS.me)
-    console.log("🚀 ~ getCurrentUser ~ data:", data)
     return data
 }
