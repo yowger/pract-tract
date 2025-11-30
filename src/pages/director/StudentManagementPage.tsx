@@ -12,7 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { StudentColumns } from "@/features/director/components/StudentColumns"
+// import { StudentColumns } from "@/features/director/components/StudentColumns"
 // import { StudentColumns } from "@/features/director/components/studentColumns"
 import {
     useStudents,
@@ -31,6 +31,7 @@ import {
 import { useUpdateUsersStatus } from "@/features/director/hooks/useUpdateUsersStatus"
 import type { UserStatus } from "@/types/users"
 import { useCompanyOptions } from "@/features/shared/hooks/useCompany"
+import { StudentColumns } from "@/features/director/components/StudentNewColumns"
 
 const StudentManagementPage = () => {
     const [selectedStudentsIds, setSelectedStudentsIds] = useState<number[]>([])
