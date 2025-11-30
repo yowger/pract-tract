@@ -4,6 +4,7 @@ import type { UserRole } from "@/types/roles"
 
 export const PublicRoute = () => {
     const { data: user, isLoading } = useUser()
+    console.log("🚀 ~ PublicRoute ~ user:", user)
 
     if (isLoading) return <div>Loading...</div>
 
