@@ -35,6 +35,19 @@ import { useCompanyOptions } from "@/features/shared/hooks/useCompany"
 import { StudentColumns } from "@/features/director/components/StudentNewColumns"
 import { useAdvisors } from "@/features/director/hooks/useAdvisors"
 
+const PROGRAMS = [
+    { id: 1, name: "BSCRIM" },
+    { id: 2, name: "BSISM" },
+    { id: 3, name: "BSIT" },
+    { id: 4, name: "BSA" },
+    { id: 5, name: "BSED-MATH" },
+    { id: 6, name: "BSED-FIL" },
+    { id: 7, name: "BSED-ENG" },
+    { id: 8, name: "BPED" },
+    { id: 9, name: "BEED" },
+    { id: 10, name: "BAELS" },
+]
+
 const StudentManagementPage = () => {
     const [selectedStudentsIds, setSelectedStudentsIds] = useState<number[]>([])
     const [isStatusModalOpen, setIsStatusModalOpen] = useState(false)
@@ -164,6 +177,39 @@ const StudentManagementPage = () => {
                             onChange={handleSearch}
                             className="w-[200px]"
                         />
+
+                        <Select
+                            value={
+                                filters.program_id
+                                    ? String(filters.program_id)
+                                    : "all"
+                            }
+                            onValueChange={(value) =>
+                                setFilters((f) => ({
+                                    ...f,
+                                    program_id:
+                                        value === "all"
+                                            ? undefined
+                                            : Number(value),
+                                    page: 1,
+                                }))
+                            }
+                        >
+                            <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Filter by program" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                <SelectItem value="all">
+                                    All Programs
+                                </SelectItem>
+                                {PROGRAMS.map((p) => (
+                                    <SelectItem key={p.id} value={String(p.id)}>
+                                        {p.name}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
                     </div>
 
                     <div className="flex gap-3 items-center">
