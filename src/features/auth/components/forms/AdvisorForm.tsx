@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
-import { Mail, Lock, User } from "lucide-react"
+import { Mail, Lock, User, BookOpen } from "lucide-react"
 
 import {
     Form,
@@ -16,6 +16,13 @@ import { Button } from "@/components/ui/button"
 import { useRegister } from "@/features/auth/hooks/useRegister"
 import { toast } from "sonner"
 import { AxiosError } from "axios"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 
 const advisorFormSchema = z
     .object({
@@ -25,6 +32,7 @@ const advisorFormSchema = z
         password_confirmation: z
             .string()
             .min(8, "Please confirm your password"),
+        program_id: z.number().min(1, "Program is required"),
     })
     .refine((data) => data.password === data.password_confirmation, {
         message: "Passwords do not match",
@@ -109,6 +117,66 @@ export default function AdvisorForm() {
                                         placeholder="advisor@example.com"
                                         className="pl-11 h-12"
                                     />
+                                </div>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="program_id"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Program</FormLabel>
+                            <FormControl>
+                                <div className="relative">
+                                    <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+
+                                    <Select
+                                        onValueChange={(v) =>
+                                            field.onChange(Number(v))
+                                        }
+                                        defaultValue={String(field.value)}
+                                    >
+                                        <SelectTrigger className="pl-11 h-12 w-full">
+                                            <SelectValue placeholder="Select program" />
+                                        </SelectTrigger>
+
+                                        <SelectContent>
+                                            <SelectItem value="1">
+                                                BSCRIM
+                                            </SelectItem>
+                                            <SelectItem value="2">
+                                                BSISM
+                                            </SelectItem>
+                                            <SelectItem value="3">
+                                                BSIT
+                                            </SelectItem>
+                                            <SelectItem value="4">
+                                                BSA
+                                            </SelectItem>
+                                            <SelectItem value="5">
+                                                BSED-MATH
+                                            </SelectItem>
+                                            <SelectItem value="6">
+                                                BSED-FIL
+                                            </SelectItem>
+                                            <SelectItem value="7">
+                                                BSED-ENG
+                                            </SelectItem>
+                                            <SelectItem value="8">
+                                                BPED
+                                            </SelectItem>
+                                            <SelectItem value="9">
+                                                BEED
+                                            </SelectItem>
+                                            <SelectItem value="10">
+                                                BAELS
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                             </FormControl>
                             <FormMessage />
