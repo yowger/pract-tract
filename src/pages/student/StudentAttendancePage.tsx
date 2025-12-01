@@ -119,6 +119,7 @@ const StudentAttendancePage = () => {
 
         try {
             const data = JSON.parse(result)
+            console.log("🚀 ~ handleScanResult ~ data:", data)
             // data.companyId, data.scheduleId, data.timestamp
 
             // if (!studentId || !userLocation) {
