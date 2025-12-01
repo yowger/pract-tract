@@ -111,7 +111,7 @@ const AdvisorFormPage = () => {
                                 </div>
 
                                 <Link
-                                    to="/landing"
+                                    to="/signup"
                                     className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white border border-gray-200 text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors shadow-sm"
                                     aria-label="Close"
                                 >
