@@ -20,7 +20,7 @@ export const ProtectedRoute = ({ allowedRoles }: ProtectedRouteProps) => {
                 : user.user.role === "director"
                 ? "/director/dashboard"
                 : user.user.role === "student"
-                ? "/student/dashboard"
+                ? "/student"
                 : "/landing"
 
         return <Navigate to={redirectPath} replace />
