@@ -4,12 +4,15 @@ import { useUser } from "@/features/auth/hooks/useUser"
 import { isStudent } from "@/features/auth/types/auth"
 import { toast } from "sonner"
 import { useCloudinaryBulkUpload } from "@/hooks/use-upload-bulk"
-import { useNavigate } from "react-router-dom"
+import { Navigate, useNavigate } from "react-router-dom"
 
 export function ExcuseCreatePage() {
     const { data: user, isLoading } = useUser()
+    const hasCompany = user && isStudent(user.user) && user.user.student.company
+
     const studentId =
         user && isStudent(user?.user) ? user.user.student.id : undefined
+
     const { mutateAsync: createExcuse } = useCreateExcuse()
     const { upload, uploading, error: uploadError } = useCloudinaryBulkUpload()
 
@@ -63,6 +66,7 @@ export function ExcuseCreatePage() {
     }
 
     if (isLoading) return <div>Loading...</div>
+    if (!hasCompany) return <Navigate to="/student" replace />
 
     return (
         <div className="p-6 space-y-6 max-w-2xl mx-auto">

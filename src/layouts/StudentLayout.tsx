@@ -19,6 +19,7 @@ import { useLogout } from "@/features/auth/hooks/useLogout"
 import Sidebar from "./dashboard/Sidebar"
 import DashboardLayout from "./dashboard/DashboardLayout"
 import Navbar from "./dashboard/Navbar"
+import { isStudent } from "@/features/auth/types/auth"
 
 const studentLinks = [
     { name: "Dashboard", path: "/student", icon: Home },
@@ -35,6 +36,8 @@ const studentLinks = [
 
 const StudentLayout = () => {
     const { data: user } = useUser()
+    const hasCompany = user && isStudent(user.user) && user.user.student.company
+
     const { mutateAsync: logout } = useLogout()
     const navigate = useNavigate()
 
@@ -51,6 +54,11 @@ const StudentLayout = () => {
         }
     }
 
+    const filteredLinks = studentLinks.filter((link) => {
+        if (link.name === "Excuse" && !hasCompany) return false
+        return true
+    })
+
     return (
         <SidebarProvider>
             <DashboardLayout
@@ -64,7 +72,7 @@ const StudentLayout = () => {
                         }}
                     />
                 }
-                sidebar={<Sidebar links={studentLinks} title="Student" />}
+                sidebar={<Sidebar links={filteredLinks} title="Student" />}
             >
                 <Outlet />
             </DashboardLayout>
