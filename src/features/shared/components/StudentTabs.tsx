@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import StudentEvaluationsTab from "./StudentEvaluationsTab"
 import StudentDocumentsTab from "./StudentDocumentTab"
 import ViolationsTable from "./ViolationTabs"
+import StudentProgressCard from "./StudentProgressCard"
 
 export default function StudentTabs({ id }: { id: string | number }) {
     const { data: student, isLoading } = useStudent(Number(id))
@@ -39,6 +40,12 @@ export default function StudentTabs({ id }: { id: string | number }) {
                             className="flex items-center gap-2"
                         >
                             <Home className="w-4 h-4" /> Info
+                        </TabsTrigger>
+                        <TabsTrigger
+                            value="progress"
+                            className="flex items-center gap-2"
+                        >
+                            <Home className="w-4 h-4" /> Progress
                         </TabsTrigger>
                         <TabsTrigger
                             value="schedule"
@@ -78,6 +85,10 @@ export default function StudentTabs({ id }: { id: string | number }) {
                         student={student}
                         formatDate={formatDate}
                     />
+                </TabsContent>
+
+                <TabsContent value="progress">
+                    <StudentProgressCard student={student} />
                 </TabsContent>
 
                 <TabsContent value="schedule">
