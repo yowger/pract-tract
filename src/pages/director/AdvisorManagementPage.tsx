@@ -14,6 +14,7 @@ const AdvisorManagementPage = () => {
     })
 
     const { data, isLoading } = useAdvisors(filters)
+    console.log("🚀 ~ AdvisorManagementPage ~ data:", data)
 
     return (
         <div className="space-y-4">
