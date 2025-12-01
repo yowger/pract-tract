@@ -4,7 +4,7 @@ import {
     User,
     // FileText,
     CalendarCheck,
-    Clipboard,
+    // Clipboard,
     FileText,
     Home,
     // SaveIcon,
@@ -21,11 +21,11 @@ import DashboardLayout from "./dashboard/DashboardLayout"
 import Navbar from "./dashboard/Navbar"
 
 const studentLinks = [
-    { name: "Dashboard", path: "/", icon: Home },
+    { name: "Dashboard", path: "/student", icon: Home },
     { name: "Profile", path: "/student/dashboard", icon: User },
     { name: "Attendance", path: "/student/attendance", icon: CalendarCheck },
     { name: "Excuse", path: "/student/excuse", icon: FileText },
-    { name: "Reports", path: "/student/reports", icon: Clipboard },
+    // { name: "Reports", path: "/student/reports", icon: Clipboard },
     // { name: "Profile", path: "/student/profile", icon: User },
     // { name: "documents", path: "/student/documents", icon: SaveIcon },
     // { name: "Reports", path: "/student/reports", icon: FileText },
