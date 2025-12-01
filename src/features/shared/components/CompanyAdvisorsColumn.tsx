@@ -54,6 +54,18 @@ export const AdvisorColumns: ColumnDef<Advisor>[] = [
     //     },
     // },
     {
+        accessorKey: "program.name",
+        header: "Program",
+        cell: ({ row }) => {
+            const program = row.original.program
+            return (
+                <span title={program?.name || "N/A"}>
+                    {program?.code || "N/A"}
+                </span>
+            )
+        },
+    },
+    {
         accessorKey: "students_count",
         header: "Students",
         cell: ({ row }) => row.original.students_count ?? 0,

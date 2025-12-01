@@ -1,10 +1,12 @@
 import type { PaginatedResponse } from "@/types/page"
 import { privateApi } from "@/lib/axiosClient"
 import type { User } from "@/types/user"
+import type { Program } from "@/types/studentList"
 
 export interface Advisor {
     id: number
     user_id: number
+    program: Program | null
     students_count: number
     created_at: string
     updated_at: string
