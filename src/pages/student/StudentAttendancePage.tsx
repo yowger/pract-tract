@@ -14,6 +14,7 @@ import { AgentAttendanceColumns } from "@/features/agent/components/AgentAttenda
 import { useSchedule } from "@/features/agent/hooks/useSchedule"
 import { Map, Source, Layer } from "@vis.gl/react-maplibre"
 import "maplibre-gl/dist/maplibre-gl.css"
+import { QrReader } from "react-qr-reader"
 
 const MAP_STYLE =
     "https://api.maptiler.com/maps/streets-v4/style.json?key=l60bj9KIXXKDXbsOvzuz"
@@ -57,6 +58,8 @@ const StudentAttendancePage = () => {
     const [showCamera, setShowCamera] = useState(false)
     const [capturedImage, setCapturedImage] = useState<string | null>(null)
     const webcamRef = useRef<Webcam>(null)
+
+    const [scanOpen, setScanOpen] = useState(false)
 
     const capturePhoto = () => {
         const imageSrc = webcamRef.current?.getScreenshot()
@@ -109,6 +112,34 @@ const StudentAttendancePage = () => {
             month: "long",
             day: "numeric",
         })
+    }
+
+    const handleScanResult = async (result: string | null) => {
+        if (!result) return
+
+        try {
+            const data = JSON.parse(result)
+            // data.companyId, data.scheduleId, data.timestamp
+
+            // if (!studentId || !userLocation) {
+            //     toast.error("Cannot record attendance.")
+            //     return
+            // }
+
+            // await recordSelfAttendance({
+            //     student_id: studentId,
+            //     schedule_id: data.scheduleId,
+            //     lat: userLocation?.lat,
+            //     lng: userLocation?.lng,
+            // })
+
+            // toast.success("Successfully clocked in via QR!")
+            // setScanOpen(false)
+        } catch (err) {
+            if (err instanceof Error) {
+                toast.error("Invalid QR code.")
+            }
+        }
     }
 
     const handleClockIn = async () => {
@@ -235,6 +266,14 @@ const StudentAttendancePage = () => {
                                 Clock In
                             </button>
                         </div>
+
+                        <button
+                            onClick={() => setScanOpen(true)}
+                            className="group flex items-center gap-3 px-8 py-4 bg-blue-600 text-white rounded-full"
+                        >
+                            <Clock size={20} />
+                            Clock In via QR
+                        </button>
                     </div>
 
                     {schedule && (
@@ -444,6 +483,31 @@ const StudentAttendancePage = () => {
                                 )}
                             </div>
                         </div>
+                    </DialogContent>
+                </Dialog>
+            )}
+
+            {scanOpen && (
+                <Dialog open={scanOpen} onOpenChange={setScanOpen}>
+                    <DialogContent>
+                        <DialogTitle>Scan QR Code</DialogTitle>
+                        <div className="w-full h-96">
+                            <QrReader
+                                constraints={{ facingMode: "environment" }}
+                                onResult={(result, error) => {
+                                    if (result) {
+                                        handleScanResult(result.getText())
+                                    }
+
+                                    if (!error) {
+                                        console.info(error)
+                                    }
+                                }}
+                            />
+                        </div>
+                        <Button onClick={() => setScanOpen(false)}>
+                            Cancel
+                        </Button>
                     </DialogContent>
                 </Dialog>
             )}
