@@ -1,4 +1,4 @@
-import { GraduationCap, UserCheck, Users } from "lucide-react"
+import { GraduationCap, UserCheck, Users, X } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 
 interface RoleSelectHandler {
@@ -14,6 +14,13 @@ const SelectRolePage = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 p-4">
+            <Link
+                to="/"
+                className="absolute top-6 left-6 p-2 rounded-full hover:bg-gray-200 transition"
+            >
+                <X className="w-6 h-6 text-gray-600" />
+            </Link>
+
             <div className="w-full max-w-4xl">
                 <div className="text-center mb-12">
                     <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full mb-4">
