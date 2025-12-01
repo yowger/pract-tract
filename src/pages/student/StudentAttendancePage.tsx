@@ -115,30 +115,53 @@ const StudentAttendancePage = () => {
     }
 
     const handleScanResult = async (result: IDetectedBarcode[]) => {
-        if (!result) return
+        if (!result || result.length === 0) return
 
-        result.forEach((code) => {
-            console.log(`Format: ${code.format}, Value: ${code.rawValue}`)
-        })
+        const code = result[0]
+        console.log(`Format: ${code.format}, Value: ${code.rawValue}`)
 
         try {
-            // data.companyId, data.scheduleId, data.timestamp
-            // if (!studentId || !userLocation) {
-            //     toast.error("Cannot record attendance.")
-            //     return
-            // }
-            // await recordSelfAttendance({
-            //     student_id: studentId,
-            //     schedule_id: data.scheduleId,
-            //     lat: userLocation?.lat,
-            //     lng: userLocation?.lng,
-            // })
-            // toast.success("Successfully clocked in via QR!")
-            // setScanOpen(false)
-        } catch (err) {
-            if (err instanceof Error) {
-                toast.error("Invalid QR code.")
+            const data = JSON.parse(code.rawValue) as {
+                companyId: number
+                scheduleId: number
+                timestamp: number
             }
+
+            if (data.companyId !== companyId) {
+                toast.error("QR code does not belong to your company.")
+                return
+            }
+
+            if (!studentId) {
+                toast.error("Invalid Student ID.")
+                return
+            }
+
+            if (!userLocation) {
+                toast.error(
+                    "You must turn on your location to clock in or out."
+                )
+                return
+            }
+
+            if (status?.require_photo) {
+                setScanOpen(false)
+                setShowCamera(true)
+                
+                return
+            }
+
+            await recordSelfAttendance({
+                student_id: studentId,
+                lat: userLocation.lat,
+                lng: userLocation.lng,
+            })
+
+            toast.success("Successfully clocked in via QR!")
+            setScanOpen(false)
+        } catch (err) {
+            console.error(err)
+            toast.error("Invalid QR code.")
         }
     }
 
