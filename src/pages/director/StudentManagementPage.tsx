@@ -166,11 +166,13 @@ const StudentManagementPage = () => {
         }
     }
 
+    const isProgramSelected = !!filters.program_id
+
     return (
         <>
             <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                    <div>
+                    <div className="flex gap-3 items-center">
                         <Input
                             placeholder="Search student..."
                             value={filters.student}
@@ -226,7 +228,15 @@ const StudentManagementPage = () => {
                         )}
 
                         {selectedStudentsIds.length > 0 && (
-                            <Button onClick={() => setAdvisorModalOpen(true)}>
+                            <Button
+                                onClick={() => setAdvisorModalOpen(true)}
+                                disabled={!isProgramSelected}
+                                title={
+                                    !isProgramSelected
+                                        ? "Select a program first"
+                                        : ""
+                                }
+                            >
                                 Assign Advisor ({selectedStudentsIds.length})
                             </Button>
                         )}
