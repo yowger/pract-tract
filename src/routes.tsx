@@ -108,7 +108,7 @@ const routes = [
                         element: <DirectorStudentProfilePage />,
                     },
                     {
-                        path: "students/qr",
+                        path: "qr",
                         element: <AgentQrPage />,
                     },
                 ],
