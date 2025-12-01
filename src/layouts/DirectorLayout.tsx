@@ -48,7 +48,7 @@ const DirectorLayout = () => {
                         }}
                     />
                 }
-                sidebar={<Sidebar links={adminLinks} title="Program Coordinator" />}
+                sidebar={<Sidebar links={adminLinks} title="PC" />}
             >
                 <Outlet />
             </DashboardLayout>
