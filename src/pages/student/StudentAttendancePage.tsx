@@ -118,54 +118,73 @@ const StudentAttendancePage = () => {
     const handleScanResult = async (result: IDetectedBarcode[]) => {
         if (!result || result.length === 0 || scanned) return
 
+        if (!navigator.geolocation) {
+            toast.error("Geolocation is not supported by your browser.")
+            return
+        }
+
         setScanned(true)
 
         const code = result[0]
 
-        try {
-            const data = JSON.parse(code.rawValue) as {
-                companyId: number
-                scheduleId: number
-                timestamp: number
-            }
-            console.log("🚀 ~ handleScanResult ~ data:", data)
+        navigator.geolocation.getCurrentPosition(
+            async ({ coords: { latitude, longitude } }) => {
+                try {
+                    const data = JSON.parse(code.rawValue) as {
+                        companyId: number
+                        scheduleId: number
+                        timestamp: number
+                    }
+                    console.log("🚀 ~ handleScanResult ~ data:", data)
 
-            if (data.companyId !== companyId) {
-                toast.error("QR code does not belong to your company.")
-                return
-            }
+                    if (data.companyId !== companyId) {
+                        toast.error("QR code does not belong to your company.")
+                        return
+                    }
 
-            if (!studentId) {
-                toast.error("Invalid Student ID.")
-                return
-            }
+                    if (!studentId) {
+                        toast.error("Invalid Student ID.")
+                        return
+                    }
 
-            if (!userLocation) {
-                toast.error(
-                    "You must turn on your location to clock in or out."
-                )
-                return
-            }
+                    if (!userLocation) {
+                        toast.error(
+                            "You must turn on your location to clock in or out."
+                        )
+                        return
+                    }
 
-            if (status?.require_photo) {
-                setScanOpen(false)
-                setShowCamera(true)
+                    if (status?.require_photo) {
+                        setScanOpen(false)
+                        setShowCamera(true)
 
-                return
-            }
+                        return
+                    }
 
-            await recordSelfAttendance({
-                student_id: studentId,
-                lat: userLocation.lat,
-                lng: userLocation.lng,
-            })
+                    await recordSelfAttendance({
+                        student_id: studentId,
+                        lat: latitude,
+                        lng: longitude,
+                    })
 
-            toast.success("Successfully clocked in via QR!")
-            setScanOpen(false)
-        } catch (err) {
-            console.error(err)
-            toast.error("Invalid QR code.")
-        }
+                    toast.success("Successfully clocked in via QR!")
+                    setScanOpen(false)
+                } catch (error) {
+                    console.log("🚀 ~ handleClockIn ~ error:", error)
+                    if (error instanceof AxiosError) {
+                        toast.error(
+                            error?.response?.data?.error ||
+                                "Failed to clock in."
+                        )
+                    }
+                }
+            },
+            (error) => {
+                console.error("Geolocation error:", error)
+                toast.error("Unable to get your location.")
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
+        )
     }
 
     const handleClockIn = async () => {
