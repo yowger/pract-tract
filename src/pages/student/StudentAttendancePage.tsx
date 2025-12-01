@@ -14,7 +14,7 @@ import { AgentAttendanceColumns } from "@/features/agent/components/AgentAttenda
 import { useSchedule } from "@/features/agent/hooks/useSchedule"
 import { Map, Source, Layer } from "@vis.gl/react-maplibre"
 import "maplibre-gl/dist/maplibre-gl.css"
-import { QrReader } from "react-qr-reader"
+import { Scanner, type IDetectedBarcode } from "@yudiel/react-qr-scanner"
 
 const MAP_STYLE =
     "https://api.maptiler.com/maps/streets-v4/style.json?key=l60bj9KIXXKDXbsOvzuz"
@@ -114,26 +114,25 @@ const StudentAttendancePage = () => {
         })
     }
 
-    const handleScanResult = async (result: string | null) => {
+    const handleScanResult = async (result: IDetectedBarcode[]) => {
         if (!result) return
 
-        try {
-            const data = JSON.parse(result)
-            console.log("🚀 ~ handleScanResult ~ data:", data)
-            // data.companyId, data.scheduleId, data.timestamp
+        result.forEach((code) => {
+            console.log(`Format: ${code.format}, Value: ${code.rawValue}`)
+        })
 
+        try {
+            // data.companyId, data.scheduleId, data.timestamp
             // if (!studentId || !userLocation) {
             //     toast.error("Cannot record attendance.")
             //     return
             // }
-
             // await recordSelfAttendance({
             //     student_id: studentId,
             //     schedule_id: data.scheduleId,
             //     lat: userLocation?.lat,
             //     lng: userLocation?.lng,
             // })
-
             // toast.success("Successfully clocked in via QR!")
             // setScanOpen(false)
         } catch (err) {
@@ -493,20 +492,26 @@ const StudentAttendancePage = () => {
                     <DialogContent>
                         <DialogTitle>Scan QR Code</DialogTitle>
                         <div className="w-full h-96">
-                            <QrReader
+                            <Scanner
                                 constraints={{ facingMode: "environment" }}
-                                onResult={(result, error) => {
-                                    if (result) {
-                                        handleScanResult(result.getText())
+                                onScan={(result) => handleScanResult(result)}
+                                onError={(err) => {
+                                    if (err instanceof Error) {
+                                        toast.error("Failed to scan QR code.")
                                     }
-
-                                    if (!error) {
-                                        console.info(error)
-                                    }
+                                }}
+                                components={{
+                                    onOff: true,
+                                    torch: true,
+                                    zoom: true,
+                                    finder: true,
                                 }}
                             />
                         </div>
-                        <Button onClick={() => setScanOpen(false)}>
+                        <Button
+                            onClick={() => setScanOpen(false)}
+                            className="mt-4"
+                        >
                             Cancel
                         </Button>
                     </DialogContent>
