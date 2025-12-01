@@ -16,6 +16,7 @@ export interface AdvisorFilters {
     email?: string
     status?: string
     sort_by?: string
+    program?: number
     sort_order?: "asc" | "desc"
     per_page: number
     page: number

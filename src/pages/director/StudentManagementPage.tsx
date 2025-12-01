@@ -56,9 +56,17 @@ const StudentManagementPage = () => {
     const [isStatusModalOpen, setIsStatusModalOpen] = useState(false)
     const [isCompanyModalOpen, setCompanyModalOpen] = useState(false)
     const { data: companies } = useCompanyOptions()
+
+    const allSameProgram = selectedStudents.every(
+        (s) => s.program_id === selectedStudents[0]?.program_id
+    )
+    const programId = allSameProgram
+        ? selectedStudents[0]?.program_id
+        : undefined
     const { data: advisors } = useAdvisors({
         page: 1,
         per_page: 100,
+        program: programId,
     })
 
     const [selectedAdvisorId, setSelectedAdvisorId] = useState<number | "">("")
