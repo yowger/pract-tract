@@ -24,6 +24,7 @@ import DirectorEvaluationsPage from "./pages/director/DirectorEvaluationsPage"
 import DirectorCreateEvaluationsPage from "./pages/director/DirectorCreateEvaluationsPage"
 import DocumentsUploadsPage from "./pages/student/DocumentsUploadsPage"
 import AgentUpdateSchedulePage from "./pages/agent/AgentUpdateSchedulePage"
+import StudentDashboard from "./pages/student/StudentDashboard"
 
 const LandingPage = lazy(() => import("@/pages/LandingPage"))
 const SignInFormPage = lazy(() => import("@/pages/signUp/SignInFormPage"))
@@ -117,6 +118,10 @@ const routes = [
             {
                 element: <StudentLayout />,
                 children: [
+                    {
+                        index: true,
+                        element: <StudentDashboard />,
+                    },
                     // { path: "dashboard", element: <StudentDashboardPage /> },
                     { path: "dashboard", element: <StudentProfilePage /> },
                     // { path: "profile", element: <StudentProfilePage /> },
