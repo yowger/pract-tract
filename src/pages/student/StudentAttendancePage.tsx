@@ -58,6 +58,7 @@ const StudentAttendancePage = () => {
     const [showCamera, setShowCamera] = useState(false)
     const [capturedImage, setCapturedImage] = useState<string | null>(null)
     const webcamRef = useRef<Webcam>(null)
+    const [scanned, setScanned] = useState(false)
 
     const [scanOpen, setScanOpen] = useState(false)
 
@@ -115,10 +116,11 @@ const StudentAttendancePage = () => {
     }
 
     const handleScanResult = async (result: IDetectedBarcode[]) => {
-        if (!result || result.length === 0) return
+        if (!result || result.length === 0 || scanned) return
+
+        setScanned(true)
 
         const code = result[0]
-        console.log(`Format: ${code.format}, Value: ${code.rawValue}`)
 
         try {
             const data = JSON.parse(code.rawValue) as {
@@ -126,6 +128,7 @@ const StudentAttendancePage = () => {
                 scheduleId: number
                 timestamp: number
             }
+            console.log("🚀 ~ handleScanResult ~ data:", data)
 
             if (data.companyId !== companyId) {
                 toast.error("QR code does not belong to your company.")
@@ -147,7 +150,7 @@ const StudentAttendancePage = () => {
             if (status?.require_photo) {
                 setScanOpen(false)
                 setShowCamera(true)
-                
+
                 return
             }
 
