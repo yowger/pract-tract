@@ -334,22 +334,34 @@ const StudentForm = () => {
 
                                             <SelectContent>
                                                 <SelectItem value="1">
-                                                    BSIT
+                                                    BSCRIM
                                                 </SelectItem>
                                                 <SelectItem value="2">
-                                                    BSCS
+                                                    BSISM
                                                 </SelectItem>
                                                 <SelectItem value="3">
-                                                    BSBA
+                                                    BSIT
                                                 </SelectItem>
                                                 <SelectItem value="4">
                                                     BSA
                                                 </SelectItem>
                                                 <SelectItem value="5">
-                                                    BSED
+                                                    BSED-MATH
                                                 </SelectItem>
                                                 <SelectItem value="6">
-                                                    BSAT
+                                                    BSED-FIL
+                                                </SelectItem>
+                                                <SelectItem value="7">
+                                                    BSED-ENG
+                                                </SelectItem>
+                                                <SelectItem value="8">
+                                                    BPED
+                                                </SelectItem>
+                                                <SelectItem value="9">
+                                                    BEED
+                                                </SelectItem>
+                                                <SelectItem value="10">
+                                                    BAELS
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>
