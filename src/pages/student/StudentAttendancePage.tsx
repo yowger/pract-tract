@@ -118,12 +118,19 @@ const StudentAttendancePage = () => {
     const handleScanResult = async (result: IDetectedBarcode[]) => {
         if (!result || result.length === 0 || scanned) return
 
+        setScanned(true)
+
         if (!navigator.geolocation) {
             toast.error("Geolocation is not supported by your browser.")
             return
         }
 
-        setScanned(true)
+        if (status?.require_photo) {
+            setScanOpen(false)
+            setShowCamera(true)
+
+            return
+        }
 
         const code = result[0]
 
@@ -151,13 +158,6 @@ const StudentAttendancePage = () => {
                         toast.error(
                             "You must turn on your location to clock in or out."
                         )
-                        return
-                    }
-
-                    if (status?.require_photo) {
-                        setScanOpen(false)
-                        setShowCamera(true)
-
                         return
                     }
 
