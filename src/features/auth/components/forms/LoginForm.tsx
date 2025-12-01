@@ -51,7 +51,7 @@ const LoginForm = () => {
 
             switch (role) {
                 case "student":
-                    navigate("/student/dashboard")
+                    navigate("/student")
                     break
                 case "advisor":
                     navigate("/advisor/dashboard")
