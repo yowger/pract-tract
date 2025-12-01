@@ -421,19 +421,32 @@ export function ScheduleForm({
                                         </div>
                                     </div>
 
-                                    <Label>Radius</Label>
-                                    <input
-                                        type="number"
-                                        {...form.register("radius")}
-                                        value={radius}
-                                        onChange={(e) => {
-                                            const newVal = Number(
-                                                e.target.value
-                                            )
-                                            setRadius(newVal)
-                                            form.setValue("radius", newVal)
-                                        }}
-                                        className="border p-2 rounded"
+                                    <FormField
+                                        control={form.control}
+                                        name="radius"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Radius</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        type="number"
+                                                        value={radius}
+                                                        onChange={(e) => {
+                                                            const newVal =
+                                                                Number(
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            setRadius(newVal)
+                                                            field.onChange(
+                                                                newVal
+                                                            )
+                                                        }}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
                                     />
 
                                     <Label>Coords</Label>
