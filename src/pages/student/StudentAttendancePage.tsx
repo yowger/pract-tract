@@ -187,49 +187,49 @@ const StudentAttendancePage = () => {
         )
     }
 
-    const handleClockIn = async () => {
-        if (!studentId) {
-            toast.error("You must be logged in as student.")
-            return
-        }
+    // const handleClockIn = async () => {
+    //     if (!studentId) {
+    //         toast.error("You must be logged in as student.")
+    //         return
+    //     }
 
-        if (!navigator.geolocation) {
-            toast.error("Geolocation is not supported by your browser.")
-            return
-        }
+    //     if (!navigator.geolocation) {
+    //         toast.error("Geolocation is not supported by your browser.")
+    //         return
+    //     }
 
-        navigator.geolocation.getCurrentPosition(
-            async ({ coords: { latitude, longitude } }) => {
-                if (status?.require_photo) {
-                    setShowCamera(true)
-                    return
-                }
+    //     navigator.geolocation.getCurrentPosition(
+    //         async ({ coords: { latitude, longitude } }) => {
+    //             if (status?.require_photo) {
+    //                 setShowCamera(true)
+    //                 return
+    //             }
 
-                try {
-                    await recordSelfAttendance({
-                        student_id: studentId,
-                        lat: latitude,
-                        lng: longitude,
-                    })
+    //             try {
+    //                 await recordSelfAttendance({
+    //                     student_id: studentId,
+    //                     lat: latitude,
+    //                     lng: longitude,
+    //                 })
 
-                    toast.success("Successfully clocked in.")
-                } catch (error) {
-                    console.log("🚀 ~ handleClockIn ~ error:", error)
-                    if (error instanceof AxiosError) {
-                        toast.error(
-                            error?.response?.data?.error ||
-                                "Failed to clock in."
-                        )
-                    }
-                }
-            },
-            (error) => {
-                console.error("Geolocation error:", error)
-                toast.error("Unable to get your location.")
-            },
-            { enableHighAccuracy: true, timeout: 10000 }
-        )
-    }
+    //                 toast.success("Successfully clocked in.")
+    //             } catch (error) {
+    //                 console.log("🚀 ~ handleClockIn ~ error:", error)
+    //                 if (error instanceof AxiosError) {
+    //                     toast.error(
+    //                         error?.response?.data?.error ||
+    //                             "Failed to clock in."
+    //                     )
+    //                 }
+    //             }
+    //         },
+    //         (error) => {
+    //             console.error("Geolocation error:", error)
+    //             toast.error("Unable to get your location.")
+    //         },
+    //         { enableHighAccuracy: true, timeout: 10000 }
+    //     )
+    // }
 
     useEffect(() => {
         if (!navigator.geolocation) return
