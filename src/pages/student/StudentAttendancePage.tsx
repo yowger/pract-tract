@@ -299,7 +299,7 @@ const StudentAttendancePage = () => {
                             </div>
                         </div>
 
-                        <div className="mt-8 flex justify-center">
+                        {/* <div className="mt-8 flex justify-center">
                             <button
                                 onClick={handleClockIn}
                                 className="group flex items-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-full transition-all shadow-sm hover:shadow-md active:scale-95"
@@ -310,7 +310,7 @@ const StudentAttendancePage = () => {
                                 />
                                 Clock In
                             </button>
-                        </div>
+                        </div> */}
 
                         <button
                             onClick={() => setScanOpen(true)}
