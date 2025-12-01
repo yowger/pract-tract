@@ -106,24 +106,6 @@ const SignInFormPage = () => {
                         <LoginForm />
                     </div>
 
-                    <div className="flex items-center justify-end mt-4 text-sm text-gray-600">
-                        <Link
-                            to="/signup"
-                            className="text-[#0f5d2e] hover:text-[#127036] font-medium"
-                        >
-                            Sign up
-                        </Link>
-                    </div>
-
-                    <div className="text-center mt-6">
-                        <Link
-                            to="/signup"
-                            className="inline-flex items-center justify-center w-full rounded-xl bg-[#0f5d2e] text-white font-semibold h-12 shadow-md hover:bg-[#127036] transition-colors"
-                        >
-                            Sign up
-                        </Link>
-                    </div>
-
                     <div className="text-center mt-4">
                         <p className="text-sm text-gray-600">
                             Don't have an account?{" "}
