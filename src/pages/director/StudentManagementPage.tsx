@@ -49,7 +49,10 @@ const PROGRAMS = [
 ]
 
 const StudentManagementPage = () => {
-    const [selectedStudentsIds, setSelectedStudentsIds] = useState<number[]>([])
+    const [selectedStudents, setSelectedStudents] = useState<
+        { user_id: number; program_id?: number }[]
+    >([])
+    const selectedStudentsIds = selectedStudents.map((s) => s.user_id)
     const [isStatusModalOpen, setIsStatusModalOpen] = useState(false)
     const [isCompanyModalOpen, setCompanyModalOpen] = useState(false)
     const { data: companies } = useCompanyOptions()
@@ -57,7 +60,6 @@ const StudentManagementPage = () => {
         page: 1,
         per_page: 100,
     })
-    console.log("🚀 ~ StudentManagementPage ~ advisors:", advisors)
 
     const [selectedAdvisorId, setSelectedAdvisorId] = useState<number | "">("")
     const [isAdvisorModalOpen, setAdvisorModalOpen] = useState(false)
@@ -114,7 +116,6 @@ const StudentManagementPage = () => {
 
             toast.success("Status updated successfully")
             setIsStatusModalOpen(false)
-            setSelectedStudentsIds([])
         } catch (error) {
             if (error instanceof AxiosError) {
                 toast.error(
@@ -137,7 +138,6 @@ const StudentManagementPage = () => {
 
             toast.success("Company assigned successfully")
             setCompanyModalOpen(false)
-            setSelectedStudentsIds([])
             setSelectedCompanyId("")
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -157,7 +157,6 @@ const StudentManagementPage = () => {
 
             toast.success("Advisor assigned successfully")
             setAdvisorModalOpen(false)
-            setSelectedStudentsIds([])
             setSelectedAdvisorId("")
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -166,7 +165,11 @@ const StudentManagementPage = () => {
         }
     }
 
-    const isProgramSelected = !!filters.program_id
+    const canAssignAdvisor =
+        selectedStudents.length > 0 &&
+        selectedStudents.every(
+            (s) => s.program_id === selectedStudents[0].program_id
+        )
 
     return (
         <>
@@ -227,19 +230,17 @@ const StudentManagementPage = () => {
                             </Button>
                         )}
 
-                        {selectedStudentsIds.length > 0 && (
-                            <Button
-                                onClick={() => setAdvisorModalOpen(true)}
-                                disabled={!isProgramSelected}
-                                title={
-                                    !isProgramSelected
-                                        ? "Select a program first"
-                                        : ""
-                                }
-                            >
-                                Assign Advisor ({selectedStudentsIds.length})
-                            </Button>
-                        )}
+                        <Button
+                            onClick={() => setAdvisorModalOpen(true)}
+                            disabled={!canAssignAdvisor}
+                            title={
+                                !canAssignAdvisor
+                                    ? "Select students with the same program to assign an advisor"
+                                    : ""
+                            }
+                        >
+                            Assign Advisor ({selectedStudents.length})
+                        </Button>
 
                         <Select
                             value={filters.status || "all"}
@@ -285,7 +286,12 @@ const StudentManagementPage = () => {
                         }
                         getRowId={(row) => row.user.id.toString()}
                         onSelectedRowsChange={(rows) =>
-                            setSelectedStudentsIds(rows.map((r) => r.user.id))
+                            setSelectedStudents(
+                                rows.map((r) => ({
+                                    user_id: r.user.id,
+                                    program_id: r.program?.id,
+                                }))
+                            )
                         }
                     />
                     <ScrollBar orientation="horizontal" />
