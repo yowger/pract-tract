@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from "react-router-dom"
-import { Home } from "lucide-react"
+import { Home, QrCode } from "lucide-react"
 import { toast } from "sonner"
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
@@ -11,6 +11,7 @@ import Navbar from "./dashboard/Navbar"
 
 const AgentLinks = [
     { name: "Profile", path: "/agent/dashboard", icon: Home },
+    { name: "Attendance", path: "/agent/qr", icon: QrCode },
     // { name: "Dashboard", path: "/agent/dashboard", icon: Home },
     // { name: "Profile", path: "/agent/profile", icon: User },
     // { name: "Attendance", path: "/agent/attendance", icon: CalendarCheck },

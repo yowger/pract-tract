@@ -12,10 +12,11 @@ export const useCompanyOptions = () => {
     })
 }
 
-export const useCompany = (companyId: number) => {
+export const useCompany = (companyId?: number) => {
     return useQuery({
         queryKey: ["company", companyId],
-        queryFn: () => fetchCompany(companyId),
+        queryFn: () => fetchCompany(companyId!),
+        enabled: !!companyId,
     })
 }
 
@@ -32,4 +33,3 @@ export const useAttendanceCharts = (params: {
         staleTime: 1000 * 60 * 5,
     })
 }
-
