@@ -31,5 +31,6 @@ export const useAttendanceCharts = (params: {
         queryKey: ["attendanceCharts", params],
         queryFn: () => fetchAttendanceCharts(params),
         staleTime: 1000 * 60 * 5,
+        enabled: !!params.company_id,
     })
 }

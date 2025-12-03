@@ -38,13 +38,14 @@ import { DownloadIcon } from "lucide-react"
 import { useStudent } from "../hooks/useStudent"
 import type { StudentResponse } from "../api/studentApi"
 import StudentCharts from "./StudentCharts"
+// import { isStudent } from "@/features/auth/types/auth"
 // import { useStudent } from "../hooks/useStudent"
 
 const today = new Date()
 const thisMonthStart = startOfMonth(today)
 
 const StudentAttendanceInfoCard = ({
-    companyId,
+    // companyId,
     userId,
     studentId,
     studentRealId,
@@ -56,6 +57,7 @@ const StudentAttendanceInfoCard = ({
 }) => {
     const pdfMutation = useDownloadAttendancePdf()
     const { data: student } = useStudent(studentRealId)
+    const studentCompanyId = student?.data.company.id
 
     const monthYear = format(thisMonthStart, "LLLL-yyyy").toLowerCase()
     const buildFileName = (student?: StudentResponse) =>
@@ -81,7 +83,7 @@ const StudentAttendanceInfoCard = ({
         useAttendances(filters)
 
     const { data: charts } = useAttendanceCharts({
-        company_id: companyId,
+        company_id: studentCompanyId,
         student_id: studentId,
         start_date: filters.start_date,
         end_date: filters.end_date,
