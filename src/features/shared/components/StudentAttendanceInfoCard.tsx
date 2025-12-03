@@ -64,7 +64,7 @@ const StudentAttendanceInfoCard = ({
     console.log("🚀 ~ StudentAttendanceInfoCard ~ companyId:", companyId)
     const pdfMutation = useDownloadAttendancePdf()
     const { data: student } = useStudent(studentRealId)
-    const studentCompanyId = student?.data.company.id
+    const studentCompanyId = student?.data?.company?.id
     console.log(
         "🚀 ~ StudentAttendanceInfoCard ~ studentCompanyId:",
         studentCompanyId
