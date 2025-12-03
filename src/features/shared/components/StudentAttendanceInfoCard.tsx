@@ -45,7 +45,7 @@ const today = new Date()
 const thisMonthStart = startOfMonth(today)
 
 const StudentAttendanceInfoCard = ({
-    // companyId,
+    companyId,
     userId,
     studentId,
     studentRealId,
@@ -55,9 +55,14 @@ const StudentAttendanceInfoCard = ({
     studentId: number
     studentRealId: number
 }) => {
+    console.log("🚀 ~ StudentAttendanceInfoCard ~ companyId:", companyId)
     const pdfMutation = useDownloadAttendancePdf()
     const { data: student } = useStudent(studentRealId)
     const studentCompanyId = student?.data.company.id
+    console.log(
+        "🚀 ~ StudentAttendanceInfoCard ~ studentCompanyId:",
+        studentCompanyId
+    )
 
     const monthYear = format(thisMonthStart, "LLLL-yyyy").toLowerCase()
     const buildFileName = (student?: StudentResponse) =>
