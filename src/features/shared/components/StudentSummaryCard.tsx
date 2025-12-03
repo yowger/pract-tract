@@ -58,6 +58,7 @@ const StudentSummaryCard: React.FC<StudentSummaryCardProps> = ({ student }) => {
         (student.data.hours_attended / student.data.effective_required_hours) *
         100
     const isNearComplete = progressPercentage >= 90
+    const isComplete = progressPercentage >= 100
 
     return (
         <Card className="w-full overflow-hidden">
@@ -65,12 +66,17 @@ const StudentSummaryCard: React.FC<StudentSummaryCardProps> = ({ student }) => {
                 <h3 className="text-lg font-semibold text-gray-900">
                     Student Summary
                 </h3>
-                {isNearComplete && (
+                {isComplete ? (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-600 text-white rounded-full text-xs font-medium">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Completed
+                    </span>
+                ) : isNearComplete ? (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-xs font-medium">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         Almost Complete
                     </span>
-                )}
+                ) : null}
             </CardHeader>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
