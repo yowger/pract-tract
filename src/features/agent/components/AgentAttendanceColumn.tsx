@@ -164,14 +164,14 @@ export const AgentAttendanceColumns: ColumnDef<AttendanceWithStudent>[] = [
             }
 
             return (
-                <div className="flex flex-wrap gap-2 max-w-[150px]">
+                <div className="flex -space-x-2 overflow-hidden">
                     {photos.map((p, i) => (
                         <img
                             key={i}
                             src={p.src}
                             alt={p.label}
                             title={p.label}
-                            className="w-12 h-12 object-cover rounded cursor-pointer border border-gray-200"
+                            className="w-10 h-10 object-cover rounded-full border-2 border-white cursor-pointer"
                             onClick={() => window.open(p.src, "_blank")}
                         />
                     ))}
