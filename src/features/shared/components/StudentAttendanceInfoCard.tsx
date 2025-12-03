@@ -37,6 +37,7 @@ import { Button } from "@/components/ui/button"
 import { DownloadIcon } from "lucide-react"
 import { useStudent } from "../hooks/useStudent"
 import type { StudentResponse } from "../api/studentApi"
+import StudentCharts from "./StudentCharts"
 // import { useStudent } from "../hooks/useStudent"
 
 const today = new Date()
@@ -55,15 +56,12 @@ const StudentAttendanceInfoCard = ({
 }) => {
     const pdfMutation = useDownloadAttendancePdf()
     const { data: student } = useStudent(studentRealId)
-    // console.log("🚀 ~ StudentAttendanceInfoCard ~ student:", student)
 
     const monthYear = format(thisMonthStart, "LLLL-yyyy").toLowerCase()
-
-    const buildFileName = (student?: StudentResponse) => {
-        if (!student) return "attendance-report.pdf"
-
-        return `${student.data.user.name}-${student.data.program.name}-${student.data.section.name}-${monthYear}`
-    }
+    const buildFileName = (student?: StudentResponse) =>
+        student
+            ? `${student.data.user.name}-${student.data.program.name}-${student.data.section.name}-${monthYear}`
+            : "attendance-report.pdf"
 
     const fileName = buildFileName(student)
 
@@ -81,6 +79,7 @@ const StudentAttendanceInfoCard = ({
 
     const { data: attendances, isLoading: isLoadingAttendances } =
         useAttendances(filters)
+
     const { data: charts } = useAttendanceCharts({
         company_id: companyId,
         student_id: studentId,
@@ -288,6 +287,8 @@ const StudentAttendanceInfoCard = ({
                             </BarChart>
                         </ChartContainer>
                     </CardContent>
+
+                    {charts && <StudentCharts charts={charts} />}
                 </Card>
             </div>
 
