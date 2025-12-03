@@ -33,8 +33,10 @@ export const useAttendanceStatus = () => {
 }
 
 export const downloadAttendancePdf = async (filters: AttendanceFilters) => {
+    const { fileName, ...params } = filters
+
     const response = await privateApi.get("/api/attendances/pdf", {
-        params: filters,
+        params,
         responseType: "blob",
     })
 
@@ -43,7 +45,7 @@ export const downloadAttendancePdf = async (filters: AttendanceFilters) => {
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = filters.fileName ? filters.fileName : "attendance-report.pdf"
+    a.download = fileName ? fileName : "attendance-report.pdf"
     a.click()
     URL.revokeObjectURL(url)
 }
