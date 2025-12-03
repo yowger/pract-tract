@@ -164,7 +164,7 @@ export const AgentAttendanceColumns: ColumnDef<AttendanceWithStudent>[] = [
             }
 
             return (
-                <div className="flex -space-x-2 overflow-hidden">
+                <div className="flex -space-x-4 overflow-hidden">
                     {photos.map((p, i) => (
                         <img
                             key={i}
