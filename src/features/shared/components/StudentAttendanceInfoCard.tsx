@@ -36,6 +36,7 @@ import DatePickerRange from "@/components/custom/DatePickerRange"
 import { Button } from "@/components/ui/button"
 import { DownloadIcon } from "lucide-react"
 import { useStudent } from "../hooks/useStudent"
+import type { StudentResponse } from "../api/studentApi"
 // import { useStudent } from "../hooks/useStudent"
 
 const today = new Date()
@@ -56,6 +57,16 @@ const StudentAttendanceInfoCard = ({
     const { data: student } = useStudent(studentRealId)
     // console.log("🚀 ~ StudentAttendanceInfoCard ~ student:", student)
 
+    const monthYear = format(thisMonthStart, "LLLL-yyyy").toLowerCase()
+
+    const buildFileName = (student?: StudentResponse) => {
+        if (!student) return "attendance-report.pdf"
+
+        return `${student.data.user.name}-${student.data.program.name}-${student.data.section.name}-${monthYear}`
+    }
+
+    const fileName = buildFileName(student)
+
     const [filters, setFilters] = useState<AttendanceFilters>({
         page: 1,
         per_page: 10,
@@ -65,6 +76,7 @@ const StudentAttendanceInfoCard = ({
         status: undefined,
         start_date: format(thisMonthStart, "yyyy-MM-dd"),
         end_date: format(today, "yyyy-MM-dd"),
+        fileName,
     })
 
     const { data: attendances, isLoading: isLoadingAttendances } =

@@ -17,6 +17,7 @@ export interface AttendanceFilters {
     status?: AttendanceStatus
     per_page: number
     page: number
+    fileName?: string
 }
 
 export type AttendanceWithStudent = Attendance & {
@@ -66,4 +67,3 @@ export const fetchAttendanceCharts = async (params: {
 
     return response.data
 }
-

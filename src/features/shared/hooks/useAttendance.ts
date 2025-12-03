@@ -43,7 +43,7 @@ export const downloadAttendancePdf = async (filters: AttendanceFilters) => {
     const url = URL.createObjectURL(blob)
     const a = document.createElement("a")
     a.href = url
-    a.download = "attendance-report.pdf"
+    a.download = filters.fileName ? filters.fileName : "attendance-report.pdf"
     a.click()
     URL.revokeObjectURL(url)
 }
