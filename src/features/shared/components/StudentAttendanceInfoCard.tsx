@@ -261,6 +261,8 @@ const StudentAttendanceInfoCard = ({
                 </Card>
             </div> */}
 
+            {charts && <StudentCharts charts={charts} />}
+
             <Card className="py-0">
                 <CardHeader className="flex flex-row">
                     <div className="flex flex-1 flex-row gap-3 pt-6 justify-end">
@@ -312,8 +314,6 @@ const StudentAttendanceInfoCard = ({
                     />
                 </CardContent>
             </Card>
-
-            {charts && <StudentCharts charts={charts} />}
         </div>
     )
 }
