@@ -197,7 +197,14 @@ const StudentCharts: React.FC<StudentChartsProps> = ({ charts }) => {
                                 )}`}
                             >
                                 <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    {day.date}
+                                    {new Date(day.date).toLocaleDateString(
+                                        "en-US",
+                                        {
+                                            month: "short",
+                                            day: "numeric",
+                                            year: "numeric",
+                                        }
+                                    )}
                                 </td>
                                 {metrics.map((metric) => (
                                     <td
