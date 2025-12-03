@@ -119,6 +119,7 @@ const StudentAttendancePage = () => {
         if (!result || result.length === 0 || scanned) return
 
         setScanned(true)
+        setScanOpen(false)
 
         if (!navigator.geolocation) {
             toast.error("Geolocation is not supported by your browser.")
