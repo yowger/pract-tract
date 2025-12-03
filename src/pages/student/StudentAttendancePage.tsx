@@ -315,13 +315,15 @@ const StudentAttendancePage = () => {
                             </button>
                         </div> */}
 
-                        <button
-                            onClick={() => setScanOpen(true)}
-                            className="group flex items-center gap-3 px-8 py-4 bg-blue-600 text-white rounded-full"
-                        >
-                            <Clock size={20} />
-                            Clock In via QR
-                        </button>
+                        <div className="mt-8 flex justify-center">
+                            <button
+                                onClick={() => setScanOpen(true)}
+                                className="group flex items-center gap-3 px-8 py-4 bg-blue-600 text-white rounded-full"
+                            >
+                                <Clock size={20} />
+                                Clock In via QR
+                            </button>
+                        </div>
                     </div>
 
                     {schedule && (
