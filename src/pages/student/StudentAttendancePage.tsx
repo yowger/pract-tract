@@ -247,10 +247,12 @@ const StudentAttendancePage = () => {
     const confirmPhoto = async () => {
         if (!capturedImage) {
             toast.error("No photo captured")
+            setShowCamera(false)
             return
         }
         if (!studentId || !userLocation) {
             toast.error("You must be logged in as student.")
+            setShowCamera(false)
             return
         }
 
@@ -272,13 +274,13 @@ const StudentAttendancePage = () => {
             })
 
             toast.success("Attendance updated with photo")
-            setShowCamera(false)
-            setCapturedImage(null)
         } catch (err) {
-            console.error("🚀 ~ confirmPhoto ~ error:", err)
             toast.error(
                 err instanceof Error ? err.message : "Failed to upload photo"
             )
+        } finally {
+            setShowCamera(false)
+            setCapturedImage(null)
         }
     }
 
