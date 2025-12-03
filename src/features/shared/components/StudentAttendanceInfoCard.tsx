@@ -1,11 +1,5 @@
 import { useState } from "react"
-import {
-    format,
-    startOfMonth,
-    endOfMonth,
-    parseISO,
-    isThisYear,
-} from "date-fns"
+import { format, parseISO, isThisYear, startOfMonth } from "date-fns"
 
 import {
     Select,
@@ -38,10 +32,12 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import DatePickerRange from "@/components/custom/DatePickerRange"
 import { Button } from "@/components/ui/button"
 import { DownloadIcon } from "lucide-react"
 import { useStudent } from "../hooks/useStudent"
 import type { StudentResponse } from "../api/studentApi"
+// import { useStudent } from "../hooks/useStudent"
 
 const today = new Date()
 const thisMonthStart = startOfMonth(today)
@@ -59,13 +55,13 @@ const StudentAttendanceInfoCard = ({
 }) => {
     const pdfMutation = useDownloadAttendancePdf()
     const { data: student } = useStudent(studentRealId)
+    // console.log("🚀 ~ StudentAttendanceInfoCard ~ student:", student)
 
-    const [selectedMonth, setSelectedMonth] = useState(thisMonthStart)
-
-    const monthYear = format(selectedMonth, "LLLL-yyyy").toLowerCase()
+    const monthYear = format(thisMonthStart, "LLLL-yyyy").toLowerCase()
 
     const buildFileName = (student?: StudentResponse) => {
         if (!student) return "attendance-report.pdf"
+
         return `${student.data.user.name}-${student.data.program.name}-${student.data.section.name}-${monthYear}`
     }
 
@@ -78,8 +74,8 @@ const StudentAttendanceInfoCard = ({
         student_id: userId,
         student_name: undefined,
         status: undefined,
-        start_date: format(selectedMonth, "yyyy-MM-dd"),
-        end_date: format(endOfMonth(selectedMonth), "yyyy-MM-dd"),
+        start_date: format(thisMonthStart, "yyyy-MM-dd"),
+        end_date: format(today, "yyyy-MM-dd"),
         fileName,
     })
 
@@ -107,13 +103,12 @@ const StudentAttendanceInfoCard = ({
         undertime: Number(d.undertime),
     }))
 
-    const months = Array.from({ length: 12 }, (_, i) => {
-        const date = new Date(today.getFullYear(), i, 1)
-        return {
-            label: format(date, "LLLL yyyy"),
-            value: format(date, "yyyy-MM-01"),
-        }
-    })
+    const handleDateChange = (
+        field: "start_date" | "end_date",
+        value: string
+    ) => {
+        setFilters((f) => ({ ...f, [field]: value, page: 1 }))
+    }
 
     return (
         <div className="space-y-6">
@@ -126,30 +121,28 @@ const StudentAttendanceInfoCard = ({
                     <DownloadIcon />
                 </Button>
 
-                <Select
-                    value={format(selectedMonth, "yyyy-MM-01")}
-                    onValueChange={(val) => {
-                        const newDate = new Date(val)
-                        setSelectedMonth(newDate)
-                        setFilters((f) => ({
-                            ...f,
-                            start_date: format(newDate, "yyyy-MM-01"),
-                            end_date: format(endOfMonth(newDate), "yyyy-MM-dd"),
-                            page: 1,
-                        }))
+                <DatePickerRange
+                    value={{
+                        from: filters.start_date
+                            ? new Date(filters.start_date)
+                            : undefined,
+                        to: filters.end_date
+                            ? new Date(filters.end_date)
+                            : undefined,
                     }}
-                >
-                    <SelectTrigger>
-                        <SelectValue placeholder="Select Month" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {months.map((m) => (
-                            <SelectItem key={m.value} value={m.value}>
-                                {m.label}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                    onChange={(range) => {
+                        if (range?.from && range?.to) {
+                            handleDateChange(
+                                "start_date",
+                                range.from.toISOString().slice(0, 10)
+                            )
+                            handleDateChange(
+                                "end_date",
+                                range.to.toISOString().slice(0, 10)
+                            )
+                        }
+                    }}
+                />
             </div>
 
             {student && (
